@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '../../store/useAppStore';
@@ -22,8 +22,31 @@ export function ScrollSections() {
   const scrollProgress = useAppStore((state) => state.scrollProgress);
   const setActiveSection = useAppStore((state) => state.setActiveSection);
   const rootRef = useRef<HTMLDivElement>(null);
-  const heroBgContainerRef = useRef<HTMLDivElement>(null);
-  const heroBgImgRef = useRef<HTMLImageElement>(null);
+
+  // Refs for the 3D Morphing Hero-to-Card element
+  const heroCardStageRef = useRef<HTMLDivElement>(null);
+  const heroCardBodyRef = useRef<HTMLDivElement>(null);
+  const heroCardGlareRef = useRef<HTMLDivElement>(null);
+
+  // Interactive mouse tilt state when the card is docked in Section 2
+  const [mouseTilt, setMouseTilt] = useState({ rotateX: 0, rotateY: 0, scale: 1 });
+
+  const handleCardMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / (rect.width / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    setMouseTilt({
+      rotateX: Number((-dy * 16).toFixed(2)),
+      rotateY: Number((dx * 16).toFixed(2)),
+      scale: 1.03,
+    });
+  }, []);
+
+  const handleCardMouseLeave = useCallback(() => {
+    setMouseTilt({ rotateX: 0, rotateY: 0, scale: 1 });
+  }, []);
 
   useEffect(() => {
     const index = Math.min(3, Math.floor(scrollProgress * 4));
@@ -32,52 +55,82 @@ export function ScrollSections() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Hero background image shrinks & shifts right into Section 2 (About)
-      if (heroBgContainerRef.current && heroBgImgRef.current) {
-        gsap.to(heroBgContainerRef.current, {
-          x: window.innerWidth > 768 ? '14%' : '0%',
-          y: window.innerWidth > 768 ? '22%' : '2%',
-          keyframes: {
-            scale: window.innerWidth > 768 ? [1, 0, 0.5] : [1, 0, 0.8],
-          },
-          ease: 'none',
+      const isDesktop = window.innerWidth > 768;
+
+      // =========================================================================
+      // 1. 3D HERO BACKGROUND -> ABOUT CARD ROTATION & MORPH TIMELINE
+      // =========================================================================
+      if (heroCardBodyRef.current) {
+        const heroToCardTl = gsap.timeline({
           scrollTrigger: {
             trigger: '.hero-section',
             start: 'top top',
-            end: 'bottom top',
-            scrub: true,
+            endTrigger: '.about-section',
+            end: 'top top',
+            scrub: 0.65,
           },
         });
 
-        gsap.fromTo(
-          heroBgImgRef.current,
-          { scale: 1.15, opacity: 0.45 },
+        // Morph dimensions, position, and 3D rotation simultaneously
+        heroToCardTl.fromTo(
+          heroCardBodyRef.current,
           {
-            scale: 1,
-            opacity: 0.75,
-            width: '36rem',
-            height: '36rem',
-            objectFit: 'contain',
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: '.hero-section',
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
+            width: '100vw',
+            height: '100vh',
+            x: isDesktop ? '4vw' : '0vw',
+            y: '0vh',
+            rotateY: 0,
+            rotateX: 0,
+            rotateZ: 0,
+            z: 0,
+            borderRadius: '0px',
+          },
+          {
+            width: isDesktop ? '27vw' : '84vw',
+            height: isDesktop ? '66vh' : '46vh',
+            x: isDesktop ? '32.5vw' : '0vw',
+            y: isDesktop ? '4vh' : '18vh',
+            rotateY: 360,
+            keyframes: {
+              rotateX: [0, 22, -14, 0],
+              rotateZ: [0, -9, 6, 0],
+              z: [0, -180, 60, 0],
             },
-          }
+            borderRadius: '14px',
+            ease: 'power2.inOut',
+          },
+          0
         );
 
-        gsap.to(heroBgContainerRef.current, {
+        // Sweep the 3D specular glare across the card as it rotates
+        if (heroCardGlareRef.current) {
+          heroToCardTl.fromTo(
+            heroCardGlareRef.current,
+            { xPercent: -120, opacity: 0 },
+            {
+              keyframes: {
+                xPercent: [-120, 0, 120],
+                opacity: [0, 0.65, 0],
+              },
+              ease: 'none',
+            },
+            0
+          );
+        }
+
+        // Rotate & shrink the 3D card out when scrolling into Section 3
+        gsap.to(heroCardBodyRef.current, {
           scale: 0,
-          x: '20%',
-          y: 50,
-          ease: 'power2.out',
+          rotateY: 540,
+          rotateX: -28,
+          rotateZ: 12,
+          opacity: 0,
+          ease: 'power2.inOut',
           scrollTrigger: {
             trigger: '.section3',
-            start: 'top 30%',
-            end: 'top -30%',
-            scrub: true,
+            start: 'top 75%',
+            end: 'top 15%',
+            scrub: 0.6,
           },
         });
       }
@@ -85,7 +138,7 @@ export function ScrollSections() {
       // Fade out hero text as we scroll into Section 2
       gsap.to('.hero-section-content', {
         opacity: 0,
-        y: -40,
+        y: -50,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: '.hero-section',
@@ -261,17 +314,101 @@ export function ScrollSections() {
 
   return (
     <div ref={rootRef} className="w-full text-white">
-      {/* Morphing Fixed Hero Background Image Layer (shrinks into Section 2 on scroll) */}
+      {/* =====================================================================
+          3D MORPHING HERO-TO-CARD STAGE
+          Starts as 100vw x 100vh Hero Background, rotates 360° in 3D space
+          on scroll, and docks as a 3D tiltable card in Section 2's right column.
+      ===================================================================== */}
       <div
-        ref={heroBgContainerRef}
-        className="fixed inset-0 w-full h-full z-0 overflow-hidden pointer-events-none flex items-center justify-center"
+        ref={heroCardStageRef}
+        className="fixed inset-0 w-full h-full z-25 pointer-events-none flex items-center justify-center"
+        style={{ perspective: '1600px' }}
       >
-        <img
-          ref={heroBgImgRef}
-          src="/images/hero-bg.png"
-          alt="Hero Background"
-          className="h-full w-full object-cover mix-blend-screen opacity-45"
-        />
+        <div
+          ref={heroCardBodyRef}
+          onMouseMove={handleCardMouseMove}
+          onMouseLeave={handleCardMouseLeave}
+          className="pointer-events-auto relative w-screen h-screen will-change-transform"
+          style={{
+            transformStyle: 'preserve-3d',
+          }}
+        >
+          {/* Interactive Hover Tilt Wrapper (active when hovering the card) */}
+          <div
+            className="relative w-full h-full transition-transform duration-300 ease-out"
+            style={{
+              transformStyle: 'preserve-3d',
+              transform: `rotateX(${mouseTilt.rotateX}deg) rotateY(${mouseTilt.rotateY}deg) scale3d(${mouseTilt.scale}, ${mouseTilt.scale}, ${mouseTilt.scale})`,
+            }}
+          >
+            {/* 3D Extruded Back/Side Thickness Plate (-10px Z depth) */}
+            <div
+              className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-mint-leaf/60 via-sea-green/50 to-evergreen border border-mint-leaf/60 shadow-[0_25px_70px_rgba(4,56,38,0.85)]"
+              style={{
+                transform: 'translateZ(-10px)',
+              }}
+            />
+
+            {/* 3D Mid-Chassis Plate (-5px Z depth) */}
+            <div
+              className="absolute inset-0 rounded-[inherit] bg-evergreen/90 border border-mint-leaf/40"
+              style={{
+                transform: 'translateZ(-5px)',
+              }}
+            />
+
+            {/* Back Face of the 3D Card (visible when rotateY is between 90° and 270°) */}
+            <div
+              className="absolute inset-0 rounded-[inherit] overflow-hidden bg-evergreen border-2 border-mint-leaf/70 flex flex-col items-center justify-center p-6"
+              style={{
+                backfaceVisibility: 'hidden',
+                transform: 'rotateY(180deg) translateZ(1px)',
+              }}
+            >
+              <img
+                src="./images/about-image.png"
+                alt="Card Back Face"
+                className="w-full h-full object-cover opacity-80 mix-blend-luminosity"
+                draggable={false}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
+              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
+                <span>SYNC&apos;26 // CORE ARTIFACT</span>
+                <span>3D ROTATION ACTIVE</span>
+              </div>
+            </div>
+
+            {/* Front Face of the 3D Card (Hero Background -> Section 2 Right Card) */}
+            <div
+              className="relative w-full h-full rounded-[inherit] overflow-hidden border border-white/20 bg-black shadow-[0_20px_60px_rgba(0,0,0,0.85)]"
+              style={{
+                backfaceVisibility: 'hidden',
+                transform: 'translateZ(2px)',
+              }}
+            >
+              <img
+                src="./images/hero-bg.png"
+                alt="Hero 3D Morphing Card"
+                className="w-full h-full object-cover opacity-75"
+                draggable={false}
+              />
+
+              {/* Subtle Sci-Fi Corner Brackets & Telemetry Overlay */}
+              <div className="pointer-events-none absolute inset-3 border border-mint-leaf/25 rounded-[inherit]">
+                <div className="absolute -top-px -left-px w-3 h-3 border-t-2 border-l-2 border-mint-leaf" />
+                <div className="absolute -top-px -right-px w-3 h-3 border-t-2 border-r-2 border-mint-leaf" />
+                <div className="absolute -bottom-px -left-px w-3 h-3 border-b-2 border-l-2 border-mint-leaf" />
+                <div className="absolute -bottom-px -right-px w-3 h-3 border-b-2 border-r-2 border-mint-leaf" />
+              </div>
+
+              {/* Dynamic Specular Reflection Sweep during 3D Scroll Rotation */}
+              <div
+                ref={heroCardGlareRef}
+                className="pointer-events-none absolute inset-y-0 -left-1/4 w-1/2 bg-gradient-to-r from-transparent via-frozen-water/45 to-transparent skew-x-[-20deg]"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* =====================================================================
@@ -279,7 +416,7 @@ export function ScrollSections() {
       ===================================================================== */}
       <section
         id="project"
-        className="hero-section relative min-h-screen w-full flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-6 sm:pr-10 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 z-20"
+        className="hero-section relative min-h-screen w-full flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-6 sm:pr-10 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 z-30 pointer-events-none"
       >
         <div className="hero-section-content flex flex-col justify-between flex-1">
           {/* Top-Left KPRverse Narrative Intro Paragraph */}
@@ -328,7 +465,7 @@ export function ScrollSections() {
           SECTION 2: ABOUT SECTION (001 — A FAMILIAR WORLD... SET ON A DIFFERENT PATH)
       ===================================================================== */}
       <section className="about-section min-h-screen w-full relative z-20 flex justify-center font-whyte">
-        <div className="h-full w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] flex items-start z-30 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
+        <div className="h-full w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
           {/* Left Side (62%) */}
           <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
             {/* Left Side Top */}
@@ -350,7 +487,7 @@ export function ScrollSections() {
             <div className="p-8 flex flex-col justify-between gap-6 flex-1">
               <div className="w-56 sm:w-64">
                 <ImageTilt
-                  src="/images/trailer-side-media.webp"
+                  src="./images/trailer-side-media.webp"
                   alt="Trailer Side Media"
                   className="border border-mint-leaf/30"
                   tiltOptions={{ max: 20, scale: 1.03, perspective: 1200, speed: 400 }}
@@ -367,15 +504,17 @@ export function ScrollSections() {
             </div>
           </div>
 
-          {/* Right Side (38%) */}
-          <div className="w-[38%] min-h-[86vh] border-l border-white/20 p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex items-center justify-center">
-            <div className="w-full max-w-md">
-              <ImageTilt
-                src="/images/about-image.png"
-                alt="About Character"
-                className="border border-white/15"
-                tiltOptions={{ max: 20, scale: 1.02, perspective: 1200, speed: 400 }}
-              />
+          {/* Right Side (38%): Docking Bay for the 3D Rotating Hero Card */}
+          <div className="w-[38%] min-h-[86vh] border-l border-white/20 p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
+            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
+              <span>DOCKING BAY // 01</span>
+              <span className="text-mint-leaf">3D OBJECT LOCK</span>
+            </div>
+            {/* The 3D Hero Card rotates & lands right inside this frame */}
+            <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
+            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
+              <span>HOVER CARD TO TILT</span>
+              <span>SYNC&apos;26 ARCHIVE</span>
             </div>
           </div>
         </div>
@@ -388,7 +527,7 @@ export function ScrollSections() {
         {/* Center-Scaling Background Image (.s3image) */}
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10">
           <img
-            src="/images/section3-image.png"
+            src="./images/section3-image.png"
             alt="Section 3 Backdrop"
             className="s3image absolute object-cover w-[92vw] max-w-[1250px] h-[82vh] max-h-[900px] scale-0 rounded-xl opacity-45 border border-mint-leaf/30"
           />
@@ -482,7 +621,7 @@ export function ScrollSections() {
               <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
                 SYNC&apos;26 <br /> SYMBOL // ARCHIVE
               </p>
-              <img src="/images/logo.png" alt="Symbol" className="w-16 opacity-70" />
+              <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
             </div>
             <div className="p-8 h-full w-[35%]" />
           </div>
@@ -522,7 +661,7 @@ export function ScrollSections() {
           <div className="w-[48vw] max-md:w-full h-full flex items-center justify-center relative py-8 border-x border-white/20 max-md:border-x-0">
             <div className="s4-center-portrait w-full max-w-md px-6">
               <ImageTilt
-                src="/images/section4-image.png"
+                src="./images/section4-image.png"
                 alt="10K Collection Portrait"
                 className="!object-contain"
                 tiltOptions={{ max: 30, scale: 1.04, perspective: 1200, speed: 800 }}
@@ -534,14 +673,14 @@ export function ScrollSections() {
           <div className="w-[30vw] max-md:w-full h-full flex flex-col justify-center">
             <div className="p-6 border-b border-white/20">
               <ImageTilt
-                src="/images/face-traits.webp"
+                src="./images/face-traits.webp"
                 alt="Face Traits Upper"
                 tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
               />
             </div>
             <div className="p-6">
               <ImageTilt
-                src="/images/face-traits.webp"
+                src="./images/face-traits.webp"
                 alt="Face Traits Lower"
                 tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
               />
@@ -592,7 +731,7 @@ export function ScrollSections() {
         {/* Layer 1: THE KEEP */}
         <div id="the-keep" className="absolute inset-0 z-10 overflow-hidden">
           <img
-            src="/images/section3-image.png"
+            src="./images/section3-image.png"
             alt="The Keep"
             className="s6-img-1 w-full h-full object-cover opacity-75"
           />
@@ -601,7 +740,7 @@ export function ScrollSections() {
         {/* Layer 2: FACTIONS (Expands via polygon clip-path) */}
         <div id="factions" className="absolute inset-0 z-20 overflow-hidden">
           <img
-            src="/images/section3-bg.jpg"
+            src="./images/section3-bg.jpg"
             alt="Factions"
             className="s6-img-2 w-full h-full object-cover"
             style={{ clipPath: 'polygon(40% 25%, 60% 25%, 60% 75%, 40% 75%)' }}
@@ -611,7 +750,7 @@ export function ScrollSections() {
         {/* Layer 3: THE WORLD (Expands via polygon clip-path) */}
         <div id="the-world" className="absolute inset-0 z-30 overflow-hidden">
           <img
-            src="/images/protocol-bg.jpg"
+            src="./images/protocol-bg.jpg"
             alt="The World"
             className="s6-img-3 w-full h-full object-cover"
             style={{ clipPath: 'polygon(50% 25%, 50% 25%, 50% 75%, 50% 75%)' }}
@@ -672,7 +811,7 @@ export function ScrollSections() {
           {/* Centered Floating Portrait */}
           <div className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 sm:w-96 max-sm:static max-sm:translate-x-0 max-sm:translate-y-0 max-sm:mx-auto max-sm:pb-8">
             <ImageTilt
-              src="/images/section4-image.png"
+              src="./images/section4-image.png"
               alt="Become a Keeper"
               className="!object-contain s7-scale-up"
               tiltOptions={{ max: 35, scale: 1.04, perspective: 1200, speed: 1200 }}

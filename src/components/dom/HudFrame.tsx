@@ -22,7 +22,7 @@ export function HudFrame() {
 
   const handleAudioToggle = () => {
     if (!audioRef.current) {
-      audioRef.current = new Audio('/audio/bgm.mp3');
+      audioRef.current = new Audio('./audio/bgm.mp3');
       audioRef.current.loop = true;
       audioRef.current.volume = 0.45;
     }
@@ -109,7 +109,7 @@ export function HudFrame() {
             >
               ✕
             </button>
-            <img src="/images/logo.png" alt="Logo" className="w-8 opacity-80" />
+            <img src="./images/logo.png" alt="Logo" className="w-8 opacity-80" />
             <span className="text-[8px] text-mint-leaf">ONLINE</span>
           </div>
         </div>
@@ -129,7 +129,7 @@ export function HudFrame() {
 
           {/* Center-Left Vertical KPR/SYNC Geometric Emblem */}
           <div className="flex flex-col items-center justify-center my-auto px-2">
-            <img src="/images/logo.png" alt="KPR Emblem" className="w-7 opacity-90" />
+            <img src="./images/logo.png" alt="KPR Emblem" className="w-7 opacity-90" />
           </div>
 
           {/* Bottom-Left Sound Equalizer Button (/audio/bgm.mp3) */}

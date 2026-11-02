@@ -23,12 +23,12 @@ const RIGHT_PERSPECTIVES = [
 ];
 
 const FALLBACK_IMAGES = [
-  '/images/about-image.png',
-  '/images/section4-image.png',
-  '/images/trailer-side-media.webp',
-  '/images/face-traits.webp',
-  '/images/hero.webp',
-  '/images/hero-2.webp',
+  './images/about-image.png',
+  './images/section4-image.png',
+  './images/trailer-side-media.webp',
+  './images/face-traits.webp',
+  './images/hero.webp',
+  './images/hero-2.webp',
 ];
 
 export function PerspectiveCardGallery({ className = '' }: PerspectiveCardGalleryProps) {
