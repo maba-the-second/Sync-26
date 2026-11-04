@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface PerspectiveCardGalleryProps {
   className?: string;
@@ -41,17 +41,36 @@ const RIGHT_CARD_IMAGES = [
 ];
 
 export function PerspectiveCardGallery({ className = '' }: PerspectiveCardGalleryProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [leftCounters, setLeftCounters] = useState([1, 2, 3, 4, 5, 6]);
   const [rightCounters, setRightCounters] = useState([1, 2, 3, 4, 5, 6]);
 
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
     const interval = window.setInterval(() => {
       setLeftCounters((prev) => prev.map((c) => (c === 6 ? 1 : c + 1)));
       setRightCounters((prev) => prev.map((c) => (c === 6 ? 1 : c + 1)));
     }, 1000);
 
     return () => window.clearInterval(interval);
-  }, []);
+  }, [isVisible]);
 
   const getLeftTransform = (index: number) => {
     const p = LEFT_PERSPECTIVES[leftCounters[index] - 1];
@@ -64,7 +83,7 @@ export function PerspectiveCardGallery({ className = '' }: PerspectiveCardGaller
   };
 
   return (
-    <div className={`flex h-[350px] w-full ${className}`}>
+    <div ref={containerRef} className={`flex h-[350px] w-full ${className}`}>
       {/* Left Tunnel */}
       <div className="flex items-center relative overflow-hidden w-1/2">
         <div
@@ -80,6 +99,8 @@ export function PerspectiveCardGallery({ className = '' }: PerspectiveCardGaller
               key={`left-${index}`}
               src={src}
               alt={`Keeper Collectible Left ${index + 1}`}
+              loading="lazy"
+              decoding="async"
               className="absolute w-[250px] h-[282px] max-sm:w-48 max-sm:h-56 object-cover rounded-md border border-mint-leaf/30 transition-transform duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] bg-evergreen"
               style={{
                 right: '-10rem',
@@ -106,6 +127,8 @@ export function PerspectiveCardGallery({ className = '' }: PerspectiveCardGaller
               key={`right-${index}`}
               src={src}
               alt={`Keeper Collectible Right ${index + 1}`}
+              loading="lazy"
+              decoding="async"
               className="absolute w-[250px] h-[282px] max-sm:w-48 max-sm:h-56 object-cover rounded-md border border-mint-leaf/30 transition-transform duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] bg-evergreen"
               style={{
                 left: '-10rem',

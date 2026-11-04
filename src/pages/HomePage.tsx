@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '../store/useAppStore';
@@ -21,56 +21,62 @@ const TERMINAL_LINES = [
 const SECTION_ANCHORS = ['#project', '#the-keep', '#factions', '#the-world'];
 
 export function HomePage() {
-  const scrollProgress = useAppStore((state) => state.scrollProgress);
   const setActiveSection = useAppStore((state) => state.setActiveSection);
   const rootRef = useRef<HTMLDivElement>(null);
 
   // Refs for the 3D Morphing Hero-to-Card element
   const heroCardStageRef = useRef<HTMLDivElement>(null);
   const heroCardBodyRef = useRef<HTMLDivElement>(null);
+  const heroCardTiltRef = useRef<HTMLDivElement>(null);
   const heroCardGlareRef = useRef<HTMLDivElement>(null);
-
-  // Interactive mouse tilt state when the card is docked in Section 2
-  const [mouseTilt, setMouseTilt] = useState({ rotateX: 0, rotateY: 0, scale: 1 });
+  const tiltRafRef = useRef<number | null>(null);
 
   const handleCardMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / (rect.width / 2);
-    const dy = (e.clientY - cy) / (rect.height / 2);
-    setMouseTilt({
-      rotateX: Number((-dy * 16).toFixed(2)),
-      rotateY: Number((dx * 16).toFixed(2)),
-      scale: 1.03,
+    const target = e.currentTarget;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+
+    if (tiltRafRef.current !== null) {
+      window.cancelAnimationFrame(tiltRafRef.current);
+    }
+
+    tiltRafRef.current = window.requestAnimationFrame(() => {
+      if (!heroCardTiltRef.current) return;
+      const rect = target.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (clientX - cx) / (rect.width / 2);
+      const dy = (clientY - cy) / (rect.height / 2);
+      const rotateX = (-dy * 16).toFixed(2);
+      const rotateY = (dx * 16).toFixed(2);
+      heroCardTiltRef.current.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+      tiltRafRef.current = null;
     });
   }, []);
 
   const handleCardMouseLeave = useCallback(() => {
-    setMouseTilt({ rotateX: 0, rotateY: 0, scale: 1 });
-  }, []);
-
-  // Track active navigation section based on actual section positions in viewport
-  useEffect(() => {
-    const threshold = window.innerHeight * 0.45;
-    let currentIdx = 0;
-
-    for (let i = 0; i < SECTION_ANCHORS.length; i++) {
-      const el = rootRef.current?.querySelector(SECTION_ANCHORS[i]);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= threshold) {
-          currentIdx = i;
-        }
-      }
+    if (tiltRafRef.current !== null) {
+      window.cancelAnimationFrame(tiltRafRef.current);
+      tiltRafRef.current = null;
     }
-
-    setActiveSection(currentIdx);
-  }, [scrollProgress, setActiveSection]);
+    if (heroCardTiltRef.current) {
+      heroCardTiltRef.current.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    }
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const isDesktop = window.innerWidth > 768;
+
+      SECTION_ANCHORS.forEach((selector, idx) => {
+        ScrollTrigger.create({
+          trigger: selector,
+          start: 'top 45%',
+          end: 'bottom 45%',
+          onEnter: () => setActiveSection(idx),
+          onEnterBack: () => setActiveSection(idx),
+        });
+      });
 
       // =========================================================================
       // 1. 3D HERO BACKGROUND -> ABOUT CARD ROTATION & MORPH TIMELINE
@@ -344,10 +350,11 @@ export function HomePage() {
           }}
         >
           <div
+            ref={heroCardTiltRef}
             className="relative w-full h-full transition-transform duration-300 ease-out"
             style={{
               transformStyle: 'preserve-3d',
-              transform: `rotateX(${mouseTilt.rotateX}deg) rotateY(${mouseTilt.rotateY}deg) scale3d(${mouseTilt.scale}, ${mouseTilt.scale}, ${mouseTilt.scale})`,
+              transform: 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
             }}
           >
             <div
@@ -832,7 +839,7 @@ export function HomePage() {
             003 . THE WORLD
           </span>
           <p className="text-sm sm:text-base text-white/90">
-            An ever-expanding synthetic biosphere. Hold [DECRYPT] or press [SPACE] at any coordinates to breach the underlying stencil layer.
+            An ever-expanding synthetic biosphere engineered for the next generation of Keepers and creators.
           </p>
         </div>
       </section>

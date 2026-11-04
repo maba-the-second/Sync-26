@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 
 const FOOTER_LINKS: {
@@ -34,7 +35,15 @@ const FOOTER_LINKS: {
 ];
 
 export function KprFooter() {
-  const scrollProgress = useAppStore((state) => state.scrollProgress);
+  const depthTextRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    return useAppStore.subscribe((state) => {
+      if (depthTextRef.current) {
+        depthTextRef.current.textContent = `DEPTH LOCK // ${(state.scrollProgress * 100).toFixed(1)}% — SECURE CONNECTION`;
+      }
+    });
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -81,8 +90,8 @@ export function KprFooter() {
           <p className="font-sans text-xs sm:text-sm text-white/80 leading-relaxed tracking-normal normal-case max-w-sm">
             You have reached the foundation layer of SYNC&apos;26. The upper reality curtain has lifted to expose the core archive.
           </p>
-          <div className="text-[10px] text-white/40 tracking-[0.2em]">
-            DEPTH LOCK // {(scrollProgress * 100).toFixed(1)}% — SECURE CONNECTION
+          <div ref={depthTextRef} className="text-[10px] text-white/40 tracking-[0.2em]">
+            DEPTH LOCK // 0.0% — SECURE CONNECTION
           </div>
         </div>
 

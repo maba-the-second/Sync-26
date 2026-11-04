@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '../store/useAppStore';
@@ -21,53 +21,61 @@ const TERMINAL_LINES = [
 const SECTION_ANCHORS = ['#project', '#the-keep', '#factions', '#the-world'];
 
 export function AboutPage() {
-  const scrollProgress = useAppStore((state) => state.scrollProgress);
   const setActiveSection = useAppStore((state) => state.setActiveSection);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const heroCardStageRef = useRef<HTMLDivElement>(null);
   const heroCardBodyRef = useRef<HTMLDivElement>(null);
+  const heroCardTiltRef = useRef<HTMLDivElement>(null);
   const heroCardGlareRef = useRef<HTMLDivElement>(null);
-
-  const [mouseTilt, setMouseTilt] = useState({ rotateX: 0, rotateY: 0, scale: 1 });
+  const tiltRafRef = useRef<number | null>(null);
 
   const handleCardMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / (rect.width / 2);
-    const dy = (e.clientY - cy) / (rect.height / 2);
-    setMouseTilt({
-      rotateX: Number((-dy * 16).toFixed(2)),
-      rotateY: Number((dx * 16).toFixed(2)),
-      scale: 1.03,
+    const target = e.currentTarget;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+
+    if (tiltRafRef.current !== null) {
+      window.cancelAnimationFrame(tiltRafRef.current);
+    }
+
+    tiltRafRef.current = window.requestAnimationFrame(() => {
+      if (!heroCardTiltRef.current) return;
+      const rect = target.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (clientX - cx) / (rect.width / 2);
+      const dy = (clientY - cy) / (rect.height / 2);
+      const rotateX = (-dy * 16).toFixed(2);
+      const rotateY = (dx * 16).toFixed(2);
+      heroCardTiltRef.current.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+      tiltRafRef.current = null;
     });
   }, []);
 
   const handleCardMouseLeave = useCallback(() => {
-    setMouseTilt({ rotateX: 0, rotateY: 0, scale: 1 });
-  }, []);
-
-  useEffect(() => {
-    const threshold = window.innerHeight * 0.45;
-    let currentIdx = 0;
-
-    for (let i = 0; i < SECTION_ANCHORS.length; i++) {
-      const el = rootRef.current?.querySelector(SECTION_ANCHORS[i]);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= threshold) {
-          currentIdx = i;
-        }
-      }
+    if (tiltRafRef.current !== null) {
+      window.cancelAnimationFrame(tiltRafRef.current);
+      tiltRafRef.current = null;
     }
-
-    setActiveSection(currentIdx);
-  }, [scrollProgress, setActiveSection]);
+    if (heroCardTiltRef.current) {
+      heroCardTiltRef.current.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    }
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const isDesktop = window.innerWidth > 768;
+
+      SECTION_ANCHORS.forEach((selector, idx) => {
+        ScrollTrigger.create({
+          trigger: selector,
+          start: 'top 45%',
+          end: 'bottom 45%',
+          onEnter: () => setActiveSection(idx),
+          onEnterBack: () => setActiveSection(idx),
+        });
+      });
 
       if (heroCardBodyRef.current) {
         const heroToCardTl = gsap.timeline({
@@ -333,10 +341,11 @@ export function AboutPage() {
           }}
         >
           <div
+            ref={heroCardTiltRef}
             className="relative w-full h-full transition-transform duration-300 ease-out"
             style={{
               transformStyle: 'preserve-3d',
-              transform: `rotateX(${mouseTilt.rotateX}deg) rotateY(${mouseTilt.rotateY}deg) scale3d(${mouseTilt.scale}, ${mouseTilt.scale}, ${mouseTilt.scale})`,
+              transform: 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
             }}
           >
             <div
@@ -415,7 +424,7 @@ export function AboutPage() {
         <div className="hero-section-content flex flex-col justify-between flex-1">
           <div className="max-w-[310px] sm:max-w-[340px]">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-              DIR // 06 — ABOUT
+              DIR // 05 — ABOUT
             </span>
             <p className="font-whyte text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
               Discover the collective behind SYNC&apos;26. We unite builders, designers, and storytellers to engineer the next generation of interactive experiences.

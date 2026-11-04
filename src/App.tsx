@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -8,11 +8,19 @@ import { HudFrame } from './components/dom/HudFrame';
 import { Preloader } from './components/dom/Preloader';
 import { KprFooter } from './components/dom/KprFooter';
 import { HomePage } from './pages/HomePage';
-import { RegistrationsPage } from './pages/RegistrationsPage';
-import { SubmissionsPage } from './pages/SubmissionsPage';
-import { OdysseyPage } from './pages/OdysseyPage';
-import { AspectPage } from './pages/AspectPage';
-import { AboutPage } from './pages/AboutPage';
+
+const RegistrationsPage = lazy(() =>
+  import('./pages/RegistrationsPage').then((m) => ({ default: m.RegistrationsPage }))
+);
+const OdysseyPage = lazy(() =>
+  import('./pages/OdysseyPage').then((m) => ({ default: m.OdysseyPage }))
+);
+const AspectPage = lazy(() =>
+  import('./pages/AspectPage').then((m) => ({ default: m.AspectPage }))
+);
+const AboutPage = lazy(() =>
+  import('./pages/AboutPage').then((m) => ({ default: m.AboutPage }))
+);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -62,8 +70,6 @@ export default function App() {
         return <HomePage key="home" />;
       case 'registrations':
         return <RegistrationsPage key="registrations" />;
-      case 'submissions':
-        return <SubmissionsPage key="submissions" />;
       case 'odyssey':
         return <OdysseyPage key="odyssey" />;
       case 'aspect':
@@ -85,12 +91,18 @@ export default function App() {
       <HudFrame />
 
       {/* Step 2 & 4: Footer placed fixed BEHIND the .subcontainer-wrapper (z-0) */}
-      <KprFooter />
+      {activePage !== 'registrations' && <KprFooter />}
 
       {/* Step 3 & 5: .subcontainer-wrapper in front (z-10) */}
       <div className="subcontainer-wrapper relative z-10 w-full pointer-events-none">
         {/* UPPER PART: Content-Visible (Opaque black background blocks the footer behind it) */}
-        <div className="content-visible relative w-full bg-black border-b border-mint-leaf/40 shadow-[0_35px_90px_rgba(0,0,0,0.98)] [clip-path:inset(0)]">
+        <div
+          className={`content-visible relative w-full bg-black ${
+            activePage !== 'registrations'
+              ? 'border-b border-mint-leaf/40 shadow-[0_35px_90px_rgba(0,0,0,0.98)]'
+              : ''
+          } [clip-path:inset(0)]`}
+        >
           {/* Sticky 3D WebGL Background inside the upper content curtain */}
           <div className="sticky top-0 left-0 w-full h-screen z-0 pointer-events-auto">
             <SceneCanvas />
@@ -98,15 +110,19 @@ export default function App() {
 
           {/* Active Directory Standalone View */}
           <main className="relative z-10 -mt-[100vh] pointer-events-none">
-            {renderActivePage()}
+            <Suspense fallback={<div className="min-h-screen w-full" />}>
+              {renderActivePage()}
+            </Suspense>
           </main>
         </div>
 
         {/* LOWER PART: Invisible Section (100dvh transparent window that reveals the footer underneath) */}
-        <div
-          className="invisible-section w-full h-screen bg-transparent pointer-events-none"
-          aria-hidden="true"
-        />
+        {activePage !== 'registrations' && (
+          <div
+            className="invisible-section w-full h-screen bg-transparent pointer-events-none"
+            aria-hidden="true"
+          />
+        )}
       </div>
     </div>
   );

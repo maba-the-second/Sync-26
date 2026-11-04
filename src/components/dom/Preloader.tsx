@@ -6,6 +6,7 @@ export function Preloader() {
   const isLoaded = useAppStore((state) => state.isLoaded);
   const setIsLoaded = useAppStore((state) => state.setIsLoaded);
   const [progress, setProgress] = useState(0);
+  const [unmounted, setUnmounted] = useState(false);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -21,6 +22,14 @@ export function Preloader() {
 
     return () => window.clearInterval(interval);
   }, [setIsLoaded]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    const timer = window.setTimeout(() => setUnmounted(true), 750);
+    return () => window.clearTimeout(timer);
+  }, [isLoaded]);
+
+  if (unmounted) return null;
 
   return (
     <div

@@ -3,7 +3,6 @@ import { create } from 'zustand';
 export type PageId =
   | 'home'
   | 'registrations'
-  | 'submissions'
   | 'odyssey'
   | 'aspect'
   | 'about';

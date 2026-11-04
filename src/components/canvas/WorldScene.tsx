@@ -1,290 +1,212 @@
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Float, useMask, Edges } from '@react-three/drei';
+import { useMask, Edges } from '@react-three/drei';
 import * as THREE from 'three';
 import { useAppStore } from '../../store/useAppStore';
 import { PortalMask } from './PortalMask';
+import { createPrismaticCrystalGeometry } from './rhombicBipyramid';
 
-/**
- * Generates a non-indexed, flat-faceted hexagonal crystal spire geometry
- * with pointed top and bottom pyramidal terminations.
- */
-export function createCrystalSpireGeometry(
-  radiusTop = 0.45,
-  radiusBottom = 0.36,
-  bodyHeight = 1.5,
-  tipTopHeight = 0.7,
-  tipBottomHeight = 0.5,
-  sides = 6
-): THREE.BufferGeometry {
-  const positions: number[] = [];
-  const halfBody = bodyHeight / 2;
-
-  const topApex: [number, number, number] = [0, halfBody + tipTopHeight, 0];
-  const bottomApex: [number, number, number] = [0, -halfBody - tipBottomHeight, 0];
-
-  const topRing: [number, number, number][] = [];
-  const bottomRing: [number, number, number][] = [];
-
-  for (let i = 0; i < sides; i++) {
-    const angle = (i / sides) * Math.PI * 2;
-    // Slight deterministic facet asymmetry for authentic crystal cut proportions
-    const facetScale = i % 2 === 0 ? 1.05 : 0.94;
-    const cos = Math.cos(angle) * facetScale;
-    const sin = Math.sin(angle) * facetScale;
-
-    topRing.push([cos * radiusTop, halfBody, sin * radiusTop]);
-    bottomRing.push([cos * radiusBottom, -halfBody, sin * radiusBottom]);
-  }
-
-  const pushTri = (
-    a: [number, number, number],
-    b: [number, number, number],
-    c: [number, number, number]
-  ) => {
-    positions.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
-  };
-
-  for (let i = 0; i < sides; i++) {
-    const next = (i + 1) % sides;
-    const tCurr = topRing[i];
-    const tNext = topRing[next];
-    const bCurr = bottomRing[i];
-    const bNext = bottomRing[next];
-
-    // Top pyramidal termination facet
-    pushTri(topApex, tNext, tCurr);
-
-    // Prism body trapezoidal facet (split into 2 coplanar triangles)
-    pushTri(tCurr, tNext, bNext);
-    pushTri(tCurr, bNext, bCurr);
-
-    // Bottom pyramidal termination facet
-    pushTri(bottomApex, bCurr, bNext);
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-  geometry.computeVertexNormals();
-  return geometry;
+interface OrbitConfig {
+  radius: number;
+  count: number;
+  spread: number;
+  speed: number;
+  tilt: [number, number, number];
+  color: string;
+  size: number;
 }
 
-const SECONDARY_SHARDS: {
-  position: [number, number, number];
-  rotation: [number, number, number];
-  scale: [number, number, number];
-  color: string;
-  emissive: string;
-}[] = [
+const ORBIT_CONFIGS: OrbitConfig[] = [
   {
-    position: [-0.46, -0.18, 0.16],
-    rotation: [0.18, 0.4, 0.48],
-    scale: [0.58, 0.68, 0.58],
-    color: '#0D6F51',
-    emissive: '#043826',
+    radius: 1.28,
+    count: 140,
+    spread: 0.08,
+    speed: 0.55,
+    tilt: [0.42, 0.15, -0.35],
+    color: '#D6F8ED',
+    size: 0.032,
   },
   {
-    position: [0.48, -0.14, 0.14],
-    rotation: [0.15, -0.5, -0.44],
-    scale: [0.54, 0.64, 0.54],
+    radius: 1.72,
+    count: 200,
+    spread: 0.12,
+    speed: -0.38,
+    tilt: [-0.55, 0.25, 0.48],
+    color: '#41D2A2',
+    size: 0.028,
+  },
+  {
+    radius: 2.22,
+    count: 240,
+    spread: 0.16,
+    speed: 0.24,
+    tilt: [1.18, -0.18, 0.22],
     color: '#178966',
-    emissive: '#043826',
-  },
-  {
-    position: [-0.26, -0.32, -0.34],
-    rotation: [-0.38, 0.25, 0.28],
-    scale: [0.46, 0.55, 0.46],
-    color: '#043826',
-    emissive: '#0D6F51',
-  },
-  {
-    position: [0.3, -0.3, -0.32],
-    rotation: [-0.34, -0.3, -0.32],
-    scale: [0.48, 0.52, 0.48],
-    color: '#0D6F51',
-    emissive: '#043826',
-  },
-  {
-    position: [0.06, -0.38, 0.4],
-    rotation: [0.52, 0.12, -0.14],
-    scale: [0.4, 0.45, 0.4],
-    color: '#178966',
-    emissive: '#0D6F51',
+    size: 0.025,
   },
 ];
 
-export function WorldScene() {
-  const crystalClusterRef = useRef<THREE.Group>(null!);
-  const holoCrystalRef = useRef<THREE.Group>(null!);
-  const orbitalRingRef = useRef<THREE.Mesh>(null!);
+function createOrbitParticleGeometry(radius: number, count: number, spread: number): THREE.BufferGeometry {
+  const positions = new Float32Array(count * 3);
 
-  // Inverted mask so the outer crystal shell gets peeled away where the portal mask expands
+  for (let i = 0; i < count; i++) {
+    // Deterministic pseudo-random offsets for smooth organic clustering along the ring
+    const s1 = Math.sin(i * 12.9898) * 43758.5453;
+    const s2 = Math.sin(i * 78.233) * 43758.5453;
+    const s3 = Math.sin(i * 39.425) * 43758.5453;
+    const r1 = s1 - Math.floor(s1) - 0.5;
+    const r2 = s2 - Math.floor(s2) - 0.5;
+    const r3 = s3 - Math.floor(s3) - 0.5;
+
+    const angle = (i / count) * Math.PI * 2 + r1 * 0.15;
+    const localRadius = radius + r2 * spread;
+    const yOffset = r3 * (spread * 0.75);
+
+    positions[i * 3] = Math.cos(angle) * localRadius;
+    positions[i * 3 + 1] = yOffset;
+    positions[i * 3 + 2] = Math.sin(angle) * localRadius;
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  return geometry;
+}
+
+export function WorldScene() {
+  const crystalRef = useRef<THREE.Group>(null!);
+  const orbitGroupRef = useRef<THREE.Group>(null!);
+  const orbitRefs = useRef<(THREE.Group | null)[]>([]);
+  const outerSpinAngleRef = useRef(0);
+  const outerSpinSpeedRef = useRef(0.22);
+
+  // Inverted mask so the outer solid Prismatic Crystal peels away to reveal the inner mesh when holding the mouse
   const outerWorldStencil = useMask(1, true);
 
-  const mainCrystalGeo = useMemo(
-    () => createCrystalSpireGeometry(0.46, 0.36, 1.55, 0.75, 0.55, 6),
+  // Prismatic Crystal with Pyramidal Caps: 14 vertices, 6 flat rectangular side walls + 12 triangular cap facets, regular hexagon cross-section
+  const prismaticCrystalGeo = useMemo(
+    () => createPrismaticCrystalGeometry(0.56, 1.65, 0.85),
     []
   );
-  const shardCrystalGeo = useMemo(
-    () => createCrystalSpireGeometry(0.36, 0.24, 1.25, 0.6, 0.4, 6),
-    []
-  );
-  const holoCrystalGeo = useMemo(
-    () => createCrystalSpireGeometry(0.42, 0.34, 1.15, 0.62, 0.52, 6),
+
+  // Precompute particle ring geometries
+  const orbitGeometries = useMemo(
+    () => ORBIT_CONFIGS.map((cfg) => createOrbitParticleGeometry(cfg.radius, cfg.count, cfg.spread)),
     []
   );
 
   useFrame((state, delta) => {
-    const scroll = useAppStore.getState().scrollProgress;
+    const { scrollProgress: scroll, isHolding: storeHolding, activePage } = useAppStore.getState();
+    const isHolding = activePage !== 'home' && storeHolding;
     const t = state.clock.elapsedTime;
 
-    if (crystalClusterRef.current) {
-      crystalClusterRef.current.rotation.y = THREE.MathUtils.lerp(
-        crystalClusterRef.current.rotation.y,
-        state.pointer.x * 0.4 - scroll * Math.PI * 0.75 + t * 0.12,
-        0.06
+    // Smoothly accelerate the larger crystal spin when entering decrypt mode
+    const targetOuterSpeed = isHolding ? 1.8 : 0.22;
+    outerSpinSpeedRef.current = THREE.MathUtils.lerp(
+      outerSpinSpeedRef.current,
+      targetOuterSpeed,
+      delta * 5
+    );
+    outerSpinAngleRef.current += delta * outerSpinSpeedRef.current;
+
+    if (crystalRef.current) {
+      crystalRef.current.position.y = Math.sin(t * 1.4) * 0.08;
+      crystalRef.current.rotation.y = THREE.MathUtils.lerp(
+        crystalRef.current.rotation.y,
+        state.pointer.x * 0.4 - scroll * Math.PI * 0.75 + outerSpinAngleRef.current,
+        0.12
       );
-      crystalClusterRef.current.rotation.x = THREE.MathUtils.lerp(
-        crystalClusterRef.current.rotation.x,
+      crystalRef.current.rotation.x = THREE.MathUtils.lerp(
+        crystalRef.current.rotation.x,
         -state.pointer.y * 0.22 + scroll * 0.35,
         0.06
       );
     }
 
-    if (holoCrystalRef.current) {
-      holoCrystalRef.current.position.y = 0.25 + Math.sin(t * 1.6) * 0.12;
-      holoCrystalRef.current.rotation.y = -0.35 + state.pointer.x * 0.45 + t * 0.35;
-      holoCrystalRef.current.rotation.z = Math.cos(t * 0.9) * 0.08;
-    }
+    // Rotate each particle orbit ring around its tilted axis (accelerates when holding mouse)
+    const speedMultiplier = isHolding ? 2.4 : 1.0;
+    ORBIT_CONFIGS.forEach((cfg, idx) => {
+      const ring = orbitRefs.current[idx];
+      if (ring) {
+        ring.rotation.y += delta * cfg.speed * speedMultiplier;
+      }
+    });
 
-    if (orbitalRingRef.current) {
-      orbitalRingRef.current.rotation.z -= delta * 0.15;
-      orbitalRingRef.current.rotation.x = Math.PI / 2.3 + scroll * 0.8;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.y = Math.sin(t * 1.4) * 0.05;
+      orbitGroupRef.current.rotation.y = THREE.MathUtils.lerp(
+        orbitGroupRef.current.rotation.y,
+        state.pointer.x * 0.25 - scroll * Math.PI * 0.35,
+        0.05
+      );
+      orbitGroupRef.current.rotation.x = THREE.MathUtils.lerp(
+        orbitGroupRef.current.rotation.x,
+        -state.pointer.y * 0.15 + scroll * 0.2,
+        0.05
+      );
     }
   });
 
   return (
     <group>
-      {/* Stencil Portal & Hidden Breach World */}
+      {/* Stencil Portal & Hidden Wireframe Mesh (revealed on mouse click & hold) */}
       <PortalMask />
 
-      {/* FOREGROUND PRIMARY EMERALD-MINT CRYSTAL CLUSTER */}
-      <group ref={crystalClusterRef} position={[-0.35, -0.05, 0]}>
-        <Float speed={1.5} rotationIntensity={0.22} floatIntensity={0.42}>
-          {/* Central Monolith Crystal Spire */}
-          <mesh geometry={mainCrystalGeo} position={[0, 0.1, 0]}>
-            <meshPhysicalMaterial
-              color="#0D6F51"
-              emissive="#043826"
-              emissiveIntensity={0.55}
-              metalness={0.3}
-              roughness={0.12}
-              clearcoat={1}
-              clearcoatRoughness={0.06}
-              reflectivity={1}
-              flatShading
-              {...outerWorldStencil}
-            />
-            <Edges threshold={12} color="#41D2A2" />
-          </mesh>
+      {/* PRIMARY PRISMATIC CRYSTAL WITH PYRAMIDAL CAPS (14 vertices, 20 facets, hexagonal cross-section) */}
+      <group ref={crystalRef} position={[0, 0, 0]}>
+        <mesh geometry={prismaticCrystalGeo}>
+          <meshPhysicalMaterial
+            color="#0D6F51"
+            emissive="#043826"
+            emissiveIntensity={0.6}
+            metalness={0.3}
+            roughness={0.1}
+            clearcoat={1}
+            clearcoatRoughness={0.05}
+            reflectivity={1}
+            flatShading
+            {...outerWorldStencil}
+          />
+          {/* Threshold > 0 hides the coplanar diagonal inside the 6 rectangular side walls so they render as pure rectangles */}
+          <Edges threshold={5} color="#41D2A2" />
+        </mesh>
+      </group>
 
-          {/* Secondary Intersecting Crystal Shards */}
-          {SECONDARY_SHARDS.map((shard, idx) => (
-            <mesh
-              key={idx}
-              geometry={shardCrystalGeo}
-              position={shard.position}
-              rotation={shard.rotation}
-              scale={shard.scale}
+      {/* MULTI-RING PARTICLE ORBITS AROUND THE CRYSTAL */}
+      <group ref={orbitGroupRef} position={[0, 0, 0]}>
+        {ORBIT_CONFIGS.map((cfg, idx) => (
+          <group key={idx} rotation={cfg.tilt}>
+            <group
+              ref={(el) => {
+                orbitRefs.current[idx] = el;
+              }}
             >
-              <meshPhysicalMaterial
-                color={shard.color}
-                emissive={shard.emissive}
-                emissiveIntensity={0.45}
-                metalness={0.35}
-                roughness={0.15}
-                clearcoat={1}
-                clearcoatRoughness={0.08}
-                flatShading
-                {...outerWorldStencil}
-              />
-              <Edges threshold={12} color="#41D2A2" />
-            </mesh>
-          ))}
+              {/* Glowing Particle Stream */}
+              <points geometry={orbitGeometries[idx]}>
+                <pointsMaterial
+                  color={cfg.color}
+                  size={cfg.size}
+                  transparent
+                  opacity={0.85}
+                  sizeAttenuation
+                  depthWrite={false}
+                  blending={THREE.AdditiveBlending}
+                />
+              </points>
 
-          {/* Orbiting Floating Micro-Crystal Shards */}
-          <mesh
-            geometry={shardCrystalGeo}
-            position={[-0.95, 0.55, 0.35]}
-            rotation={[0.4, 0.8, 0.6]}
-            scale={[0.18, 0.24, 0.18]}
-          >
-            <meshStandardMaterial
-              color="#41D2A2"
-              emissive="#178966"
-              emissiveIntensity={0.8}
-              flatShading
-              {...outerWorldStencil}
-            />
-          </mesh>
-          <mesh
-            geometry={shardCrystalGeo}
-            position={[0.88, 0.42, 0.45]}
-            rotation={[-0.3, 0.5, -0.5]}
-            scale={[0.15, 0.22, 0.15]}
-          >
-            <meshStandardMaterial
-              color="#D6F8ED"
-              emissive="#41D2A2"
-              emissiveIntensity={0.9}
-              flatShading
-              {...outerWorldStencil}
-            />
-          </mesh>
-        </Float>
+              {/* Subtle Guide Ring along the Orbit Path */}
+              <mesh rotation={[Math.PI / 2, 0, 0]}>
+                <torusGeometry args={[cfg.radius, 0.0025, 12, 128]} />
+                <meshBasicMaterial
+                  color={cfg.color}
+                  transparent
+                  opacity={0.18}
+                  blending={THREE.AdditiveBlending}
+                />
+              </mesh>
+            </group>
+          </group>
+        ))}
       </group>
-
-      {/* RIGHT-SIDE NEON-MINT HOLOGRAPHIC CRYSTAL SHARD */}
-      <group ref={holoCrystalRef} position={[1.45, 0.25, -0.6]}>
-        <Float speed={2.2} rotationIntensity={0.35} floatIntensity={0.55}>
-          {/* Outer Translucent Mint Crystal Shell */}
-          <mesh geometry={holoCrystalGeo}>
-            <meshPhysicalMaterial
-              color="#41D2A2"
-              emissive="#178966"
-              emissiveIntensity={0.95}
-              transparent
-              opacity={0.42}
-              roughness={0.08}
-              metalness={0.2}
-              clearcoat={1}
-              flatShading
-            />
-            <Edges threshold={12} color="#D6F8ED" />
-          </mesh>
-
-          {/* Inner Crisp Holographic Crystal Wireframe */}
-          <mesh geometry={holoCrystalGeo} scale={0.78}>
-            <meshBasicMaterial
-              color="#D6F8ED"
-              wireframe
-              transparent
-              opacity={0.35}
-            />
-          </mesh>
-        </Float>
-      </group>
-
-      {/* Subtle Orbital Telemetry Ring */}
-      <mesh ref={orbitalRingRef} position={[-0.25, -0.1, 0]}>
-        <torusGeometry args={[2.35, 0.006, 16, 128]} />
-        <meshBasicMaterial
-          color="#41D2A2"
-          transparent
-          opacity={0.3}
-          {...outerWorldStencil}
-        />
-      </mesh>
     </group>
   );
 }

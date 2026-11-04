@@ -6,7 +6,11 @@ import { WorldScene } from './WorldScene';
 
 export function SceneCanvas() {
   return (
-    <Canvas camera={{ position: [0, 0, 5], fov: 45 }} gl={{ stencil: true, antialias: true }}>
+    <Canvas
+      dpr={[1, 1.5]}
+      camera={{ position: [0, 0, 5], fov: 45 }}
+      gl={{ stencil: true, antialias: true, powerPreference: 'high-performance' }}
+    >
       <color attach="background" args={['#050505']} />
       <fog attach="fog" args={['#050505', 5, 14]} />
 
