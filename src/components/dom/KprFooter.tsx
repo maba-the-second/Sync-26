@@ -1,17 +1,35 @@
 import { useAppStore } from '../../store/useAppStore';
 
-const FOOTER_LINKS = [
+const FOOTER_LINKS: {
+  heading: string;
+  items: { label: string; target?: string }[];
+}[] = [
   {
     heading: '01 // NAVIGATION',
-    items: ['PROJECT', 'THE KEEP', 'FACTIONS', 'THE WORLD'],
+    items: [
+      { label: 'PROJECT', target: '#project' },
+      { label: 'THE KEEP', target: '#the-keep' },
+      { label: 'FACTIONS', target: '#factions' },
+      { label: 'THE WORLD', target: '#the-world' },
+    ],
   },
   {
     heading: '02 // NETWORK',
-    items: ['DISCORD', 'X // TWITTER', 'MANIFESTO', 'GITHUB'],
+    items: [
+      { label: 'DISCORD' },
+      { label: 'X // TWITTER' },
+      { label: 'MANIFESTO', target: '#about' },
+      { label: 'GITHUB' },
+    ],
   },
   {
     heading: '03 // LEGAL & LORE',
-    items: ['PRIVACY POLICY', 'TERMS OF USE', 'SECURITY BRIEF', 'PRESS KIT'],
+    items: [
+      { label: 'PRIVACY POLICY' },
+      { label: 'TERMS OF USE' },
+      { label: 'SECURITY BRIEF' },
+      { label: 'PRESS KIT' },
+    ],
   },
 ];
 
@@ -20,6 +38,17 @@ export function KprFooter() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLinkClick = (target?: string) => {
+    if (target) {
+      const el = document.querySelector(target);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
+    scrollToTop();
   };
 
   return (
@@ -66,16 +95,16 @@ export function KprFooter() {
               </div>
               <ul className="space-y-2">
                 {col.items.map((item) => (
-                  <li key={item}>
+                  <li key={item.label}>
                     <a
-                      href="#top"
+                      href={item.target ?? '#top'}
                       onClick={(e) => {
                         e.preventDefault();
-                        scrollToTop();
+                        handleLinkClick(item.target);
                       }}
                       className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] text-white/70 hover:text-mint-leaf transition-colors"
                     >
-                      <span>{item}</span>
+                      <span>{item.label}</span>
                     </a>
                   </li>
                 ))}

@@ -1,21 +1,29 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from './store/useAppStore';
 import { SceneCanvas } from './components/canvas/SceneCanvas';
 import { HudFrame } from './components/dom/HudFrame';
-import { ScrollSections } from './components/dom/ScrollSections';
 import { Preloader } from './components/dom/Preloader';
 import { KprFooter } from './components/dom/KprFooter';
+import { HomePage } from './pages/HomePage';
+import { RegistrationsPage } from './pages/RegistrationsPage';
+import { SubmissionsPage } from './pages/SubmissionsPage';
+import { OdysseyPage } from './pages/OdysseyPage';
+import { AspectPage } from './pages/AspectPage';
+import { AboutPage } from './pages/AboutPage';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
+  const activePage = useAppStore((state) => state.activePage);
   const setScrollProgress = useAppStore((state) => state.setScrollProgress);
+  const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
     const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+    lenisRef.current = lenis;
 
     lenis.on('scroll', ({ progress }: { progress: number }) => {
       setScrollProgress(progress);
@@ -32,8 +40,40 @@ export default function App() {
     return () => {
       gsap.ticker.remove(updateTicker);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, [setScrollProgress]);
+
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    const timer = window.setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 60);
+    return () => window.clearTimeout(timer);
+  }, [activePage]);
+
+  const renderActivePage = () => {
+    switch (activePage) {
+      case 'home':
+        return <HomePage key="home" />;
+      case 'registrations':
+        return <RegistrationsPage key="registrations" />;
+      case 'submissions':
+        return <SubmissionsPage key="submissions" />;
+      case 'odyssey':
+        return <OdysseyPage key="odyssey" />;
+      case 'aspect':
+        return <AspectPage key="aspect" />;
+      case 'about':
+        return <AboutPage key="about" />;
+      default:
+        return <HomePage key="home" />;
+    }
+  };
 
   return (
     /* Step 1: Root .container */
@@ -56,9 +96,9 @@ export default function App() {
             <SceneCanvas />
           </div>
 
-          {/* Scrollable Transparent HTML Sections pulled over the sticky 3D canvas */}
+          {/* Active Directory Standalone View */}
           <main className="relative z-10 -mt-[100vh] pointer-events-none">
-            <ScrollSections />
+            {renderActivePage()}
           </main>
         </div>
 

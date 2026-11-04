@@ -18,6 +18,8 @@ const TERMINAL_LINES = [
   'KLMX TRANSMISSIONS',
 ];
 
+const SECTION_ANCHORS = ['#project', '#the-keep', '#factions', '#the-world'];
+
 export function ScrollSections() {
   const scrollProgress = useAppStore((state) => state.scrollProgress);
   const setActiveSection = useAppStore((state) => state.setActiveSection);
@@ -48,9 +50,22 @@ export function ScrollSections() {
     setMouseTilt({ rotateX: 0, rotateY: 0, scale: 1 });
   }, []);
 
+  // Track active navigation section based on actual section positions in viewport
   useEffect(() => {
-    const index = Math.min(3, Math.floor(scrollProgress * 4));
-    setActiveSection(index);
+    const threshold = window.innerHeight * 0.45;
+    let currentIdx = 0;
+
+    for (let i = 0; i < SECTION_ANCHORS.length; i++) {
+      const el = document.querySelector(SECTION_ANCHORS[i]);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= threshold) {
+          currentIdx = i;
+        }
+      }
+    }
+
+    setActiveSection(currentIdx);
   }, [scrollProgress, setActiveSection]);
 
   useEffect(() => {
@@ -71,13 +86,13 @@ export function ScrollSections() {
           },
         });
 
-        // Morph dimensions, position, and 3D rotation simultaneously
+        // Starts full-bleed (100vw x 100vh at x: 0vw) so WebGL is completely hidden behind the Hero image
         heroToCardTl.fromTo(
           heroCardBodyRef.current,
           {
             width: '100vw',
             height: '100vh',
-            x: isDesktop ? '4vw' : '0vw',
+            x: '0vw',
             y: '0vh',
             rotateY: 0,
             rotateX: 0,
@@ -316,8 +331,9 @@ export function ScrollSections() {
     <div ref={rootRef} className="w-full text-white">
       {/* =====================================================================
           3D MORPHING HERO-TO-CARD STAGE
-          Starts as 100vw x 100vh Hero Background, rotates 360° in 3D space
-          on scroll, and docks as a 3D tiltable card in Section 2's right column.
+          Starts as 100vw x 100vh solid Hero Background (completely blocking WebGL
+          in the Hero section), rotates 360° in 3D space on scroll, and docks
+          as a 3D tiltable card in Section 2's right column.
       ===================================================================== */}
       <div
         ref={heroCardStageRef}
@@ -343,7 +359,7 @@ export function ScrollSections() {
           >
             {/* 3D Extruded Back/Side Thickness Plate (-10px Z depth) */}
             <div
-              className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-mint-leaf/60 via-sea-green/50 to-evergreen border border-mint-leaf/60 shadow-[0_25px_70px_rgba(4,56,38,0.85)]"
+              className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-mint-leaf via-sea-green to-evergreen border border-mint-leaf/60 shadow-[0_25px_70px_rgba(4,56,38,0.85)]"
               style={{
                 transform: 'translateZ(-10px)',
               }}
@@ -351,7 +367,7 @@ export function ScrollSections() {
 
             {/* 3D Mid-Chassis Plate (-5px Z depth) */}
             <div
-              className="absolute inset-0 rounded-[inherit] bg-evergreen/90 border border-mint-leaf/40"
+              className="absolute inset-0 rounded-[inherit] bg-evergreen border border-mint-leaf/40"
               style={{
                 transform: 'translateZ(-5px)',
               }}
@@ -368,7 +384,7 @@ export function ScrollSections() {
               <img
                 src="./images/about-image.png"
                 alt="Card Back Face"
-                className="w-full h-full object-cover opacity-80 mix-blend-luminosity"
+                className="w-full h-full object-cover opacity-90 mix-blend-luminosity"
                 draggable={false}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
@@ -378,9 +394,9 @@ export function ScrollSections() {
               </div>
             </div>
 
-            {/* Front Face of the 3D Card (Hero Background -> Section 2 Right Card) */}
+            {/* Front Face of the 3D Card (Solid Opaque Hero Image -> Section 2 Right Card) */}
             <div
-              className="relative w-full h-full rounded-[inherit] overflow-hidden border border-white/20 bg-black shadow-[0_20px_60px_rgba(0,0,0,0.85)]"
+              className="relative w-full h-full rounded-[inherit] overflow-hidden border border-white/20 bg-black shadow-[0_20px_60px_rgba(0,0,0,0.95)]"
               style={{
                 backfaceVisibility: 'hidden',
                 transform: 'translateZ(2px)',
@@ -389,9 +405,12 @@ export function ScrollSections() {
               <img
                 src="./images/hero-bg.png"
                 alt="Hero 3D Morphing Card"
-                className="w-full h-full object-cover opacity-75"
+                className="w-full h-full object-cover opacity-100"
                 draggable={false}
               />
+
+              {/* Subtle Dark Vignette for Hero Typography Readability (no WebGL bleed-through) */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/35" />
 
               {/* Subtle Sci-Fi Corner Brackets & Telemetry Overlay */}
               <div className="pointer-events-none absolute inset-3 border border-mint-leaf/25 rounded-[inherit]">
@@ -462,9 +481,12 @@ export function ScrollSections() {
       </section>
 
       {/* =====================================================================
-          SECTION 2: ABOUT SECTION (001 — A FAMILIAR WORLD... SET ON A DIFFERENT PATH)
+          SECTION 2: ABOUT SECTION (#about)
       ===================================================================== */}
-      <section className="about-section min-h-screen w-full relative z-20 flex justify-center font-whyte">
+      <section
+        id="about"
+        className="about-section min-h-screen w-full relative z-20 flex justify-center font-whyte"
+      >
         <div className="h-full w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
           {/* Left Side (62%) */}
           <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
@@ -521,9 +543,12 @@ export function ScrollSections() {
       </section>
 
       {/* =====================================================================
-          SECTION 3: 4-ROW ARCHITECTURAL GRID (002 & 003 — YOU ARE A KEEPER)
+          SECTION 3: 4-ROW ARCHITECTURAL GRID (#the-keep)
       ===================================================================== */}
-      <section className="section3 min-h-screen w-full relative z-20 flex flex-col justify-center font-whyte">
+      <section
+        id="the-keep"
+        className="section3 min-h-screen w-full relative z-20 flex flex-col justify-center font-whyte"
+      >
         {/* Center-Scaling Background Image (.s3image) */}
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10">
           <img
@@ -562,7 +587,7 @@ export function ScrollSections() {
             </div>
           </div>
 
-          {/* Row 2: Topographic Video & Coordinates */}
+          {/* Row 2: Self-Contained Animated Topographic Telemetry Scanner & Coordinates */}
           <div className="relative min-h-[48vh] flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
             <div className="px-6 py-8 w-[70%] max-sm:w-[35%] border-r border-white/20" />
             <div className="p-6 sm:p-8 overflow-hidden w-[30%] max-sm:w-[65%] flex flex-col justify-between gap-4">
@@ -571,15 +596,71 @@ export function ScrollSections() {
                   <p>N 35°27.37</p>
                   <p>E 139°38.57</p>
                 </div>
-                <span className="px-2 py-0.5 border border-mint-leaf/40 text-[9px]">
+                <span className="px-2 py-0.5 border border-mint-leaf/40 text-[9px] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-mint-leaf animate-ping" />
                   TOPO // LIVE
                 </span>
               </div>
-              <div className="border border-white/15 rounded overflow-hidden bg-evergreen/30">
-                <video playsInline loop autoPlay muted className="w-full h-40 object-cover opacity-80">
-                  <source src="https://kprverse.com/videos/project/topo-landing.mp4" type="video/mp4" />
-                  <source src="https://kprverse.com/videos/project/topo-landing.webm" type="video/webm" />
-                </video>
+
+              {/* Local Animated Topographic Contour Display (replaces external hotlinked video) */}
+              <div className="relative border border-mint-leaf/30 rounded overflow-hidden bg-evergreen/40 h-40 flex items-center justify-center">
+                <img
+                  src="./images/protocol-bg.jpg"
+                  alt="Topographic Sector Map"
+                  className="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-luminosity"
+                  draggable={false}
+                />
+                <svg
+                  className="relative z-10 w-full h-full text-mint-leaf/70"
+                  viewBox="0 0 320 160"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {/* Animated Topographic Contour Rings */}
+                  <ellipse
+                    cx="160"
+                    cy="80"
+                    rx="130"
+                    ry="58"
+                    stroke="currentColor"
+                    strokeWidth="0.8"
+                    strokeDasharray="6 4"
+                    className="animate-pulse"
+                  />
+                  <ellipse
+                    cx="160"
+                    cy="80"
+                    rx="96"
+                    ry="42"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                  />
+                  <ellipse
+                    cx="164"
+                    cy="78"
+                    rx="62"
+                    ry="26"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                    strokeDasharray="4 3"
+                  />
+                  <ellipse
+                    cx="168"
+                    cy="76"
+                    rx="28"
+                    ry="12"
+                    stroke="#D6F8ED"
+                    strokeWidth="1.2"
+                  />
+                  {/* Crosshair Grid */}
+                  <line x1="0" y1="80" x2="320" y2="80" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
+                  <line x1="160" y1="0" x2="160" y2="160" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
+                  <circle cx="168" cy="76" r="3" fill="#41D2A2" />
+                </svg>
+                <div className="pointer-events-none absolute bottom-2 left-2.5 right-2.5 flex justify-between font-mono text-[8px] text-mint-leaf/80 tracking-widest">
+                  <span>ELEV // +412M</span>
+                  <span>SECTOR 04-K</span>
+                </div>
               </div>
             </div>
           </div>
@@ -629,9 +710,12 @@ export function ScrollSections() {
       </section>
 
       {/* =====================================================================
-          SECTION 4: 10K INITIAL COLLECTION & EXPANDING GREEN BACKGROUND BLOCKS
+          SECTION 4: 10K INITIAL COLLECTION & EXPANDING GREEN BACKGROUND BLOCKS (#factions)
       ===================================================================== */}
-      <section className="section4 mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-whyte overflow-hidden">
+      <section
+        id="factions"
+        className="section4 mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-whyte overflow-hidden"
+      >
         {/* 3 Expanding Background Blocks (using the Green/Mint Palette) */}
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
           <div className="bg-block1 absolute w-[92vw] max-w-[1300px] h-[88vh] bg-evergreen/90 border border-turf-green scale-0 rounded-xl" />
@@ -690,9 +774,12 @@ export function ScrollSections() {
       </section>
 
       {/* =====================================================================
-          SECTION 5: 004 — 10,000 UNIQUE DIGITAL COLLECTIBLES (3D CARD TUNNEL)
+          SECTION 5: 004 — 10,000 UNIQUE DIGITAL COLLECTIBLES (#collectibles)
       ===================================================================== */}
-      <section className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-whyte flex flex-col justify-between gap-12 max-md:pl-4">
+      <section
+        id="collectibles"
+        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-whyte flex flex-col justify-between gap-12 max-md:pl-4"
+      >
         <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
           <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
             <div className="relative">
@@ -725,11 +812,14 @@ export function ScrollSections() {
       </section>
 
       {/* =====================================================================
-          SECTION 6: PINNED 300VH POLYGON CLIP-PATH WORLD REVEAL
+          SECTION 6: PINNED 300VH POLYGON CLIP-PATH WORLD REVEAL (#the-world)
       ===================================================================== */}
-      <section className="section6 w-full h-screen z-30 relative overflow-hidden font-whyte text-white bg-black">
+      <section
+        id="the-world"
+        className="section6 w-full h-screen z-30 relative overflow-hidden font-whyte text-white bg-black"
+      >
         {/* Layer 1: THE KEEP */}
-        <div id="the-keep" className="absolute inset-0 z-10 overflow-hidden">
+        <div className="absolute inset-0 z-10 overflow-hidden">
           <img
             src="./images/section3-image.png"
             alt="The Keep"
@@ -738,7 +828,7 @@ export function ScrollSections() {
         </div>
 
         {/* Layer 2: FACTIONS (Expands via polygon clip-path) */}
-        <div id="factions" className="absolute inset-0 z-20 overflow-hidden">
+        <div className="absolute inset-0 z-20 overflow-hidden">
           <img
             src="./images/section3-bg.jpg"
             alt="Factions"
@@ -748,7 +838,7 @@ export function ScrollSections() {
         </div>
 
         {/* Layer 3: THE WORLD (Expands via polygon clip-path) */}
-        <div id="the-world" className="absolute inset-0 z-30 overflow-hidden">
+        <div className="absolute inset-0 z-30 overflow-hidden">
           <img
             src="./images/protocol-bg.jpg"
             alt="The World"

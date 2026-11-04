@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore, type PageId } from '../../store/useAppStore';
 import { HoldButton } from './HoldButton';
 import { ShuffleText } from './ShuffleText';
 
@@ -10,7 +10,18 @@ const NAV_ITEMS = [
   { label: 'THE WORLD', target: '#the-world', section: 3 },
 ];
 
+const SIDEBAR_ITEMS: { label: string; page: PageId }[] = [
+  { label: 'HOME', page: 'home' },
+  { label: 'REGISTRATIONS', page: 'registrations' },
+  { label: 'SUBMISSIONS', page: 'submissions' },
+  { label: 'ODYSSEY', page: 'odyssey' },
+  { label: 'ASPECT', page: 'aspect' },
+  { label: 'ABOUT', page: 'about' },
+];
+
 export function HudFrame() {
+  const activePage = useAppStore((state) => state.activePage);
+  const setActivePage = useAppStore((state) => state.setActivePage);
   const isHolding = useAppStore((state) => state.isHolding);
   const scrollProgress = useAppStore((state) => state.scrollProgress);
   const activeSection = useAppStore((state) => state.activeSection);
@@ -45,26 +56,31 @@ export function HudFrame() {
     <div className="fixed inset-0 z-40 pointer-events-none p-2.5 sm:p-3.5 md:p-4 font-mono text-[10px] tracking-[0.2em] uppercase select-none">
       {/* Main 1px KPRverse Outer Grid Frame */}
       <div className="relative w-full h-full border border-white/20 rounded-lg overflow-hidden flex">
-        {/* SLIDE-OUT SIDEBAR DRAWER (from kprverse-main/Sidebar.jsx) */}
+        {/* SLIDE-OUT SIDEBAR DRAWER */}
         <div
           className={`pointer-events-auto absolute top-0 bottom-0 left-0 z-50 bg-black/95 backdrop-blur-xl border-r border-white/20 transition-transform duration-500 ease-in-out flex ${
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
-          <div className="w-[340px] sm:w-[440px] h-full flex flex-col justify-between pt-8">
-            <div className="flex items-start gap-12 px-6">
-              <span className="text-[9px] text-mint-leaf">
+          <div className="w-[340px] sm:w-[500px] md:w-[560px] h-full flex flex-col justify-between pt-8">
+            <div className="flex items-start gap-6 sm:gap-10 px-6">
+              <span className="text-[9px] text-mint-leaf shrink-0 pt-2">
                 <ShuffleText text="DISCOVER" />
               </span>
-              <ul className="font-ethnocentric flex flex-col gap-3 text-2xl sm:text-3xl">
-                {['STORY', 'PROTOCOL', 'JOURNAL', 'MEDIA', 'GALLERY', 'ABOUT'].map(
-                  (name, i) => (
-                    <li key={name}>
+              <ul className="font-ethnocentric flex flex-col gap-3 text-lg sm:text-2xl md:text-[26px] tracking-wider whitespace-nowrap">
+                {SIDEBAR_ITEMS.map((item) => {
+                  const isCurrentPage = activePage === item.page;
+                  return (
+                    <li key={item.label}>
                       <button
                         type="button"
-                        onClick={() => setIsSidebarOpen(false)}
+                        onClick={() => {
+                          setIsSidebarOpen(false);
+                          setActivePage(item.page);
+                          window.scrollTo({ top: 0, behavior: 'instant' });
+                        }}
                         className={`px-3 py-1 transition-colors cursor-pointer ${
-                          i === 0
+                          isCurrentPage
                             ? 'bg-mint-leaf text-black'
                             : 'text-white hover:bg-white hover:text-black'
                         }`}
@@ -73,11 +89,11 @@ export function HudFrame() {
                             'polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%)',
                         }}
                       >
-                        <ShuffleText text={name} />
+                        <ShuffleText text={item.label} />
                       </button>
                     </li>
-                  )
-                )}
+                  );
+                })}
               </ul>
             </div>
 
@@ -114,7 +130,7 @@ export function HudFrame() {
           </div>
         </div>
 
-        {/* LEFT SIDEBAR RAIL (MiniSidebar.jsx style) */}
+        {/* LEFT SIDEBAR RAIL */}
         <aside className="w-11 sm:w-12 md:w-14 h-full border-r border-white/20 flex flex-col justify-between items-center shrink-0 bg-black/25 backdrop-blur-[2px]">
           {/* Top-Left Hamburger Box */}
           <button
@@ -169,7 +185,7 @@ export function HudFrame() {
 
         {/* MAIN INNER HUD CANVAS OVERLAY */}
         <div className="relative flex-1 h-full flex flex-col justify-between">
-          {/* Top Navigation Bar with Scroll Progress Fill (from kprverse-main/Navbar.jsx) */}
+          {/* Top Navigation Bar with Scroll Progress Fill */}
           <header className="relative w-full h-12 border-b border-white/20 flex items-center justify-between bg-black/25 backdrop-blur-[2px] overflow-hidden">
             {/* Scroll Progress Fill Bar */}
             <div
