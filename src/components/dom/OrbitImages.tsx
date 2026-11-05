@@ -38,9 +38,11 @@ export type OrbitShape =
 export type OrbitEasing = 'linear' | 'easeIn' | 'easeOut' | 'easeInOut';
 
 export interface OrbitCardItem {
+  id?: string;
   src?: string;
   alt?: string;
   code?: string;
+  eligibility?: string;
   title?: string;
   description?: string;
   accentColor?: string;
@@ -81,7 +83,9 @@ export interface OrbitImagesProps {
   hoverSpeed?: number;
   draggable?: boolean;
   clickToFront?: boolean;
-  onItemClick?: (index: number, src: string) => void;
+  onItemClick?: (index: number, src: string, rect?: DOMRect) => void;
+  onViewDetails?: (index: number) => void;
+  onRegister?: (index: number) => void;
   alignToPath?: boolean;
   intro?: boolean;
   speedMultiplier?: number;
@@ -106,7 +110,9 @@ interface EngineConfig {
   hoverSpeed: number;
   draggable: boolean;
   clickToFront: boolean;
-  onItemClick?: (index: number, src: string) => void;
+  onItemClick?: (index: number, src: string, rect?: DOMRect) => void;
+  onViewDetails?: (index: number) => void;
+  onRegister?: (index: number) => void;
   alignToPath: boolean;
   intro: boolean;
   speedMultiplier: number;
@@ -253,6 +259,8 @@ interface SeekState {
   delta: number;
   t: number;
   dur: number;
+  targetIndex?: number;
+  notify?: boolean;
 }
 
 const createEngine = (
@@ -552,7 +560,7 @@ const createEngine = (
     }
     const mult = cfg.speedMultiplier ?? 1;
     const want =
-      cfg.paused || st.reduced
+      cfg.paused || st.reduced || st.seek
         ? 0
         : mult > 1
           ? mult
@@ -566,13 +574,19 @@ const createEngine = (
       st.lap += (dt * st.speed) / cfg.duration;
       busy = true;
     }
+    let completedSeekIndex = -1;
     if (st.drag?.active) {
       busy = true;
     } else if (st.seek) {
       st.seek.t = Math.min(1, st.seek.t + dt / st.seek.dur);
       const e = st.seek.t < 0.5 ? 4 * st.seek.t ** 3 : 1 - Math.pow(-2 * st.seek.t + 2, 3) / 2;
       st.manual = st.seek.from + st.seek.delta * e;
-      if (st.seek.t >= 1) st.seek = null;
+      if (st.seek.t >= 1) {
+        if (st.seek.notify && st.seek.targetIndex !== undefined) {
+          completedSeekIndex = st.seek.targetIndex;
+        }
+        st.seek = null;
+      }
       busy = true;
     } else if (st.glide) {
       st.manual += st.glide * dt;
@@ -581,6 +595,11 @@ const createEngine = (
       busy = true;
     }
     render(now);
+    if (completedSeekIndex >= 0) {
+      const targetEl = st.items[completedSeekIndex]?.el;
+      const rect = targetEl ? targetEl.getBoundingClientRect() : undefined;
+      cfg.onItemClick?.(completedSeekIndex, cfg.sources[completedSeekIndex], rect);
+    }
     const whole = Math.floor(st.lap);
     if (whole) st.lap -= whole;
     if (!st.drag && !st.seek) st.manual -= Math.floor(st.manual);
@@ -613,12 +632,31 @@ const createEngine = (
     return el && root.contains(el) ? Number(el.getAttribute('data-orbit-item')) : -1;
   };
 
-  const bringToFront = (index: number) => {
+  const bringToFront = (index: number, notify = false) => {
     if (!st.lut || index < 0) return;
     const u = progress() + offsetOf(index, st.items.length);
     const delta = wrapSigned(st.front - u);
     st.glide = 0;
-    st.seek = { from: st.manual, delta, t: 0, dur: 0.45 + Math.abs(delta) * 1.4 };
+    st.speed = 0;
+    if (Math.abs(delta) < 0.012 || st.reduced) {
+      st.manual += delta;
+      st.seek = null;
+      render(performance.now());
+      if (notify) {
+        const targetEl = st.items[index]?.el;
+        const rect = targetEl ? targetEl.getBoundingClientRect() : undefined;
+        config.current.onItemClick?.(index, config.current.sources[index], rect);
+      }
+      return;
+    }
+    st.seek = {
+      from: st.manual,
+      delta,
+      t: 0,
+      dur: 0.4 + Math.abs(delta) * 1.15,
+      targetIndex: index,
+      notify,
+    };
     wake();
   };
 
@@ -705,8 +743,13 @@ const createEngine = (
   const activate = (index: number) => {
     const cfg = config.current;
     if (index < 0) return;
-    if (cfg.clickToFront) bringToFront(index);
-    cfg.onItemClick?.(index, cfg.sources[index]);
+    if (cfg.clickToFront) {
+      bringToFront(index, true);
+      return;
+    }
+    const targetEl = st.items[index]?.el;
+    const rect = targetEl ? targetEl.getBoundingClientRect() : undefined;
+    cfg.onItemClick?.(index, cfg.sources[index], rect);
   };
 
   const onClick = (e: MouseEvent) => {
@@ -716,7 +759,19 @@ const createEngine = (
       st.suppressUntil = 0;
       return;
     }
-    activate(itemIndex(e.target));
+    const idx = itemIndex(e.target);
+    if (idx >= 0 && e.target instanceof Element) {
+      const actionBtn = e.target.closest('[data-orbit-action]');
+      if (actionBtn) {
+        e.stopPropagation();
+        const action = actionBtn.getAttribute('data-orbit-action');
+        if (action === 'register') {
+          config.current.onRegister?.(idx);
+          return;
+        }
+      }
+    }
+    activate(idx);
   };
 
   const onKey = (e: KeyboardEvent) => {
@@ -852,6 +907,8 @@ export default function OrbitImages({
   draggable = true,
   clickToFront = true,
   onItemClick,
+  onViewDetails,
+  onRegister,
   alignToPath = false,
   intro = true,
   speedMultiplier = 1,
@@ -901,9 +958,11 @@ export default function OrbitImages({
         typeof image === 'string'
           ? { src: image, alt: `${altPrefix} ${index + 1}` }
           : {
+              id: image.id,
               src: image.src ?? '',
               alt: image.alt ?? image.title ?? `${altPrefix} ${index + 1}`,
               code: image.code,
+              eligibility: image.eligibility,
               title: image.title,
               description: image.description,
               accentColor: image.accentColor,
@@ -913,7 +972,7 @@ export default function OrbitImages({
     [images, altPrefix]
   );
 
-  const interactive = !!onItemClick;
+  const interactive = !!(onItemClick || onViewDetails || onRegister);
 
   const config = useRef<EngineConfig>(null!);
   config.current = {
@@ -935,6 +994,8 @@ export default function OrbitImages({
     draggable,
     clickToFront,
     onItemClick,
+    onViewDetails,
+    onRegister,
     alignToPath,
     intro,
     speedMultiplier,
@@ -1112,12 +1173,26 @@ export default function OrbitImages({
                   <span className="orbit-card-code">
                     {item.code ?? `0${index + 1}`}
                   </span>
+                  {item.eligibility && (
+                    <span className="orbit-card-elig">{item.eligibility}</span>
+                  )}
                   <span className="orbit-card-dot" />
                 </div>
-                <h3 className="orbit-card-title">{item.title}</h3>
-                {item.description && (
-                  <p className="orbit-card-desc">{item.description}</p>
-                )}
+                <div className="orbit-card-body">
+                  <h3 className="orbit-card-title">{item.title}</h3>
+                  {item.description && (
+                    <p className="orbit-card-desc">{item.description}</p>
+                  )}
+                </div>
+                <div className="orbit-card-actions">
+                  <button
+                    type="button"
+                    data-orbit-action="register"
+                    className="orbit-card-btn orbit-card-btn-register"
+                  >
+                    Register
+                  </button>
+                </div>
               </div>
             ) : (
               <img
