@@ -440,7 +440,7 @@ export function ScrollSections() {
         <div className="hero-section-content flex flex-col justify-between flex-1">
           {/* Top-Left KPRverse Narrative Intro Paragraph */}
           <div className="max-w-[310px] sm:max-w-[340px]">
-            <p className="font-whyte text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
+            <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
               SYNC&apos;26 is a brand that focuses on collective narrative and empowering storytellers. Keepers is a living story, an uncharted world waiting to be explored, to be imagined.
             </p>
           </div>
@@ -485,7 +485,7 @@ export function ScrollSections() {
       ===================================================================== */}
       <section
         id="about"
-        className="about-section min-h-screen w-full relative z-20 flex justify-center font-whyte"
+        className="about-section min-h-screen w-full relative z-20 flex justify-center font-ethnocentric"
       >
         <div className="h-full w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
           {/* Left Side (62%) */}
@@ -547,7 +547,7 @@ export function ScrollSections() {
       ===================================================================== */}
       <section
         id="the-keep"
-        className="section3 min-h-screen w-full relative z-20 flex flex-col justify-center font-whyte"
+        className="section3 min-h-screen w-full relative z-20 flex flex-col justify-center font-ethnocentric"
       >
         {/* Center-Scaling Background Image (.s3image) */}
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10">
@@ -714,7 +714,7 @@ export function ScrollSections() {
       ===================================================================== */}
       <section
         id="factions"
-        className="section4 mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-whyte overflow-hidden"
+        className="section4 mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-ethnocentric overflow-hidden"
       >
         {/* 3 Expanding Background Blocks (using the Green/Mint Palette) */}
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
@@ -778,7 +778,7 @@ export function ScrollSections() {
       ===================================================================== */}
       <section
         id="collectibles"
-        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-whyte flex flex-col justify-between gap-12 max-md:pl-4"
+        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-ethnocentric flex flex-col justify-between gap-12 max-md:pl-4"
       >
         <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
           <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
@@ -816,7 +816,7 @@ export function ScrollSections() {
       ===================================================================== */}
       <section
         id="the-world"
-        className="section6 w-full h-screen z-30 relative overflow-hidden font-whyte text-white bg-black"
+        className="section6 w-full h-screen z-30 relative overflow-hidden font-ethnocentric text-white bg-black"
       >
         {/* Layer 1: THE KEEP */}
         <div className="absolute inset-0 z-10 overflow-hidden">
@@ -881,7 +881,7 @@ export function ScrollSections() {
       {/* =====================================================================
           SECTION 7: BECOME A KEEPER (MONUMENTAL HEADLINE + TILT PORTRAIT)
       ===================================================================== */}
-      <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-whyte bg-black/85 border-t border-white/20">
+      <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-ethnocentric bg-black/85 border-t border-white/20">
         <div className="h-full w-[97vw] max-md:w-full pt-[70px] pl-[68px] max-md:pl-4 flex flex-col justify-between z-30 relative overflow-hidden">
           <div className="min-h-[42vh] w-full border-b border-white/20 p-8 flex items-end justify-center s7-fade-up">
             <h2 className="font-ethnocentric text-[11vw] leading-none font-black tracking-tight text-white uppercase">

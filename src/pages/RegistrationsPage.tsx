@@ -594,6 +594,7 @@ export function RegistrationsPage() {
     const targetId = compId ?? selectedCompId;
     setSelectedCompId(targetId);
     setGrade('');
+    setTeamName('');
     setErrors({});
     setSubmitState('form');
     setIsRegOpen(true);
@@ -638,8 +639,8 @@ export function RegistrationsPage() {
     }
 
     if (activeComp.isTeam) {
-      if (teamName.trim().length < 2) {
-        newErrors.teamName = 'Team name is required (min 2 characters).';
+      if (!teamName || (teamName !== 'Team A' && teamName !== 'Team B')) {
+        newErrors.teamName = 'Please select Team A or Team B.';
       }
       if (fullName.trim().length < 2) {
         newErrors.fullName = "Captain's full name is required.";
@@ -843,8 +844,8 @@ export function RegistrationsPage() {
             </div>
 
             {/* Modal Scrollable Body */}
-            <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-5 font-whyte text-xs sm:text-sm text-white/85">
-              <p className="text-white/90 text-sm leading-relaxed border-l-2 pl-3" style={{ borderColor: detailComp.accentColor }}>
+            <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-5 font-mono text-xs text-white/85">
+              <p className="text-white/90 text-xs sm:text-sm leading-relaxed border-l-2 pl-3" style={{ borderColor: detailComp.accentColor }}>
                 {detailComp.shortDesc}
               </p>
 
@@ -1282,15 +1283,17 @@ export function RegistrationsPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Team Name <span style={{ color: activeComp.accentColor }}>*</span>
+                          Team <span style={{ color: activeComp.accentColor }}>*</span>
                         </label>
-                        <input
-                          type="text"
+                        <select
                           value={teamName}
                           onChange={(e) => setTeamName(e.target.value)}
-                          placeholder="e.g. CyberKnights"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
-                        />
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf cursor-pointer"
+                        >
+                          <option value="">Select Team (Team A / Team B)</option>
+                          <option value="Team A">Team A</option>
+                          <option value="Team B">Team B</option>
+                        </select>
                         {errors.teamName && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.teamName}</p>
                         )}

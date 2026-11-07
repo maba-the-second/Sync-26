@@ -3,9 +3,9 @@ import { useAppStore, type PageId } from '../../store/useAppStore';
 import { ShuffleText } from './ShuffleText';
 
 const NAV_ITEMS = [
-  { label: 'PROJECT', target: '#project', section: 0 },
-  { label: 'THE KEEP', target: '#the-keep', section: 1 },
-  { label: 'FACTIONS', target: '#factions', section: 2 },
+  { label: 'FRONTIER', target: '#project', section: 0 },
+  { label: 'ROADMAP', target: '#the-keep', section: 1 },
+  { label: 'CATEGORIES', target: '#factions', section: 2 },
   { label: 'THE WORLD', target: '#the-world', section: 3 },
 ];
 
@@ -151,18 +151,38 @@ export function HudFrame() {
             <div className="w-full">
               <div className="flex items-center gap-16 border-t border-white/20 p-4">
                 <span className="text-[9px] text-white/50">CONNECT</span>
-                <div className="flex gap-6 text-[10px]">
-                  <span className="text-white hover:text-mint-leaf cursor-pointer">
-                    <ShuffleText text="TWITTER" />
-                  </span>
-                  <span className="text-white hover:text-mint-leaf cursor-pointer">
-                    <ShuffleText text="DISCORD" />
-                  </span>
+                <div className="flex flex-wrap gap-6 text-[10px]">
+                  <a
+                    href="https://chat.whatsapp.com/IaBJyTRhZcACMFKUOrYndg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-mint-leaf cursor-pointer"
+                  >
+                    <ShuffleText text="WHATSAPP" />
+                  </a>
+                  <a
+                    href="https://instagram.com/dharmaraja_ict_society"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-mint-leaf cursor-pointer"
+                  >
+                    <ShuffleText text="INSTAGRAM" />
+                  </a>
+                  <a
+                    href="https://facebook.com/dhamarajaicts"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-mint-leaf cursor-pointer"
+                  >
+                    <ShuffleText text="FACEBOOK" />
+                  </a>
                 </div>
               </div>
               <div className="flex items-center gap-16 border-t border-white/20 p-4">
                 <span className="text-[9px] text-white/50">SYSTEM</span>
-                <span className="text-[10px] text-mint-leaf">SYNC&apos;26 // © 2026</span>
+                <span className="text-[10px] text-mint-leaf">
+                  DHARMARAJA ICT SOCIETY // SYNC&apos;26
+                </span>
               </div>
             </div>
           </div>
@@ -286,18 +306,23 @@ export function HudFrame() {
               </nav>
             )}
 
-            {/* Top-Right Chamfered White "SIGN IN" Button (Hidden on Registrations Page) */}
+            {/* Top-Right Chamfered White "REGISTER NOW" Button (Hidden on Registrations Page) */}
             {activePage !== 'registrations' && (
               <div className="relative z-10 h-full flex items-center">
                 <button
                   type="button"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setActivePage('registrations');
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                  }}
                   className="pointer-events-auto h-full bg-white hover:bg-mint-leaf text-black font-mono font-bold text-[10px] tracking-[0.22em] px-6 sm:px-7 transition-colors cursor-pointer"
                   style={{
                     clipPath:
                       'polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px))',
                   }}
                 >
-                  <ShuffleText text="SIGN IN" />
+                  <ShuffleText text="REGISTER NOW" />
                 </button>
               </div>
             )}

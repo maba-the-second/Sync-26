@@ -3,33 +3,33 @@ import { useAppStore } from '../../store/useAppStore';
 
 const FOOTER_LINKS: {
   heading: string;
-  items: { label: string; target?: string }[];
+  items: { label: string; target?: string; href?: string }[];
 }[] = [
   {
     heading: '01 // NAVIGATION',
     items: [
-      { label: 'PROJECT', target: '#project' },
-      { label: 'THE KEEP', target: '#the-keep' },
-      { label: 'FACTIONS', target: '#factions' },
+      { label: 'FRONTIER', target: '#project' },
+      { label: 'ROADMAP', target: '#the-keep' },
+      { label: 'CATEGORIES', target: '#factions' },
       { label: 'THE WORLD', target: '#the-world' },
     ],
   },
   {
-    heading: '02 // NETWORK',
+    heading: '02 // COMMUNITY & SOCIALS',
     items: [
-      { label: 'DISCORD' },
-      { label: 'X // TWITTER' },
-      { label: 'MANIFESTO', target: '#about' },
-      { label: 'GITHUB' },
+      { label: 'WHATSAPP COMMUNITY', href: 'https://chat.whatsapp.com/IaBJyTRhZcACMFKUOrYndg' },
+      { label: 'DIRECT WHATSAPP', href: 'https://wa.link/05138r' },
+      { label: 'INSTAGRAM', href: 'https://instagram.com/dharmaraja_ict_society' },
+      { label: 'FACEBOOK', href: 'https://facebook.com/dhamarajaicts' },
     ],
   },
   {
-    heading: '03 // LEGAL & LORE',
+    heading: '03 // DIRECT DISPATCH',
     items: [
-      { label: 'PRIVACY POLICY' },
-      { label: 'TERMS OF USE' },
-      { label: 'SECURITY BRIEF' },
-      { label: 'PRESS KIT' },
+      { label: 'MUDITHA // +94 70 264 5851', href: 'tel:+94702645851' },
+      { label: 'NETHUN // +94 71 490 6145', href: 'tel:+94714906145' },
+      { label: 'DRCK.ICTSOCIETY@GMAIL.COM', href: 'mailto:drck.ictsociety@gmail.com' },
+      { label: 'MISSION DIRECTIVE', target: '#about' },
     ],
   },
 ];
@@ -87,8 +87,8 @@ export function KprFooter() {
             <span className="w-2 h-2 bg-mint-leaf inline-block animate-pulse" />
             <span>TERMINAL // END OF TRANSMISSION</span>
           </div>
-          <p className="font-sans text-xs sm:text-sm text-white/80 leading-relaxed tracking-normal normal-case max-w-sm">
-            You have reached the foundation layer of SYNC&apos;26. The upper reality curtain has lifted to expose the core archive.
+          <p className="font-mono text-xs text-white/80 leading-relaxed tracking-normal normal-case max-w-sm">
+            Official competition and registration platform of the Dharmaraja College Information &amp; Communication Technology Society.
           </p>
           <div ref={depthTextRef} className="text-[10px] text-white/40 tracking-[0.2em]">
             DEPTH LOCK // 0.0% — SECURE CONNECTION
@@ -105,16 +105,27 @@ export function KprFooter() {
               <ul className="space-y-2">
                 {col.items.map((item) => (
                   <li key={item.label}>
-                    <a
-                      href={item.target ?? '#top'}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleLinkClick(item.target);
-                      }}
-                      className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] text-white/70 hover:text-mint-leaf transition-colors"
-                    >
-                      <span>{item.label}</span>
-                    </a>
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        target={item.href.startsWith('http') ? '_blank' : undefined}
+                        rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] text-white/70 hover:text-mint-leaf transition-colors"
+                      >
+                        <span>{item.label}</span>
+                      </a>
+                    ) : (
+                      <a
+                        href={item.target ?? '#top'}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleLinkClick(item.target);
+                        }}
+                        className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] text-white/70 hover:text-mint-leaf transition-colors"
+                      >
+                        <span>{item.label}</span>
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -126,7 +137,7 @@ export function KprFooter() {
       {/* MASSIVE KPR-STYLE FULL-BLEED BANNER AT THE BOTTOM */}
       <div className="relative z-10 flex flex-col justify-end my-auto pt-6">
         <div className="flex items-end justify-between mb-2 font-mono text-[10px] tracking-[0.25em] text-white/50 uppercase">
-          <span>04F // CORE ARCHIVE BANNER</span>
+          <span>04F // DHARMARAJA COLLEGE ICT SOCIETY</span>
           <button
             type="button"
             onClick={scrollToTop}
@@ -145,8 +156,8 @@ export function KprFooter() {
 
         {/* Bottom Sub-bar */}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] tracking-[0.2em] text-white/45 uppercase">
-          <span>© 2026 SYNC&apos;26 COLLECTIVE. ALL RIGHTS RESERVED.</span>
-          <span className="text-mint-leaf/80">KEEP. PROTECT. REIMAGINE.</span>
+          <span>© 2026 DHARMARAJA COLLEGE ICT SOCIETY. ALL RIGHTS RESERVED.</span>
+          <span className="text-mint-leaf/80">THINK BEYOND. DESIGN BEYOND. COMPETE BEYOND.</span>
         </div>
       </div>
     </footer>

@@ -4,24 +4,15 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '../store/useAppStore';
 import { ImageTilt } from '../components/dom/ImageTilt';
 import { PerspectiveCardGallery } from '../components/dom/PerspectiveCardGallery';
+import { OrbitTimeline } from '../components/dom/OrbitTimeline';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const TERMINAL_LINES = [
-  '//INITIALIZING',
-  "SYNC'26 STORY",
-  '',
-  'LOADING...[47%]',
-  '',
-  'LOCATION_DATA',
-  'CHARACTER_ATTRIBUTES',
-  'KLMX TRANSMISSIONS',
-];
 
 const SECTION_ANCHORS = ['#project', '#the-keep', '#factions', '#the-world'];
 
 export function HomePage() {
   const setActiveSection = useAppStore((state) => state.setActiveSection);
+  const setActivePage = useAppStore((state) => state.setActivePage);
   const rootRef = useRef<HTMLDivElement>(null);
 
   // Refs for the 3D Morphing Hero-to-Card element
@@ -29,6 +20,7 @@ export function HomePage() {
   const heroCardBodyRef = useRef<HTMLDivElement>(null);
   const heroCardTiltRef = useRef<HTMLDivElement>(null);
   const heroCardGlareRef = useRef<HTMLDivElement>(null);
+  const s3RevealLayerRef = useRef<HTMLDivElement>(null);
   const tiltRafRef = useRef<number | null>(null);
 
   const handleCardMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -137,20 +129,97 @@ export function HomePage() {
           );
         }
 
-        gsap.to(heroCardBodyRef.current, {
-          scale: 0,
-          rotateY: 540,
-          rotateX: -28,
-          rotateZ: 12,
-          opacity: 0,
-          ease: 'power2.inOut',
+        // 2. AFTER CARD LOCK: ROTATE & SCALE UP TO REVEAL SECTION 3 IMAGE
+        const cardToSection3Tl = gsap.timeline({
           scrollTrigger: {
             trigger: '.section3',
-            start: 'top 75%',
-            end: 'top 15%',
-            scrub: 0.6,
+            start: 'top 80%',
+            end: 'top -15%',
+            scrub: 0.65,
           },
         });
+
+        cardToSection3Tl.fromTo(
+          heroCardBodyRef.current,
+          {
+            width: isDesktop ? '27vw' : '84vw',
+            height: isDesktop ? '66vh' : '46vh',
+            x: isDesktop ? '32.5vw' : '0vw',
+            y: isDesktop ? '4vh' : '18vh',
+            rotateY: 360,
+            rotateX: 0,
+            rotateZ: 0,
+            z: 0,
+            scale: 1,
+            borderRadius: '14px',
+          },
+          {
+            width: '92vw',
+            height: '82vh',
+            x: '0vw',
+            y: '0vh',
+            rotateY: 540,
+            scale: 1.08,
+            keyframes: {
+              rotateX: [0, -18, 0],
+              rotateZ: [0, 8, 0],
+              z: [0, -140, 0],
+            },
+            borderRadius: '12px',
+            duration: 0.75,
+            ease: 'power2.inOut',
+            immediateRender: false,
+          },
+          0
+        );
+
+        if (s3RevealLayerRef.current) {
+          cardToSection3Tl.fromTo(
+            s3RevealLayerRef.current,
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: 0.25,
+              ease: 'none',
+              immediateRender: false,
+            },
+            0
+          );
+        }
+
+        // Fade in the face marking image after the 3D card finishes rotating
+        cardToSection3Tl.fromTo(
+          '.s3-face-marking',
+          { opacity: 0, scale: 1.3 },
+          {
+            opacity: 1,
+            scale: 1.48,
+            duration: 0.25,
+            ease: 'power2.out',
+          },
+          0.75
+        );
+
+        // 3. SCALE DOWN REVEALED SECTION 3 IMAGE AS SECTION 4 ENTERS
+        gsap.fromTo(
+          heroCardBodyRef.current,
+          {
+            scale: 1.08,
+            opacity: 1,
+          },
+          {
+            scale: 0,
+            opacity: 0,
+            ease: 'power3.inOut',
+            immediateRender: false,
+            scrollTrigger: {
+              trigger: '.section4',
+              start: 'top 35%',
+              end: 'center center',
+              scrub: true,
+            },
+          }
+        );
       }
 
       gsap.to('.hero-section-content', {
@@ -175,38 +244,6 @@ export function HomePage() {
         scrollTrigger: {
           trigger: '.about-section',
           start: 'top 65%',
-        },
-      });
-
-      // 3. Section 3 center-scaling background image (.s3image)
-      gsap.fromTo(
-        '.s3image',
-        {
-          scale: 0,
-          y: window.innerWidth < 768 ? -120 : 0,
-          transformOrigin: 'center',
-        },
-        {
-          scale: 1.08,
-          y: 0,
-          ease: 'power3.inOut',
-          scrollTrigger: {
-            trigger: '.section3',
-            start: 'top 45%',
-            end: 'top -20%',
-            scrub: true,
-          },
-        }
-      );
-
-      gsap.to('.s3image', {
-        scale: 0,
-        ease: 'power3.inOut',
-        scrollTrigger: {
-          trigger: '.section4',
-          start: 'top 35%',
-          end: 'center center',
-          scrub: true,
         },
       });
 
@@ -389,6 +426,24 @@ export function HomePage() {
                 <span>SYNC&apos;26 // CORE ARTIFACT</span>
                 <span>3D ROTATION ACTIVE</span>
               </div>
+
+              {/* Section 3 Revealed Scaling Image Layer (active on 360deg -> 540deg flip) */}
+              <div
+                ref={s3RevealLayerRef}
+                className="absolute inset-0 bg-black opacity-0"
+              >
+                <img
+                  src="./images/section3-image.png"
+                  alt="Section 3 Revealed Backdrop"
+                  className="w-full h-full object-cover opacity-50"
+                  draggable={false}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/50" />
+                <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf/80 tracking-widest">
+                  <span>SYNC&apos;26 // THE KEEP</span>
+                  <span>SECTOR 04-K</span>
+                </div>
+              </div>
             </div>
 
             <div
@@ -431,31 +486,31 @@ export function HomePage() {
         className="hero-section relative min-h-screen w-full flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-6 sm:pr-10 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 z-30 pointer-events-none"
       >
         <div className="hero-section-content flex flex-col justify-between flex-1">
-          <div className="max-w-[310px] sm:max-w-[340px]">
+          <div className="max-w-[340px] sm:max-w-[380px]">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-              DIR // 01 — HOME
+              DHARMARAJA COLLEGE ICT SOCIETY PRESENTS
             </span>
-            <p className="font-whyte text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
-              SYNC&apos;26 is a brand that focuses on collective narrative and empowering storytellers. Keepers is a living story, an uncharted world waiting to be explored, to be imagined.
+            <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
+              A futuristic ICT competition experience bringing together innovation, creativity, coding, digital design, and technological thinking.
             </p>
           </div>
 
           <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-10 sm:pt-14">
             <div className="ml-[14%] sm:ml-[24%] md:ml-[29%] flex flex-col items-start">
               <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-white/75 mb-0.5 -ml-3 sm:-ml-4">
-                01K
+                01T
               </span>
               <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
-                KEEP<span className="text-mint-leaf">.</span>
+                THINK<span className="text-mint-leaf">.</span>
               </div>
             </div>
 
             <div className="ml-[18%] sm:ml-[30%] md:ml-[37%] flex flex-col items-start mt-1 sm:mt-2">
               <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-white/75 mb-0.5">
-                02P
+                02D
               </span>
               <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
-                PROTECT<span className="text-mint-leaf">.</span>
+                DESIGN<span className="text-mint-leaf">.</span>
               </div>
             </div>
 
@@ -476,7 +531,7 @@ export function HomePage() {
       ===================================================================== */}
       <section
         id="about"
-        className="about-section min-h-screen w-full relative z-20 flex justify-center font-whyte"
+        className="about-section min-h-screen w-full relative z-20 flex justify-center font-ethnocentric"
       >
         <div className="h-full w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
           <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
@@ -485,11 +540,11 @@ export function HomePage() {
                 <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
                   001
                 </span>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black tracking-tight pl-20 uppercase">
-                  A FAMILIAR WORLD... SET
+                <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black tracking-tight pl-20 uppercase">
+                  WHERE CREATIVE INTELLECT...
                 </h3>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black tracking-tight mt-1 uppercase">
-                  ON A DIFFERENT PATH<span className="text-mint-leaf">.</span>
+                <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black tracking-tight mt-1.5 uppercase">
+                  MEETS COMPUTATIONAL MASTERY<span className="text-mint-leaf">.</span>
                 </h3>
               </div>
             </div>
@@ -498,18 +553,18 @@ export function HomePage() {
               <div className="w-56 sm:w-64">
                 <ImageTilt
                   src="./images/trailer-side-media.webp"
-                  alt="Trailer Side Media"
+                  alt="Dharmaraja ICT Society Arena"
                   className="border border-mint-leaf/30"
                   tiltOptions={{ max: 20, scale: 1.03, perspective: 1200, speed: 400 }}
                 />
                 <div className="mt-2 flex items-center gap-2 font-mono text-[9px] text-mint-leaf uppercase tracking-widest">
                   <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                  <span>ANIMUS CHARACTER // ARCHIVE 01</span>
+                  <span>DHARMARAJA ICT // ARCHIVE 01</span>
                 </div>
               </div>
 
-              <h6 className="block max-w-xs text-[13px] leading-[18px] text-white/80 section-title">
-                Isolated within the New Eden safe zone, you witness humanity struggling to avoid descending into chaos.
+              <h6 className="block max-w-md font-mono text-[12px] leading-[18px] text-white/80 section-title">
+                The Information and Communication Technology Society of Dharmaraja College creates an arena celebrating innovation, analytical thinking, cutting-edge software development, and boundary-pushing multimedia design.
               </h6>
             </div>
           </div>
@@ -533,137 +588,144 @@ export function HomePage() {
       ===================================================================== */}
       <section
         id="the-keep"
-        className="section3 min-h-screen w-full relative z-20 flex flex-col justify-center font-whyte"
+        className="section3 min-h-screen w-full relative z-30 flex flex-col justify-center font-ethnocentric pointer-events-none"
       >
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10">
-          <img
-            src="./images/section3-image.png"
-            alt="Section 3 Backdrop"
-            className="s3image absolute object-cover w-[92vw] max-w-[1250px] h-[82vh] max-h-[900px] scale-0 rounded-xl opacity-45 border border-mint-leaf/30"
-          />
-        </div>
-
-        <div className="h-full mt-[180px] w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] z-30 relative mx-auto">
-          <div className="relative min-h-[52vh] flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0">
-              <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  002
-                </span>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black pl-20 max-sm:pl-12 uppercase">
-                  YOU ARE A KEEPER: AN AGENT
-                </h3>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black mt-1 uppercase">
-                  OF POWER AND CHANGE IN THIS
-                </h3>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black mt-1 uppercase">
-                  WORLD<span className="text-mint-leaf">.</span>
-                </h3>
-              </div>
-            </div>
-
-            <div className="p-8 w-[30%] max-md:w-full font-mono text-[10px] leading-4 text-mint-leaf/80 space-y-0.5">
-              {TERMINAL_LINES.map((line, idx) => (
-                <p key={idx} className="min-h-[12px]">
-                  {line}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative min-h-[48vh] flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[70%] max-sm:w-[35%] border-r border-white/20" />
-            <div className="p-6 sm:p-8 overflow-hidden w-[30%] max-sm:w-[65%] flex flex-col justify-between gap-4">
-              <div className="w-full flex items-center justify-between font-mono text-[10px] text-mint-leaf">
-                <div>
-                  <p>N 35°27.37</p>
-                  <p>E 139°38.57</p>
+        <div className="h-full mt-[180px] w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] z-30 relative mx-auto pointer-events-auto">
+          <div className="relative flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
+            {/* Left 70% Column: Title Header + Integrated Orbital Radar Grid */}
+            <div className="w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0 flex flex-col justify-between">
+              <div className="px-6 py-7 border-b border-white/20 flex items-end justify-between gap-4">
+                <div className="relative">
+                  <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
+                    002
+                  </span>
+                  <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black pl-20 max-sm:pl-12 uppercase">
+                    THE COMPETITION EXPERIENCE:
+                  </h3>
+                  <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black mt-1.5 uppercase">
+                    FROM REGISTRATION TO
+                  </h3>
+                  <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black mt-1.5 uppercase">
+                    THE GRAND STAGE<span className="text-mint-leaf">.</span>
+                  </h3>
                 </div>
-                <span className="px-2 py-0.5 border border-mint-leaf/40 text-[9px] flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-mint-leaf animate-ping" />
-                  TOPO // LIVE
-                </span>
+
+                <div className="max-lg:hidden text-right font-mono text-[9px] text-mint-leaf/70 tracking-widest uppercase shrink-0 pb-1">
+                  <p>SYS.CHRONO // LIVE</p>
+                  <p className="text-white/40">06 RINGS // 10 EVENTS</p>
+                </div>
               </div>
 
-              <div className="relative border border-mint-leaf/30 rounded overflow-hidden bg-evergreen/40 h-40 flex items-center justify-center">
+              <div className="flex-1 w-full">
+                <OrbitTimeline />
+              </div>
+            </div>
+
+            {/* Right 30% Column: Face Marking Image (Top) + Topographic Radar (Bottom) */}
+            <div className="w-[30%] max-md:w-full flex flex-col justify-between">
+              <div className="relative p-4 flex-1 min-h-[280px] border-b border-white/20 overflow-hidden flex items-center justify-center">
                 <img
-                  src="./images/protocol-bg.jpg"
-                  alt="Topographic Sector Map"
-                  className="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-luminosity"
+                  src="./images/face_marking.png"
+                  alt="SYNC '26 Face Marking"
+                  className="s3-face-marking opacity-0 w-full h-full max-h-[340px] object-contain scale-[1.48] select-none pointer-events-none"
                   draggable={false}
                 />
-                <svg
-                  className="relative z-10 w-full h-full text-mint-leaf/70"
-                  viewBox="0 0 320 160"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <ellipse
-                    cx="160"
-                    cy="80"
-                    rx="130"
-                    ry="58"
-                    stroke="currentColor"
-                    strokeWidth="0.8"
-                    strokeDasharray="6 4"
-                    className="animate-pulse"
+              </div>
+
+              <div className="p-6 sm:p-8 overflow-hidden flex flex-col justify-between gap-4">
+                <div className="w-full flex items-center justify-between font-mono text-[10px] text-mint-leaf">
+                  <div>
+                    <p>N 07°17.43</p>
+                    <p>E 080°38.82</p>
+                  </div>
+                  <span className="px-2 py-0.5 border border-mint-leaf/40 text-[9px] flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-mint-leaf animate-ping" />
+                    KANDY // LIVE
+                  </span>
+                </div>
+
+                <div className="relative border border-mint-leaf/30 rounded overflow-hidden bg-evergreen/40 h-44 flex items-center justify-center">
+                  <img
+                    src="./images/protocol-bg.jpg"
+                    alt="Topographic Sector Map"
+                    className="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-luminosity"
+                    draggable={false}
                   />
-                  <ellipse
-                    cx="160"
-                    cy="80"
-                    rx="96"
-                    ry="42"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                  />
-                  <ellipse
-                    cx="164"
-                    cy="78"
-                    rx="62"
-                    ry="26"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                    strokeDasharray="4 3"
-                  />
-                  <ellipse
-                    cx="168"
-                    cy="76"
-                    rx="28"
-                    ry="12"
-                    stroke="#D6F8ED"
-                    strokeWidth="1.2"
-                  />
-                  <line x1="0" y1="80" x2="320" y2="80" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
-                  <line x1="160" y1="0" x2="160" y2="160" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
-                  <circle cx="168" cy="76" r="3" fill="#41D2A2" />
-                </svg>
-                <div className="pointer-events-none absolute bottom-2 left-2.5 right-2.5 flex justify-between font-mono text-[8px] text-mint-leaf/80 tracking-widest">
-                  <span>ELEV // +412M</span>
-                  <span>SECTOR 04-K</span>
+                  <svg
+                    className="relative z-10 w-full h-full text-mint-leaf/70"
+                    viewBox="0 0 320 160"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <ellipse
+                      cx="160"
+                      cy="80"
+                      rx="130"
+                      ry="58"
+                      stroke="currentColor"
+                      strokeWidth="0.8"
+                      strokeDasharray="6 4"
+                      className="animate-pulse"
+                    />
+                    <ellipse
+                      cx="160"
+                      cy="80"
+                      rx="96"
+                      ry="42"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                    />
+                    <ellipse
+                      cx="164"
+                      cy="78"
+                      rx="62"
+                      ry="26"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                      strokeDasharray="4 3"
+                    />
+                    <ellipse
+                      cx="168"
+                      cy="76"
+                      rx="28"
+                      ry="12"
+                      stroke="#D6F8ED"
+                      strokeWidth="1.2"
+                    />
+                    <line x1="0" y1="80" x2="320" y2="80" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
+                    <line x1="160" y1="0" x2="160" y2="160" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
+                    <circle cx="168" cy="76" r="3" fill="#41D2A2" />
+                  </svg>
+                  <div className="pointer-events-none absolute bottom-2 left-2.5 right-2.5 flex justify-between font-mono text-[8px] text-mint-leaf/80 tracking-widest">
+                    <span>ELEV // +500M</span>
+                    <span>DHARMARAJA COLLEGE</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="relative min-h-[45vh] flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[30%] border-r border-white/20 relative overflow-hidden max-sm:hidden">
-              <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_49.5%,rgba(65,210,162,0.35)_50%,transparent_50.5%)]" />
+          <div className="relative flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
+            <div className="px-6 py-8 w-[30%] border-r border-white/20 relative overflow-hidden max-sm:hidden flex flex-col justify-between font-mono text-[9px] text-mint-leaf/60 tracking-widest uppercase">
+              <span>// SECTOR_DIAGONAL</span>
+              <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_49.5%,rgba(65,210,162,0.35)_50%,transparent_50.5%)] pointer-events-none" />
+              <span className="self-end text-white/40">DRCIS // 2026</span>
             </div>
 
-            <div className="px-6 py-8 w-[70%] max-sm:w-full">
+            <div className="px-6 py-10 w-[70%] max-sm:w-full">
               <div className="relative">
                 <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
                   003
                 </span>
                 {[
-                  'WHAT WILL YOU DO WITH THIS',
-                  'POWER? WILL YOU CHOOSE TO',
-                  'PROTECT OR DESTROY? TO GIVE',
-                  'OR TO TAKE?',
+                  "WHY PARTICIPATE IN SYNC'26?",
+                  'APPLIED ENGINEERING & DESIGN,',
+                  'NATIONAL INTER-SCHOOL GLORY,',
+                  'SHOWCASED ON MAIN EVENT DAY.',
                 ].map((item, idx) => (
                   <h3
                     key={idx}
-                    className={`section-title text-2xl sm:text-4xl md:text-[42px] leading-tight font-black uppercase ${
+                    className={`section-title text-xl sm:text-3xl md:text-[36px] leading-tight font-black uppercase ${
                       idx === 0 ? 'pl-20 max-sm:pl-12' : ''
                     }`}
                   >
@@ -674,25 +736,35 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="relative h-[45vh] max-sm:hidden flex w-full text-white border-b border-white/20 bg-black/50">
-            <div className="p-8 h-full w-[30%] border-r border-white/20" />
-            <div className="p-8 h-full w-[35%] border-r border-white/20 flex flex-col justify-between">
-              <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
-                SYNC&apos;26 <br /> SYMBOL // ARCHIVE
+          <div className="relative max-sm:hidden flex w-full text-white border-b border-white/20 bg-black/50">
+            <div className="p-8 w-[30%] border-r border-white/20 flex flex-col justify-between font-mono text-[10px] text-white/45 uppercase">
+              <span>// DIVISION_SCOPE</span>
+              <p className="text-mint-leaf/80 leading-relaxed">
+                INTRA-SCHOOL &amp; INTER-SCHOOL TRACKS // GRADES 06–13
               </p>
-              <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
             </div>
-            <div className="p-8 h-full w-[35%]" />
+            <div className="p-8 w-[35%] border-r border-white/20 flex items-center justify-between gap-4">
+              <p className="text-[10px] leading-4 uppercase font-mono text-mint-leaf">
+                DHARMARAJA COLLEGE <br /> ICT SOCIETY // OVER A DECADE OF EXCELLENCE
+              </p>
+              <img src="./images/logo.png" alt="Symbol" className="w-14 opacity-75 shrink-0" />
+            </div>
+            <div className="p-8 w-[35%] flex flex-col justify-between font-mono text-[10px] text-white/45 uppercase">
+              <span>// VENUE_PROTOCOL</span>
+              <p className="text-mint-leaf/80 leading-relaxed">
+                ONLINE QUALIFIERS &amp; PHYSICAL FINALE AT AUDITORIUM
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          SECTION 4: 10K INITIAL COLLECTION (#factions)
+          SECTION 4: 08 COMPETITION TRACKS (#factions)
       ===================================================================== */}
       <section
         id="factions"
-        className="section4 mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-whyte overflow-hidden"
+        className="section4 mt-[120px] min-h-screen w-full relative z-30 flex justify-center font-ethnocentric overflow-hidden"
       >
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
           <div className="bg-block1 absolute w-[92vw] max-w-[1300px] h-[88vh] bg-evergreen/90 border border-turf-green scale-0 rounded-xl" />
@@ -708,10 +780,10 @@ export function HomePage() {
           <div className="flex items-center justify-center w-[22vw] max-md:w-full py-8">
             <div className="-rotate-90 max-md:rotate-0 flex flex-col gap-2">
               <h2 className="font-ethnocentric text-[10vw] max-md:text-[22vw] leading-none tracking-tighter font-black text-white">
-                10K
+                08
               </h2>
               <span className="font-mono text-[11px] uppercase tracking-widest text-mint-leaf flex items-center gap-2">
-                <span>&gt;&gt;</span> Initial Collection
+                <span>&gt;&gt;</span> Competition Tracks
               </span>
             </div>
           </div>
@@ -720,7 +792,7 @@ export function HomePage() {
             <div className="s4-center-portrait w-full max-w-md px-6">
               <ImageTilt
                 src="./images/section4-image.png"
-                alt="10K Collection Portrait"
+                alt="08 Competition Tracks Portrait"
                 className="!object-contain"
                 tiltOptions={{ max: 30, scale: 1.04, perspective: 1200, speed: 800 }}
               />
@@ -731,14 +803,14 @@ export function HomePage() {
             <div className="p-6 border-b border-white/20">
               <ImageTilt
                 src="./images/face-traits.webp"
-                alt="Face Traits Upper"
+                alt="Competition Arena Upper"
                 tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
               />
             </div>
             <div className="p-6">
               <ImageTilt
                 src="./images/face-traits.webp"
-                alt="Face Traits Lower"
+                alt="Competition Arena Lower"
                 tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
               />
             </div>
@@ -747,11 +819,11 @@ export function HomePage() {
       </section>
 
       {/* =====================================================================
-          SECTION 5: 004 — 10,000 UNIQUE DIGITAL COLLECTIBLES (#collectibles)
+          SECTION 5: 004 — 08 PREMIER COMPETITION CATEGORIES (#collectibles)
       ===================================================================== */}
       <section
         id="collectibles"
-        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-whyte flex flex-col justify-between gap-12 max-md:pl-4"
+        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-ethnocentric flex flex-col justify-between gap-12 max-md:pl-4"
       >
         <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
           <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
@@ -759,23 +831,33 @@ export function HomePage() {
               <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
                 004
               </span>
-              <h3 className="text-3xl sm:text-4xl md:text-[42px] leading-none font-black pl-20 uppercase">
-                10,000 UNIQUE DIGITAL
+              <h3 className="text-2xl sm:text-3xl md:text-[38px] leading-none font-black pl-20 uppercase">
+                08 PREMIER COMPETITION
               </h3>
-              <h3 className="text-3xl sm:text-4xl md:text-[42px] leading-none font-black mt-1 uppercase">
-                COLLECTIBLES<span className="text-mint-leaf">.</span>
+              <h3 className="text-2xl sm:text-3xl md:text-[38px] leading-none font-black mt-1.5 uppercase">
+                CATEGORIES<span className="text-mint-leaf">.</span>
               </h3>
             </div>
           </div>
 
           <div className="w-1/2 max-md:w-full p-6 flex items-center">
-            <div className="relative">
-              <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf uppercase block mb-2">
-                Initial Collection
+            <div className="relative space-y-4">
+              <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf uppercase block">
+                Official ICT Day Arena • Grades 6–13
               </span>
-              <p className="text-[13px] leading-[18px] text-white/80 max-w-md">
-                Every Keeper is born, endowed with attributes from a collection of over 400 meticulously hand-painted assets. They are personable, iconic possessions that represent SYNC&apos;26&apos;s foundational pillars of evolution, inclusion, and imagination.
+              <p className="font-mono text-[12px] leading-[18px] text-white/80 max-w-md">
+                Compete across 7 core disciplines plus ASPECT Gaming: Logo Designing, Poster Designing, Game Designing, Web Designing, Algorithm (HackerRank), Video Editing, Odyssey Inter-School ICT Quiz, and Call of Duty 3 Esports.
               </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setActivePage('registrations');
+                  window.scrollTo({ top: 0, behavior: 'instant' });
+                }}
+                className="pointer-events-auto inline-flex items-center gap-2 px-5 py-2.5 bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[10px] tracking-[0.2em] uppercase transition-colors cursor-pointer"
+              >
+                <span>EXPLORE &amp; REGISTER &rarr;</span>
+              </button>
             </div>
           </div>
         </div>
@@ -788,7 +870,7 @@ export function HomePage() {
       ===================================================================== */}
       <section
         id="the-world"
-        className="section6 w-full h-screen z-30 relative overflow-hidden font-whyte text-white bg-black"
+        className="section6 w-full h-screen z-30 relative overflow-hidden font-ethnocentric text-white bg-black"
       >
         <div className="absolute inset-0 z-10 overflow-hidden">
           <img
@@ -820,7 +902,7 @@ export function HomePage() {
           <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
             001 . THE KEEP
           </span>
-          <p className="text-sm sm:text-base text-white/90">
+          <p className="font-mono text-xs sm:text-sm text-white/90">
             SYNC&apos;26 is a fortress of collective narrative and empowering storytellers. Keepers is a living story, an uncharted world waiting to be explored.
           </p>
         </div>
@@ -829,7 +911,7 @@ export function HomePage() {
           <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
             002 . FACTIONS
           </span>
-          <p className="text-sm sm:text-base text-white/90">
+          <p className="font-mono text-xs sm:text-sm text-white/90">
             Rival syndicates and guardians converge across the frontier. Every faction shapes the protocol through collective action.
           </p>
         </div>
@@ -838,36 +920,94 @@ export function HomePage() {
           <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
             003 . THE WORLD
           </span>
-          <p className="text-sm sm:text-base text-white/90">
+          <p className="font-mono text-xs sm:text-sm text-white/90">
             An ever-expanding synthetic biosphere engineered for the next generation of Keepers and creators.
           </p>
         </div>
       </section>
 
       {/* =====================================================================
-          SECTION 7: BECOME A KEEPER
+          SECTION 7: FINAL CTA & COORDINATOR CONTACT MATRIX
       ===================================================================== */}
-      <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-whyte bg-black/85 border-t border-white/20">
+      <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-ethnocentric bg-black/85 border-t border-white/20">
         <div className="h-full w-[97vw] max-md:w-full pt-[70px] pl-[68px] max-md:pl-4 flex flex-col justify-between z-30 relative overflow-hidden">
           <div className="min-h-[42vh] w-full border-b border-white/20 p-8 flex items-end justify-center s7-fade-up">
             <h2 className="font-ethnocentric text-[11vw] leading-none font-black tracking-tight text-white uppercase">
-              KEEPERS<span className="text-mint-leaf">.</span>
+              SYNC&apos;26<span className="text-mint-leaf">.</span>
             </h2>
           </div>
 
-          <div className="min-h-[42vh] w-full flex flex-col justify-between py-8 px-12 max-sm:px-4">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
-              BECOME A KEEPER // SYNC&apos;26
-            </span>
-            <span className="font-normal text-[13px] max-w-xs leading-5 block text-white/80 s7-fade-up">
-              SYNC&apos;26 is a brand that focuses on collective narrative and empowering storytellers. Keepers is a living story.
-            </span>
+          <div className="min-h-[42vh] w-full flex max-md:flex-col justify-between items-start md:items-end py-8 px-12 max-sm:px-4 gap-8">
+            <div className="flex flex-col justify-between space-y-4 s7-fade-up max-w-sm pointer-events-auto">
+              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf">
+                YOUR NEXT BREAKTHROUGH STARTS HERE // SYNC&apos;26
+              </span>
+              <span className="font-mono font-normal text-[12px] leading-5 block text-white/80">
+                Step into the futuristic dimension. Submit your entry or contact the Dharmaraja College ICT Society organizing committee.
+              </span>
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActivePage('registrations');
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                  }}
+                  className="px-4 py-2 bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[10px] tracking-[0.18em] uppercase transition-colors cursor-pointer"
+                >
+                  REGISTER NOW &rarr;
+                </button>
+                <a
+                  href="https://chat.whatsapp.com/IaBJyTRhZcACMFKUOrYndg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 border border-mint-leaf/40 bg-black/60 hover:bg-mint-leaf hover:text-black text-mint-leaf font-mono text-[10px] tracking-[0.18em] uppercase transition-colors"
+                >
+                  WHATSAPP COMMUNITY
+                </a>
+              </div>
+            </div>
+
+            <div className="flex flex-col space-y-2.5 font-mono text-[11px] s7-fade-up pointer-events-auto md:text-right">
+              <span className="text-[10px] tracking-[0.25em] text-mint-leaf uppercase">
+                COMMUNICATION MATRIX // GET IN TOUCH
+              </span>
+              <div className="text-white/85">
+                <span className="text-white/50 text-[10px] mr-2">COORDINATOR:</span>
+                <span>MUDITHA KORALEGEDARA — </span>
+                <a href="tel:+94702645851" className="text-mint-leaf hover:underline">
+                  +94 70 264 5851
+                </a>
+              </div>
+              <div className="text-white/85">
+                <span className="text-white/50 text-[10px] mr-2">CHIEF EDITOR &amp; TECH LEAD:</span>
+                <span>NETHUN THE EDITOR — </span>
+                <a href="tel:+94714906145" className="text-mint-leaf hover:underline">
+                  +94 71 490 6145
+                </a>
+              </div>
+              <div className="flex flex-wrap md:justify-end items-center gap-4 pt-1 text-[10px]">
+                <a
+                  href="mailto:drck.ictsociety@gmail.com"
+                  className="text-white/75 hover:text-mint-leaf transition-colors"
+                >
+                  drck.ictsociety@gmail.com
+                </a>
+                <a
+                  href="https://wa.link/05138r"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-mint-leaf hover:underline"
+                >
+                  [ CHAT ON WHATSAPP &nearr; ]
+                </a>
+              </div>
+            </div>
           </div>
 
           <div className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 sm:w-96 max-sm:static max-sm:translate-x-0 max-sm:translate-y-0 max-sm:mx-auto max-sm:pb-8">
             <ImageTilt
               src="./images/section4-image.png"
-              alt="Become a Keeper"
+              alt="SYNC 26 Arena"
               className="!object-contain s7-scale-up"
               tiltOptions={{ max: 35, scale: 1.04, perspective: 1200, speed: 1200 }}
             />

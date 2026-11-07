@@ -426,7 +426,7 @@ export function AboutPage() {
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
               DIR // 05 — ABOUT
             </span>
-            <p className="font-whyte text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
+            <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
               Discover the collective behind SYNC&apos;26. We unite builders, designers, and storytellers to engineer the next generation of interactive experiences.
             </p>
           </div>
@@ -467,7 +467,7 @@ export function AboutPage() {
       ===================================================================== */}
       <section
         id="about"
-        className="about-section min-h-screen w-full relative z-20 flex justify-center font-whyte"
+        className="about-section min-h-screen w-full relative z-20 flex justify-center font-ethnocentric"
       >
         <div className="h-full w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
           <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
@@ -499,7 +499,7 @@ export function AboutPage() {
                 </div>
               </div>
 
-              <h6 className="block max-w-xs text-[13px] leading-[18px] text-white/80 section-title">
+              <h6 className="block max-w-xs font-mono text-[12px] leading-[18px] text-white/80 section-title">
                 Built on the pillars of evolution, inclusion, and imagination—empowering the next wave of creators.
               </h6>
             </div>
@@ -524,7 +524,7 @@ export function AboutPage() {
       ===================================================================== */}
       <section
         id="the-keep"
-        className="section3 min-h-screen w-full relative z-20 flex flex-col justify-center font-whyte"
+        className="section3 min-h-screen w-full relative z-20 flex flex-col justify-center font-ethnocentric"
       >
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10">
           <img
@@ -652,7 +652,7 @@ export function AboutPage() {
       ===================================================================== */}
       <section
         id="factions"
-        className="section4 mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-whyte overflow-hidden"
+        className="section4 mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-ethnocentric overflow-hidden"
       >
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
           <div className="bg-block1 absolute w-[92vw] max-w-[1300px] h-[88vh] bg-evergreen/90 border border-turf-green scale-0 rounded-xl" />
@@ -711,7 +711,7 @@ export function AboutPage() {
       ===================================================================== */}
       <section
         id="collectibles"
-        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-whyte flex flex-col justify-between gap-12 max-md:pl-4"
+        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-ethnocentric flex flex-col justify-between gap-12 max-md:pl-4"
       >
         <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
           <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
@@ -733,7 +733,7 @@ export function AboutPage() {
               <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf uppercase block mb-2">
                 Who We Are
               </span>
-              <p className="text-[13px] leading-[18px] text-white/80 max-w-md">
+              <p className="font-mono text-[12px] leading-[18px] text-white/80 max-w-md">
                 SYNC&apos;26 brings together interdisciplinary teams dedicated to pushing boundaries across code, design, and narrative architecture.
               </p>
             </div>
@@ -748,7 +748,7 @@ export function AboutPage() {
       ===================================================================== */}
       <section
         id="the-world"
-        className="section6 w-full h-screen z-30 relative overflow-hidden font-whyte text-white bg-black"
+        className="section6 w-full h-screen z-30 relative overflow-hidden font-ethnocentric text-white bg-black"
       >
         <div className="absolute inset-0 z-10 overflow-hidden">
           <img
@@ -780,7 +780,7 @@ export function AboutPage() {
           <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
             001 . EVOLUTION
           </span>
-          <p className="text-sm sm:text-base text-white/90">
+          <p className="font-mono text-xs sm:text-sm text-white/90">
             Relentless iteration and forward-looking engineering drive everything we build.
           </p>
         </div>
@@ -789,7 +789,7 @@ export function AboutPage() {
           <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
             002 . INCLUSION
           </span>
-          <p className="text-sm sm:text-base text-white/90">
+          <p className="font-mono text-xs sm:text-sm text-white/90">
             An open protocol where every voice and discipline contributes to the shared narrative.
           </p>
         </div>
@@ -798,7 +798,7 @@ export function AboutPage() {
           <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
             003 . IMAGINATION
           </span>
-          <p className="text-sm sm:text-base text-white/90">
+          <p className="font-mono text-xs sm:text-sm text-white/90">
             Hold [DECRYPT] or press [SPACE] to peer into the underlying vision of SYNC&apos;26.
           </p>
         </div>
@@ -807,7 +807,7 @@ export function AboutPage() {
       {/* =====================================================================
           SECTION 7: FOOTER CALLOUT
       ===================================================================== */}
-      <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-whyte bg-black/85 border-t border-white/20">
+      <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-ethnocentric bg-black/85 border-t border-white/20">
         <div className="h-full w-[97vw] max-md:w-full pt-[70px] pl-[68px] max-md:pl-4 flex flex-col justify-between z-30 relative overflow-hidden">
           <div className="min-h-[42vh] w-full border-b border-white/20 p-8 flex items-end justify-center s7-fade-up">
             <h2 className="font-ethnocentric text-[11vw] leading-none font-black tracking-tight text-white uppercase">
@@ -819,7 +819,7 @@ export function AboutPage() {
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
               ABOUT // SYNC&apos;26 COLLECTIVE
             </span>
-            <span className="font-normal text-[13px] max-w-xs leading-5 block text-white/80 s7-fade-up">
+            <span className="font-mono font-normal text-[12px] max-w-xs leading-5 block text-white/80 s7-fade-up">
               SYNC&apos;26 is a brand that focuses on collective narrative and empowering storytellers.
             </span>
           </div>

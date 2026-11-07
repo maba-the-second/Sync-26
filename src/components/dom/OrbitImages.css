@@ -113,7 +113,7 @@
 }
 
 .orbit-card-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
   font-size: 7.5px;
   letter-spacing: 0.14em;
   color: var(--card-accent, #41d2a2);
@@ -121,7 +121,7 @@
 }
 
 .orbit-card-elig {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
   font-size: 7px;
   letter-spacing: 0.06em;
   color: rgba(255, 255, 255, 0.55);
@@ -157,7 +157,7 @@
 
 .orbit-card-desc {
   margin: 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
   font-size: 7.5px;
   line-height: 1.28;
   color: rgba(255, 255, 255, 0.76);
@@ -179,7 +179,7 @@
 .orbit-card-btn {
   pointer-events: auto;
   cursor: pointer;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
   font-size: 7.5px;
   font-weight: 700;
   letter-spacing: 0.12em;
