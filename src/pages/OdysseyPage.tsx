@@ -1,72 +1,151 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '../store/useAppStore';
 import { ImageTilt } from '../components/dom/ImageTilt';
-import { PerspectiveCardGallery } from '../components/dom/PerspectiveCardGallery';
+import { ShuffleText } from '../components/dom/ShuffleText';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TERMINAL_LINES = [
-  '//INITIALIZING',
-  "SYNC'26 ODYSSEY",
-  '',
-  'EXPEDITION_LOG...[ACTIVE]',
-  '',
-  'SECTOR_COORDINATES',
-  'HORIZON_TELEMETRY',
-  'DEEP_SPACE_BEACON',
+const SECTION_ANCHORS = ['#project', '#the-keep', '#factions', '#the-world'];
+
+const ABOUT_PILLARS = [
+  {
+    code: 'PHASE // 01',
+    title: 'ALGORITHMIC & LOGIC TRIALS',
+    description:
+      '[PLACEHOLDER] Navigate high-pressure problem-solving checkpoints designed to test analytical speed, computational thinking, and precision.',
+  },
+  {
+    code: 'PHASE // 02',
+    title: 'STRATEGIC ADAPTABILITY',
+    description:
+      '[PLACEHOLDER] Each stage introduces evolving constraints and real-world engineering scenarios where squads must pivot and innovate.',
+  },
+  {
+    code: 'PHASE // 03',
+    title: 'THE FINAL BEACON',
+    description:
+      '[PLACEHOLDER] Top-performing teams converge in the ultimate showdown to claim the Odyssey title at SYNC\u201926.',
+  },
 ];
 
-const SECTION_ANCHORS = ['#project', '#the-keep', '#factions', '#the-world'];
+const PAST_CHAMPIONS = [
+  {
+    year: '2019',
+    edition: 'ODYSSEY // 2019',
+    status: 'CHAMPIONS',
+    school: '[PLACEHOLDER: 2019 CHAMPION SCHOOL]',
+    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
+    summary:
+      'Placeholder description for the 2019 Odyssey Champions who claimed the inaugural title across the multi-stage technical trials.',
+  },
+  {
+    year: '2020',
+    edition: 'ODYSSEY // 2020',
+    status: 'CHAMPIONS',
+    school: '[PLACEHOLDER: 2020 CHAMPION SCHOOL]',
+    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
+    summary:
+      'Placeholder description for the 2020 Odyssey Champions, recognized for rapid algorithmic execution and strategic adaptability.',
+  },
+  {
+    year: '2021',
+    edition: 'ODYSSEY // 2021',
+    status: 'CHAMPIONS',
+    school: '[PLACEHOLDER: 2021 CHAMPION SCHOOL]',
+    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
+    summary:
+      'Placeholder description for the 2021 Odyssey Champions, excelling through virtual and remote problem-solving gauntlets.',
+  },
+  {
+    year: '2022',
+    edition: 'ODYSSEY // 2022',
+    status: 'CHAMPIONS',
+    school: '[PLACEHOLDER: 2022 CHAMPION SCHOOL]',
+    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
+    summary:
+      'Placeholder description for the 2022 Odyssey Champions, demonstrating superior engineering precision and teamwork.',
+  },
+  {
+    year: '2023',
+    edition: 'ODYSSEY // 2023',
+    status: 'CHAMPIONS',
+    school: '[PLACEHOLDER: 2023 CHAMPION SCHOOL]',
+    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
+    summary:
+      'Placeholder description for the 2023 Odyssey Champions, setting a high bar in cryptography, logic, and system design.',
+  },
+  {
+    year: '2024',
+    edition: 'ODYSSEY // 2024',
+    status: 'CHAMPIONS',
+    school: '[PLACEHOLDER: 2024 CHAMPION SCHOOL]',
+    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
+    summary:
+      'Placeholder description for the 2024 Odyssey Champions, dominating the sector checkpoints and final beacon showdown.',
+  },
+  {
+    year: '2025',
+    edition: 'ODYSSEY // 2025',
+    status: 'DEFENDING CHAMPIONS',
+    school: '[PLACEHOLDER: 2025 CHAMPION SCHOOL]',
+    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
+    summary:
+      'Placeholder description for the 2025 Odyssey Champions—the reigning title holders entering the SYNC\u201926 era.',
+  },
+];
+
+const EXTENDED_RULES = [
+  {
+    code: 'REG // 01',
+    category: 'ELIGIBILITY & TEAM COMPOSITION',
+    items: [
+      '[PLACEHOLDER] Open to students from Grades 6–13 representing recognized schools and institutions.',
+      '[PLACEHOLDER] Each squad must consist of [X–Y] registered members from the same institution.',
+      '[PLACEHOLDER] Participants may only register under a single squad for the duration of Odyssey.',
+    ],
+  },
+  {
+    code: 'REG // 02',
+    category: 'COMPETITION FORMAT & STAGES',
+    items: [
+      '[PLACEHOLDER] Odyssey consists of multiple sequential rounds: Preliminary Qualifier, Sector Gauntlet, and the Final Beacon.',
+      '[PLACEHOLDER] Checkpoints are time-bound; late submissions or incomplete telemetry packets will not be scored.',
+      '[PLACEHOLDER] Detailed briefs and environment credentials will be unlocked prior to each stage.',
+    ],
+  },
+  {
+    code: 'REG // 03',
+    category: 'TOOLS, RESOURCES & FAIR PLAY',
+    items: [
+      '[PLACEHOLDER] All solutions and code artifacts must be produced originally by the squad during the designated window.',
+      '[PLACEHOLDER] Unauthorized external assistance, plagiarism, or sharing of checkpoint keys across teams leads to immediate disqualification.',
+      '[PLACEHOLDER] Permitted languages, frameworks, and reference materials will be specified in each round brief.',
+    ],
+  },
+  {
+    code: 'REG // 04',
+    category: 'EVALUATION & ARBITRATION',
+    items: [
+      '[PLACEHOLDER] Submissions are evaluated on accuracy, execution efficiency, architectural clarity, and time of completion.',
+      '[PLACEHOLDER] In the event of a tie, checkpoint timestamps and bonus challenge telemetry will determine ranking.',
+      '[PLACEHOLDER] The decisions of the Dharmaraja ICT Society judging panel are final and binding.',
+    ],
+  },
+];
 
 export function OdysseyPage() {
   const setActiveSection = useAppStore((state) => state.setActiveSection);
+  const setActivePage = useAppStore((state) => state.setActivePage);
+
   const rootRef = useRef<HTMLDivElement>(null);
-
-  const heroCardStageRef = useRef<HTMLDivElement>(null);
-  const heroCardBodyRef = useRef<HTMLDivElement>(null);
-  const heroCardTiltRef = useRef<HTMLDivElement>(null);
-  const heroCardGlareRef = useRef<HTMLDivElement>(null);
-  const tiltRafRef = useRef<number | null>(null);
-
-  const handleCardMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const target = e.currentTarget;
-    const clientX = e.clientX;
-    const clientY = e.clientY;
-
-    if (tiltRafRef.current !== null) {
-      window.cancelAnimationFrame(tiltRafRef.current);
-    }
-
-    tiltRafRef.current = window.requestAnimationFrame(() => {
-      if (!heroCardTiltRef.current) return;
-      const rect = target.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (clientX - cx) / (rect.width / 2);
-      const dy = (clientY - cy) / (rect.height / 2);
-      const rotateX = (-dy * 16).toFixed(2);
-      const rotateY = (dx * 16).toFixed(2);
-      heroCardTiltRef.current.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
-      tiltRafRef.current = null;
-    });
-  }, []);
-
-  const handleCardMouseLeave = useCallback(() => {
-    if (tiltRafRef.current !== null) {
-      window.cancelAnimationFrame(tiltRafRef.current);
-      tiltRafRef.current = null;
-    }
-    if (heroCardTiltRef.current) {
-      heroCardTiltRef.current.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    }
-  }, []);
+  const bannerImgRef = useRef<HTMLImageElement>(null);
+  const logoPlaceholderRef = useRef<HTMLDivElement>(null);
+  const heroContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const isDesktop = window.innerWidth > 768;
-
       SECTION_ANCHORS.forEach((selector, idx) => {
         ScrollTrigger.create({
           trigger: selector,
@@ -77,760 +156,437 @@ export function OdysseyPage() {
         });
       });
 
-      if (heroCardBodyRef.current) {
-        const heroToCardTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: '.hero-section',
-            start: 'top top',
-            endTrigger: '.about-section',
-            end: 'top top',
-            scrub: 0.65,
-          },
-        });
-
-        heroToCardTl.fromTo(
-          heroCardBodyRef.current,
+      // Parallax Effect on Banner Image
+      if (bannerImgRef.current) {
+        gsap.fromTo(
+          bannerImgRef.current,
+          { yPercent: -10, scale: 1.14 },
           {
-            width: '100vw',
-            height: '100vh',
-            x: '0vw',
-            y: '0vh',
-            rotateY: 0,
-            rotateX: 0,
-            rotateZ: 0,
-            z: 0,
-            borderRadius: '0px',
-          },
-          {
-            width: isDesktop ? '27vw' : '84vw',
-            height: isDesktop ? '66vh' : '46vh',
-            x: isDesktop ? '32.5vw' : '0vw',
-            y: isDesktop ? '4vh' : '18vh',
-            rotateY: 360,
-            keyframes: {
-              rotateX: [0, 22, -14, 0],
-              rotateZ: [0, -9, 6, 0],
-              z: [0, -180, 60, 0],
+            yPercent: 20,
+            scale: 1.0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '.odyssey-hero',
+              start: 'top top',
+              end: 'bottom top',
+              scrub: true,
             },
-            borderRadius: '14px',
-            ease: 'power2.inOut',
-          },
-          0
+          }
         );
+      }
 
-        if (heroCardGlareRef.current) {
-          heroToCardTl.fromTo(
-            heroCardGlareRef.current,
-            { xPercent: -120, opacity: 0 },
-            {
-              keyframes: {
-                xPercent: [-120, 0, 120],
-                opacity: [0, 0.65, 0],
-              },
-              ease: 'none',
-            },
-            0
-          );
-        }
-
-        gsap.to(heroCardBodyRef.current, {
-          scale: 0,
-          rotateY: 540,
-          rotateX: -28,
-          rotateZ: 12,
-          opacity: 0,
-          ease: 'power2.inOut',
+      // Parallax Effect on Logo Placeholder
+      if (logoPlaceholderRef.current) {
+        gsap.to(logoPlaceholderRef.current, {
+          yPercent: -35,
+          opacity: 0.25,
+          ease: 'none',
           scrollTrigger: {
-            trigger: '.section3',
-            start: 'top 75%',
-            end: 'top 15%',
-            scrub: 0.6,
+            trigger: '.odyssey-hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
           },
         });
       }
 
-      gsap.to('.hero-section-content', {
-        opacity: 0,
-        y: -50,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: '.hero-section',
-          start: 'top top',
-          end: 'bottom center',
-          scrub: true,
-        },
-      });
-
-      gsap.from('.about-section .section-title', {
-        y: 50,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.about-section',
-          start: 'top 65%',
-        },
-      });
-
-      gsap.fromTo(
-        '.s3image',
-        {
-          scale: 0,
-          y: window.innerWidth < 768 ? -120 : 0,
-          transformOrigin: 'center',
-        },
-        {
-          scale: 1.08,
-          y: 0,
-          ease: 'power3.inOut',
+      // Parallax Effect on Hero Foreground Content
+      if (heroContentRef.current) {
+        gsap.to(heroContentRef.current, {
+          yPercent: -20,
+          opacity: 0,
+          ease: 'none',
           scrollTrigger: {
-            trigger: '.section3',
-            start: 'top 45%',
-            end: 'top -20%',
+            trigger: '.odyssey-hero',
+            start: 'top top',
+            end: 'bottom 35%',
             scrub: true,
           },
-        }
-      );
+        });
+      }
 
-      gsap.to('.s3image', {
-        scale: 0,
-        ease: 'power3.inOut',
-        scrollTrigger: {
-          trigger: '.section4',
-          start: 'top 35%',
-          end: 'center center',
-          scrub: true,
-        },
-      });
-
-      gsap.fromTo(
-        '.s4-center-portrait',
-        { scale: 0.35, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
+      // Subtle reveal animations for sections
+      gsap.utils.toArray<HTMLElement>('.odyssey-reveal').forEach((el) => {
+        gsap.from(el, {
+          y: 40,
+          opacity: 0,
+          duration: 0.85,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: '.section4',
-            start: 'top 55%',
-            end: 'center center',
-            scrub: 1,
+            trigger: el,
+            start: 'top 82%',
           },
-        }
-      );
-
-      const blockTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.section5',
-          start: 'top 75%',
-          end: 'center 35%',
-          scrub: 1,
-        },
-      });
-
-      blockTl
-        .fromTo(
-          '.bg-block1',
-          { scale: 0, transformOrigin: 'center' },
-          { scale: 1.05, duration: 1, ease: 'power3.inOut' }
-        )
-        .fromTo(
-          '.bg-block2',
-          { scale: 0, transformOrigin: 'center' },
-          { scale: 1.15, duration: 1, ease: 'power3.inOut' },
-          '-=0.5'
-        )
-        .fromTo(
-          '.bg-block3',
-          { scale: 0, transformOrigin: 'center' },
-          { scale: 1.25, duration: 1, ease: 'power3.inOut' },
-          '-=0.4'
-        );
-
-      const s6Tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.section6',
-          start: 'top top',
-          end: () => `+=${window.innerHeight * 2.6}`,
-          scrub: true,
-          pin: true,
-          pinSpacing: true,
-        },
-      });
-
-      s6Tl.to('.s6-text1', { opacity: 1, ease: 'none' }, 0);
-      s6Tl.to('.s6-img-1', { scale: 1.2, ease: 'none' }, 0);
-
-      s6Tl.fromTo(
-        '.s6-img-2',
-        {
-          clipPath: 'polygon(40% 25%, 60% 25%, 60% 75%, 40% 75%)',
-          scale: 1,
-        },
-        {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          scale: 1.18,
-          ease: 'none',
-        },
-        0.2
-      );
-      s6Tl.to('.s6-text1', { opacity: 0, ease: 'none' }, 0.35);
-      s6Tl.to('.s6-text2', { opacity: 1, ease: 'none' }, 0.45);
-
-      s6Tl.fromTo(
-        '.s6-img-3',
-        {
-          clipPath: 'polygon(50% 25%, 50% 25%, 50% 75%, 50% 75%)',
-        },
-        {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          ease: 'none',
-        },
-        0.75
-      );
-      s6Tl.to('.s6-text2', { opacity: 0, ease: 'none' }, 0.85);
-      s6Tl.to('.s6-text3', { opacity: 1, ease: 'none' }, 0.95);
-
-      gsap.from('.s7-scale-up', {
-        scale: 0.25,
-        opacity: 0,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.section7',
-          start: 'top 65%',
-          end: 'top 10%',
-          scrub: true,
-        },
-      });
-
-      gsap.from('.s7-fade-up', {
-        opacity: 0.2,
-        y: 100,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.section7',
-          start: 'top 65%',
-          end: 'top 10%',
-          scrub: true,
-        },
+        });
       });
     }, rootRef);
 
     ScrollTrigger.refresh();
     return () => ctx.revert();
-  }, []);
+  }, [setActiveSection]);
+
+  const handleGoToRegistration = () => {
+    setActivePage('registrations');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
 
   return (
-    <div ref={rootRef} className="w-full text-white">
+    <div ref={rootRef} className="w-full text-white pointer-events-auto">
       {/* =====================================================================
-          3D MORPHING HERO-TO-CARD STAGE (ODYSSEY)
-      ===================================================================== */}
-      <div
-        ref={heroCardStageRef}
-        className="fixed inset-0 w-full h-full z-25 pointer-events-none flex items-center justify-center"
-        style={{ perspective: '1600px' }}
-      >
-        <div
-          ref={heroCardBodyRef}
-          onMouseMove={handleCardMouseMove}
-          onMouseLeave={handleCardMouseLeave}
-          className="pointer-events-auto relative w-screen h-screen will-change-transform"
-          style={{
-            transformStyle: 'preserve-3d',
-          }}
-        >
-          <div
-            ref={heroCardTiltRef}
-            className="relative w-full h-full transition-transform duration-300 ease-out"
-            style={{
-              transformStyle: 'preserve-3d',
-              transform: 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-            }}
-          >
-            <div
-              className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-mint-leaf via-sea-green to-evergreen border border-mint-leaf/60 shadow-[0_25px_70px_rgba(4,56,38,0.85)]"
-              style={{
-                transform: 'translateZ(-10px)',
-              }}
-            />
-
-            <div
-              className="absolute inset-0 rounded-[inherit] bg-evergreen border border-mint-leaf/40"
-              style={{
-                transform: 'translateZ(-5px)',
-              }}
-            />
-
-            <div
-              className="absolute inset-0 rounded-[inherit] overflow-hidden bg-evergreen border-2 border-mint-leaf/70 flex flex-col items-center justify-center p-6"
-              style={{
-                backfaceVisibility: 'hidden',
-                transform: 'rotateY(180deg) translateZ(1px)',
-              }}
-            >
-              <img
-                src="./images/about-image.png"
-                alt="Card Back Face"
-                className="w-full h-full object-cover opacity-90 mix-blend-luminosity"
-                draggable={false}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC&apos;26 // ODYSSEY</span>
-                <span>3D ROTATION ACTIVE</span>
-              </div>
-            </div>
-
-            <div
-              className="relative w-full h-full rounded-[inherit] overflow-hidden border border-white/20 bg-black shadow-[0_20px_60px_rgba(0,0,0,0.95)]"
-              style={{
-                backfaceVisibility: 'hidden',
-                transform: 'translateZ(2px)',
-              }}
-            >
-              <img
-                src="./images/hero-bg.png"
-                alt="Hero 3D Morphing Card"
-                className="w-full h-full object-cover opacity-100"
-                draggable={false}
-              />
-
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/35" />
-
-              <div className="pointer-events-none absolute inset-3 border border-mint-leaf/25 rounded-[inherit]">
-                <div className="absolute -top-px -left-px w-3 h-3 border-t-2 border-l-2 border-mint-leaf" />
-                <div className="absolute -top-px -right-px w-3 h-3 border-t-2 border-r-2 border-mint-leaf" />
-                <div className="absolute -bottom-px -left-px w-3 h-3 border-b-2 border-l-2 border-mint-leaf" />
-                <div className="absolute -bottom-px -right-px w-3 h-3 border-b-2 border-r-2 border-mint-leaf" />
-              </div>
-
-              <div
-                ref={heroCardGlareRef}
-                className="pointer-events-none absolute inset-y-0 -left-1/4 w-1/2 bg-gradient-to-r from-transparent via-frozen-water/45 to-transparent skew-x-[-20deg]"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* =====================================================================
-          SECTION 1: HERO SECTION (#project) — ODYSSEY
+          1. HERO SECTION WITH LOGO PLACEHOLDER & PARALLAX BANNER IMAGE
       ===================================================================== */}
       <section
         id="project"
-        className="hero-section relative min-h-screen w-full flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-6 sm:pr-10 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 z-30 pointer-events-none"
+        className="odyssey-hero relative min-h-screen w-full overflow-hidden flex items-center justify-center pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 pb-14"
       >
-        <div className="hero-section-content flex flex-col justify-between flex-1">
-          <div className="max-w-[310px] sm:max-w-[340px]">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-              DIR // 03 — ODYSSEY
-            </span>
-            <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
-              Chart the unknown frontiers of SYNC&apos;26. Odyssey is our flagship exploration and problem-solving expedition across uncharted digital realms.
-            </p>
-          </div>
+        {/* Parallax Banner Image Container */}
+        <div className="absolute inset-0 z-0 overflow-hidden bg-black">
+          <img
+            ref={bannerImgRef}
+            src="./images/hero-bg.png"
+            alt="Odyssey Banner Placeholder"
+            className="w-full h-full object-cover opacity-75 will-change-transform"
+            draggable={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/95" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(65,210,162,0.14)_0%,transparent_70%)]" />
+        </div>
 
-          <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-10 sm:pt-14">
-            <div className="ml-[14%] sm:ml-[24%] md:ml-[29%] flex flex-col items-start">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-white/75 mb-0.5 -ml-3 sm:-ml-4">
-                01O
-              </span>
-              <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
-                SEEK<span className="text-mint-leaf">.</span>
-              </div>
+        {/* Architectural Inner HUD Frame */}
+        <div className="relative z-10 w-full max-w-[1400px] min-h-[78vh] border border-white/20 bg-black/35 backdrop-blur-[2px] flex flex-col justify-between p-6 sm:p-10 md:p-14">
+          {/* Corner Accents */}
+          <div className="pointer-events-none absolute -top-px -left-px w-4 h-4 border-t-2 border-l-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -top-px -right-px w-4 h-4 border-t-2 border-r-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -bottom-px -left-px w-4 h-4 border-b-2 border-l-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -bottom-px -right-px w-4 h-4 border-b-2 border-r-2 border-mint-leaf" />
+
+
+          {/* Center Stage: Logo Placeholder + Hero Title */}
+          <div
+            ref={heroContentRef}
+            className="my-auto py-10 flex flex-col items-center text-center gap-8 will-change-transform"
+          >
+            {/* Logo Placeholder */}
+            <div>
+
+              <img
+                src="./images/logo.png"
+                alt="Odyssey Logo Placeholder"
+                className="w-14 sm:w-16 object-contain opacity-90 mb-2.5"
+              />
+
             </div>
 
-            <div className="ml-[18%] sm:ml-[30%] md:ml-[37%] flex flex-col items-start mt-1 sm:mt-2">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-white/75 mb-0.5">
-                02O
+            {/* Main Heading */}
+            <div className="space-y-3 max-w-4xl">
+              <span className="font-mono text-[10px] sm:text-xs tracking-[0.3em] text-mint-leaf uppercase block">
+                SYNC&apos;26
               </span>
-              <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
-                VENTURE<span className="text-mint-leaf">.</span>
-              </div>
-            </div>
-
-            <div className="ml-0 sm:ml-[2%] flex flex-col items-start mt-1 sm:mt-2">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-mint-leaf mb-0.5 -ml-1 sm:-ml-3">
-                03O
-              </span>
-              <h1 className="font-ethnocentric text-[clamp(2.4rem,7.8vw,7.4rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
+              <h1 className="font-ethnocentric text-[clamp(2.4rem,7vw,6.2rem)] leading-[0.9] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
                 ODYSSEY<span className="text-mint-leaf">.</span>
               </h1>
+              <p className="font-mono text-xs sm:text-sm text-white/80 max-w-xl mx-auto leading-relaxed pt-2">
+                Chart the unknown frontiers of SYNC&apos;26. An elite multi-stage problem-solving and technical expedition across uncharted digital realms.
+              </p>
             </div>
+          </div>
+
+          {/* Bottom Bar Metadata */}
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-4 font-mono text-[10px] tracking-[0.2em] text-white/50">
+            <span>C03 - ODYSSEY</span>
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          SECTION 2: ABOUT SECTION (#about)
-      ===================================================================== */}
-      <section
-        id="about"
-        className="about-section min-h-screen w-full relative z-20 flex justify-center font-ethnocentric"
-      >
-        <div className="h-full w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
-          <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
-            <div className="px-6 py-8 max-md:p-4 text-white border-b border-white/20">
-              <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  001
-                </span>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black tracking-tight pl-20 uppercase">
-                  BEYOND THE HORIZON...
-                </h3>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black tracking-tight mt-1 uppercase">
-                  THE ODYSSEY BEGINS<span className="text-mint-leaf">.</span>
-                </h3>
-              </div>
-            </div>
-
-            <div className="p-8 flex flex-col justify-between gap-6 flex-1">
-              <div className="w-56 sm:w-64">
-                <ImageTilt
-                  src="./images/trailer-side-media.webp"
-                  alt="Trailer Side Media"
-                  className="border border-mint-leaf/30"
-                  tiltOptions={{ max: 20, scale: 1.03, perspective: 1200, speed: 400 }}
-                />
-                <div className="mt-2 flex items-center gap-2 font-mono text-[9px] text-mint-leaf uppercase tracking-widest">
-                  <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                  <span>ODYSSEY // ARCHIVE 04</span>
-                </div>
-              </div>
-
-              <h6 className="block max-w-xs font-mono text-[12px] leading-[18px] text-white/80 section-title">
-                Navigate multi-stage technical trials designed to test adaptability, endurance, and strategic execution.
-              </h6>
-            </div>
-          </div>
-
-          <div className="w-[38%] min-h-[86vh] border-l border-white/20 p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
-            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span>DOCKING BAY // 04</span>
-              <span className="text-mint-leaf">3D OBJECT LOCK</span>
-            </div>
-            <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
-            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span>HOVER CARD TO TILT</span>
-              <span>SYNC&apos;26 ARCHIVE</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          SECTION 3: 4-ROW ARCHITECTURAL GRID (#the-keep)
+          2. DESCRIPTION: "ABOUT ODYSSEY"
       ===================================================================== */}
       <section
         id="the-keep"
-        className="section3 min-h-screen w-full relative z-20 flex flex-col justify-center font-ethnocentric"
+        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center"
       >
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10">
-          <img
-            src="./images/section3-image.png"
-            alt="Section 3 Backdrop"
-            className="s3image absolute object-cover w-[92vw] max-w-[1250px] h-[82vh] max-h-[900px] scale-0 rounded-xl opacity-45 border border-mint-leaf/30"
-          />
-        </div>
-
-        <div className="h-full mt-[180px] w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] z-30 relative mx-auto">
-          <div className="relative min-h-[52vh] flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0">
-              <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  002
-                </span>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black pl-20 max-sm:pl-12 uppercase">
-                  EVERY CHECKPOINT UNLOCKS A
-                </h3>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black mt-1 uppercase">
-                  NEW LAYER OF THE ODYSSEY
-                </h3>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black mt-1 uppercase">
-                  PROTOCOL<span className="text-mint-leaf">.</span>
-                </h3>
-              </div>
+        <div className="odyssey-reveal w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
+          {/* Section Header */}
+          <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+            <div className="relative">
+              <span className="dot-mint pl-3 font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
+                001 // OVERVIEW
+              </span>
+              <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
+                ABOUT ODYSSEY<span className="text-mint-leaf">.</span>
+              </h2>
             </div>
+            <span className="font-mono text-[10px] tracking-[0.2em] text-white/50 uppercase">
+              PROTOCOL // EXPEDITION BRIEFING
+            </span>
+          </div>
 
-            <div className="p-8 w-[30%] max-md:w-full font-mono text-[10px] leading-4 text-mint-leaf/80 space-y-0.5">
-              {TERMINAL_LINES.map((line, idx) => (
-                <p key={idx} className="min-h-[12px]">
-                  {line}
+          {/* Main Description Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12">
+            {/* Left Narrative Column */}
+            <div className="lg:col-span-7 p-6 sm:p-10 border-b lg:border-b-0 lg:border-r border-white/20 flex flex-col justify-between gap-8">
+              <div className="space-y-5 font-mono text-xs sm:text-sm leading-relaxed text-white/85">
+                <p className="text-white font-medium text-sm sm:text-base">
+                  [PLACEHOLDER] Odyssey is the premier team-based technical and analytical challenge of SYNC&apos;26, crafted to push participants beyond conventional classroom boundaries.
                 </p>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative min-h-[48vh] flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[70%] max-sm:w-[35%] border-r border-white/20" />
-            <div className="p-6 sm:p-8 overflow-hidden w-[30%] max-sm:w-[65%] flex flex-col justify-between gap-4">
-              <div className="w-full flex items-center justify-between font-mono text-[10px] text-mint-leaf">
-                <div>
-                  <p>N 35°27.37</p>
-                  <p>E 139°38.57</p>
-                </div>
-                <span className="px-2 py-0.5 border border-mint-leaf/40 text-[9px] flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-mint-leaf animate-ping" />
-                  ODYSSEY // LIVE
-                </span>
+                <p>
+                  [PLACEHOLDER] Designed as an immersive expedition, Odyssey brings together aspiring technologists, coders, and strategic thinkers to tackle interconnected rounds of logic, software engineering, cryptography, and rapid prototyping.
+                </p>
+                <p>
+                  [PLACEHOLDER] Every checkpoint unlocks a deeper layer of the Odyssey protocol—demanding seamless collaboration, adaptability under pressure, and creative execution to reach the final beacon.
+                </p>
               </div>
 
-              <div className="relative border border-mint-leaf/30 rounded overflow-hidden bg-evergreen/40 h-40 flex items-center justify-center">
-                <img
-                  src="./images/protocol-bg.jpg"
-                  alt="Topographic Sector Map"
-                  className="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-luminosity"
-                  draggable={false}
-                />
-                <svg
-                  className="relative z-10 w-full h-full text-mint-leaf/70"
-                  viewBox="0 0 320 160"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <ellipse cx="160" cy="80" rx="130" ry="58" stroke="currentColor" strokeWidth="0.8" strokeDasharray="6 4" className="animate-pulse" />
-                  <ellipse cx="160" cy="80" rx="96" ry="42" stroke="currentColor" strokeWidth="1" />
-                  <ellipse cx="164" cy="78" rx="62" ry="26" stroke="currentColor" strokeWidth="1" strokeDasharray="4 3" />
-                  <ellipse cx="168" cy="76" rx="28" ry="12" stroke="#D6F8ED" strokeWidth="1.2" />
-                  <line x1="0" y1="80" x2="320" y2="80" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
-                  <line x1="160" y1="0" x2="160" y2="160" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
-                  <circle cx="168" cy="76" r="3" fill="#41D2A2" />
-                </svg>
-                <div className="pointer-events-none absolute bottom-2 left-2.5 right-2.5 flex justify-between font-mono text-[8px] text-mint-leaf/80 tracking-widest">
-                  <span>ELEV // +412M</span>
-                  <span>SECTOR 04-O</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative min-h-[45vh] flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[30%] border-r border-white/20 relative overflow-hidden max-sm:hidden">
-              <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_49.5%,rgba(65,210,162,0.35)_50%,transparent_50.5%)]" />
-            </div>
-
-            <div className="px-6 py-8 w-[70%] max-sm:w-full">
-              <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  003
-                </span>
-                {[
-                  'CHART YOUR COURSE THROUGH',
-                  'THE GAUNTLET. ONLY THE MOST',
-                  'RESILIENT SQUADS REACH THE',
-                  'FINAL BEACON.',
-                ].map((item, idx) => (
-                  <h3
-                    key={idx}
-                    className={`section-title text-2xl sm:text-4xl md:text-[42px] leading-tight font-black uppercase ${
-                      idx === 0 ? 'pl-20 max-sm:pl-12' : ''
-                    }`}
+              {/* Phase Breakdown */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/15">
+                {ABOUT_PILLARS.map((pillar) => (
+                  <div
+                    key={pillar.code}
+                    className="p-4 border border-white/15 bg-white/[0.02] hover:border-mint-leaf/50 transition-colors"
                   >
-                    {item}
-                  </h3>
+                    <span className="font-mono text-[9px] tracking-[0.2em] text-mint-leaf block mb-1.5">
+                      {pillar.code}
+                    </span>
+                    <h3 className="font-ethnocentric text-xs text-white uppercase mb-2 leading-snug">
+                      {pillar.title}
+                    </h3>
+                    <p className="font-mono text-[11px] leading-relaxed text-white/70">
+                      {pillar.description}
+                    </p>
+                  </div>
                 ))}
               </div>
             </div>
-          </div>
 
-          <div className="relative h-[45vh] max-sm:hidden flex w-full text-white border-b border-white/20 bg-black/50">
-            <div className="p-8 h-full w-[30%] border-r border-white/20" />
-            <div className="p-8 h-full w-[35%] border-r border-white/20 flex flex-col justify-between">
-              <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
-                SYNC&apos;26 <br /> ODYSSEY // ARCHIVE
-              </p>
-              <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
+            {/* Right Visual Column */}
+            <div className="lg:col-span-5 p-6 sm:p-10 flex flex-col items-center justify-between gap-6 bg-evergreen/15">
+              <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/50 tracking-widest uppercase">
+                <span>ARCHIVE VISUAL // 01</span>
+                <span className="text-mint-leaf">PLACEHOLDER MEDIA</span>
+              </div>
+
+              <div className="w-full max-w-sm my-auto">
+                <ImageTilt
+                  src="./images/about-image.png"
+                  alt="About Odyssey Visual Placeholder"
+                  className="border border-mint-leaf/30 rounded-lg overflow-hidden"
+                  tiltOptions={{ max: 15, scale: 1.02, perspective: 1200, speed: 400 }}
+                />
+              </div>
+
+              <div className="w-full flex items-center justify-between font-mono text-[9px] text-mint-leaf/80 tracking-widest uppercase border-t border-white/15 pt-4">
+                <span>DHARMARAJA ICT SOCIETY</span>
+                <span>SYNC&apos;26 // ODYSSEY</span>
+              </div>
             </div>
-            <div className="p-8 h-full w-[35%]" />
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          SECTION 4: 10K INITIAL COLLECTION (#factions)
+          3. DESCRIPTION: "PREVIOUS WINNERS FROM 2019"
       ===================================================================== */}
       <section
         id="factions"
-        className="section4 mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-ethnocentric overflow-hidden"
+        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center"
       >
-        <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block1 absolute w-[92vw] max-w-[1300px] h-[88vh] bg-evergreen/90 border border-turf-green scale-0 rounded-xl" />
-        </div>
-        <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block2 absolute w-[94vw] max-w-[1320px] h-[90vh] bg-turf-green/80 border border-sea-green scale-0 rounded-xl" />
-        </div>
-        <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block3 absolute w-[96vw] max-w-[1340px] h-[92vh] bg-black/90 border border-mint-leaf/40 scale-0 rounded-xl" />
-        </div>
-
-        <div className="w-[97vw] pl-[68px] pt-[70px] flex items-center z-30 relative max-md:flex-col max-md:pl-4">
-          <div className="flex items-center justify-center w-[22vw] max-md:w-full py-8">
-            <div className="-rotate-90 max-md:rotate-0 flex flex-col gap-2">
-              <h2 className="font-ethnocentric text-[10vw] max-md:text-[22vw] leading-none tracking-tighter font-black text-white">
-                04O
+        <div className="odyssey-reveal w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
+          {/* Section Header */}
+          <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+            <div className="relative">
+              <span className="dot-mint pl-3 font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
+                HALL OF RECORDS
+              </span>
+              <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
+                PREVIOUS WINNERS<span className="text-mint-leaf">.</span>
               </h2>
-              <span className="font-mono text-[11px] uppercase tracking-widest text-mint-leaf flex items-center gap-2">
-                <span>&gt;&gt;</span> Odyssey Track
-              </span>
             </div>
+            <span className="px-3 py-1 border border-mint-leaf/40 bg-mint-leaf/10 font-mono text-[10px] tracking-[0.2em] text-mint-leaf uppercase">
+              LEGACY ARCHIVE
+            </span>
           </div>
 
-          <div className="w-[48vw] max-md:w-full h-full flex items-center justify-center relative py-8 border-x border-white/20 max-md:border-x-0">
-            <div className="s4-center-portrait w-full max-w-md px-6">
-              <ImageTilt
-                src="./images/section4-image.png"
-                alt="Odyssey Portrait"
-                className="!object-contain"
-                tiltOptions={{ max: 30, scale: 1.04, perspective: 1200, speed: 800 }}
-              />
-            </div>
-          </div>
-
-          <div className="w-[30vw] max-md:w-full h-full flex flex-col justify-center">
-            <div className="p-6 border-b border-white/20">
-              <ImageTilt
-                src="./images/face-traits.webp"
-                alt="Face Traits Upper"
-                tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
-              />
-            </div>
-            <div className="p-6">
-              <ImageTilt
-                src="./images/face-traits.webp"
-                alt="Face Traits Lower"
-                tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          SECTION 5: COLLECTIBLES / STAGES (#collectibles)
-      ===================================================================== */}
-      <section
-        id="collectibles"
-        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-ethnocentric flex flex-col justify-between gap-12 max-md:pl-4"
-      >
-        <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
-          <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
-            <div className="relative">
-              <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                004
-              </span>
-              <h3 className="text-3xl sm:text-4xl md:text-[42px] leading-none font-black pl-20 uppercase">
-                EXPEDITION SECTORS &amp;
-              </h3>
-              <h3 className="text-3xl sm:text-4xl md:text-[42px] leading-none font-black mt-1 uppercase">
-                WAYPOINTS<span className="text-mint-leaf">.</span>
-              </h3>
-            </div>
-          </div>
-
-          <div className="w-1/2 max-md:w-full p-6 flex items-center">
-            <div className="relative">
-              <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf uppercase block mb-2">
-                Odyssey Campaign
-              </span>
-              <p className="font-mono text-[12px] leading-[18px] text-white/80 max-w-md">
-                Traverse sequential waypoints across the Odyssey campaign, solving real-world engineering and algorithmic anomalies.
+          {/* Legacy Description */}
+          <div className="p-6 sm:p-10 border-b border-white/20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8 space-y-4 font-mono text-xs sm:text-sm leading-relaxed text-white/80">
+              <p className="text-white font-medium text-sm sm:text-base">
+                [PLACEHOLDER] Honoring the champions of Odyssey from 2019 onwards who set the benchmark for excellence, teamwork, and technical mastery.
+              </p>
+              <p>
+                [PLACEHOLDER] Year after year since 2019, competing delegations have faced an intensive series of problem-solving and ICT challenges. Each title-winning squad distinguished themselves through analytical precision, composure under time constraints, and innovative thinking—building a legacy that continues in SYNC&apos;26.
               </p>
             </div>
+            <div className="lg:col-span-4 flex flex-col justify-between p-5 border border-mint-leaf/30 bg-evergreen/30 font-mono text-[11px] space-y-2">
+              <div className="flex justify-between text-mint-leaf">
+                <span>ARCHIVE TIMELINE</span>
+                <span>2019 — 2025</span>
+              </div>
+              <div className="flex justify-between text-white/70">
+                <span>EDITIONS RECORDED</span>
+                <span>07 CHAMPIONS</span>
+              </div>
+              <div className="flex justify-between text-white/70">
+                <span>NEXT EDITION</span>
+                <span className="text-mint-leaf">SYNC&apos;26</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Yearly Champions Grid (2019 - 2025) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {PAST_CHAMPIONS.map((champion, idx) => {
+              const isLatest = champion.year === '2025';
+              return (
+                <div
+                  key={champion.year}
+                  className={`p-6 sm:p-8 border-b border-r border-white/20 flex flex-col justify-between gap-6 hover:bg-white/[0.02] transition-colors ${isLatest ? 'md:col-span-2 lg:col-span-3 bg-evergreen/20' : ''
+                    }`}
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="font-ethnocentric text-3xl sm:text-4xl text-mint-leaf leading-none">
+                        {champion.year}
+                      </span>
+                      <span
+                        className={`px-2.5 py-1 border font-mono text-[9px] tracking-[0.18em] uppercase ${isLatest
+                          ? 'border-mint-leaf bg-mint-leaf/15 text-mint-leaf'
+                          : 'border-white/30 bg-white/5 text-white/80'
+                          }`}
+                      >
+                        {champion.status}
+                      </span>
+                    </div>
+
+                    <div className="pt-2 border-t border-white/15">
+                      <span className="font-mono text-[10px] tracking-[0.2em] text-mint-leaf/80 uppercase block mb-1">
+                        {champion.team}
+                      </span>
+                      <h3 className="font-ethnocentric text-sm sm:text-base text-white uppercase leading-snug">
+                        {champion.school}
+                      </h3>
+                    </div>
+
+                    <p className="font-mono text-xs leading-relaxed text-white/75">
+                      {champion.summary}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/45 uppercase">
+                    <span>{champion.edition}</span>
+                    <span className="text-mint-leaf">ARCHIVE // 0{idx + 1}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-
-        <PerspectiveCardGallery className="my-auto py-8" />
       </section>
 
       {/* =====================================================================
-          SECTION 6: PINNED 300VH POLYGON CLIP-PATH WORLD REVEAL (#the-world)
+          4. DESCRIPTION: "RULES AND REGULATIONS - EXTENDED"
       ===================================================================== */}
       <section
         id="the-world"
-        className="section6 w-full h-screen z-30 relative overflow-hidden font-ethnocentric text-white bg-black"
+        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center"
       >
-        <div className="absolute inset-0 z-10 overflow-hidden">
-          <img
-            src="./images/section3-image.png"
-            alt="The Keep"
-            className="s6-img-1 w-full h-full object-cover opacity-75"
-          />
-        </div>
+        <div className="odyssey-reveal w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
+          {/* Section Header */}
+          <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+            <div className="relative">
+              <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
+                RULES AND REGULATIONS — EXTENDED<span className="text-mint-leaf">.</span>
+              </h2>
+            </div>
+          </div>
 
-        <div className="absolute inset-0 z-20 overflow-hidden">
-          <img
-            src="./images/section3-bg.jpg"
-            alt="Factions"
-            className="s6-img-2 w-full h-full object-cover"
-            style={{ clipPath: 'polygon(40% 25%, 60% 25%, 60% 75%, 40% 75%)' }}
-          />
-        </div>
+          {/* Introductory Note */}
+          <div className="px-6 sm:px-10 py-6 border-b border-white/20 bg-evergreen/20 flex flex-wrap items-center justify-between gap-4">
+            <p className="font-mono text-xs sm:text-sm text-white/85 max-w-3xl leading-relaxed">
+              [PLACEHOLDER] All participating squads must adhere strictly to the extended Odyssey operational directives below. Violation of any protocol clause may result in penalty or disqualification.
+            </p>
+          </div>
 
-        <div className="absolute inset-0 z-30 overflow-hidden">
-          <img
-            src="./images/protocol-bg.jpg"
-            alt="The World"
-            className="s6-img-3 w-full h-full object-cover"
-            style={{ clipPath: 'polygon(50% 25%, 50% 25%, 50% 75%, 50% 75%)' }}
-          />
-        </div>
+          {/* Rules Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/20">
+            {EXTENDED_RULES.map((block, idx) => (
+              <div
+                key={block.code}
+                className={`p-6 sm:p-10 flex flex-col justify-between gap-6 ${idx >= 2 ? 'border-t border-white/20' : ''
+                  }`}
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between border-b border-white/15 pb-3">
+                    <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase">
+                      {block.code}
+                    </span>
+                  </div>
 
-        <div className="s6-text1 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            001 . LAUNCH
-          </span>
-          <p className="font-mono text-xs sm:text-sm text-white/90">
-            Depart from the New Eden safe zone into the outer sectors of the Odyssey grid.
-          </p>
-        </div>
+                  <h3 className="font-ethnocentric text-base sm:text-lg text-white uppercase leading-snug">
+                    {block.category}
+                  </h3>
 
-        <div className="s6-text2 opacity-0 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            002 . CONVERGENCE
-          </span>
-          <p className="font-mono text-xs sm:text-sm text-white/90">
-            Decode encrypted transmissions and collaborate under pressure as sectors merge.
-          </p>
-        </div>
+                  <ul className="space-y-3 pt-2">
+                    {block.items.map((item, itemIdx) => (
+                      <li
+                        key={itemIdx}
+                        className="flex items-start gap-3 font-mono text-xs leading-relaxed text-white/75"
+                      >
+                        <span className="w-1.5 h-1.5 bg-mint-leaf shrink-0 mt-1.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-        <div className="s6-text3 opacity-0 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            003 . ASCENSION
-          </span>
-          <p className="font-mono text-xs sm:text-sm text-white/90">
-            Claim the Odyssey crown at the core terminal of SYNC&apos;26.
-          </p>
+                <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">
+                  <span>SYNC&apos;26 ODYSSEY RULEBOOK</span>
+                  <span className="text-mint-leaf/80">SECTION 0{idx + 1}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* =====================================================================
-          SECTION 7: FOOTER CALLOUT
+          5. REDIRECT BUTTON TO REGISTRATION PAGE WITH INSPIRING TEXT
       ===================================================================== */}
-      <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-ethnocentric bg-black/85 border-t border-white/20">
-        <div className="h-full w-[97vw] max-md:w-full pt-[70px] pl-[68px] max-md:pl-4 flex flex-col justify-between z-30 relative overflow-hidden">
-          <div className="min-h-[42vh] w-full border-b border-white/20 p-8 flex items-end justify-center s7-fade-up">
-            <h2 className="font-ethnocentric text-[10vw] leading-none font-black tracking-tight text-white uppercase">
-              ODYSSEY<span className="text-mint-leaf">.</span>
-            </h2>
-          </div>
+      <section className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 py-16 sm:py-28 flex justify-center">
+        <div className="odyssey-reveal relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-8 sm:p-14 md:p-20 overflow-hidden">
+          {/* Corner Brackets */}
+          <div className="pointer-events-none absolute -top-px -left-px w-5 h-5 border-t-2 border-l-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -top-px -right-px w-5 h-5 border-t-2 border-r-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -bottom-px -left-px w-5 h-5 border-b-2 border-l-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -bottom-px -right-px w-5 h-5 border-b-2 border-r-2 border-mint-leaf" />
 
-          <div className="min-h-[42vh] w-full flex flex-col justify-between py-8 px-12 max-sm:px-4">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
-              ODYSSEY // SYNC&apos;26
-            </span>
-            <span className="font-mono font-normal text-[12px] max-w-xs leading-5 block text-white/80 s7-fade-up">
-              Embark on the SYNC&apos;26 Odyssey and forge your path across the uncharted frontier.
-            </span>
-          </div>
+          {/* Subtle Radial Glow */}
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(65,210,162,0.16)_0%,transparent_65%)]" />
 
-          <div className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 sm:w-96 max-sm:static max-sm:translate-x-0 max-sm:translate-y-0 max-sm:mx-auto max-sm:pb-8">
-            <ImageTilt
-              src="./images/section4-image.png"
-              alt="Odyssey"
-              className="!object-contain s7-scale-up"
-              tiltOptions={{ max: 35, scale: 1.04, perspective: 1200, speed: 1200 }}
-            />
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+            <div className="space-y-4 max-w-2xl">
+              <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-tight font-black uppercase text-white">
+                FORGE YOUR LEGACY BEYOND THE HORIZON<span className="text-mint-leaf">.</span>
+              </h2>
+              <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
+                Every great breakthrough begins with a single step into the unknown. Assemble your squad, calibrate your resolve, and claim your place among the pioneers of SYNC&apos;26 Odyssey.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-4 shrink-0 w-full lg:w-auto">
+              <button
+                type="button"
+                onClick={handleGoToRegistration}
+                className="group relative bg-mint-leaf hover:bg-white text-black font-ethnocentric text-xs sm:text-sm tracking-[0.18em] uppercase px-8 sm:px-10 py-5 transition-all duration-300 cursor-pointer shadow-[0_0_35px_rgba(65,210,162,0.35)] hover:shadow-[0_0_45px_rgba(255,255,255,0.5)] flex items-center justify-center gap-3"
+                style={{
+                  clipPath:
+                    'polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)',
+                }}
+              >
+                <ShuffleText text="REGISTER FOR ODYSSEY" />
+                <span className="font-mono text-base transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
