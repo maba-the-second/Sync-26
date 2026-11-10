@@ -242,7 +242,7 @@ export function OdysseyPage() {
         <div className="absolute inset-0 z-0 overflow-hidden bg-black">
           <img
             ref={bannerImgRef}
-            src="./images/hero-bg.png"
+            src="./images/odybanner.jpg"
             alt="Odyssey Banner Placeholder"
             className="w-full h-full object-cover opacity-75 will-change-transform"
             draggable={false}
