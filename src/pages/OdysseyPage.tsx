@@ -33,72 +33,45 @@ const ABOUT_PILLARS = [
 const PAST_CHAMPIONS = [
   {
     year: '2019',
-    edition: 'ODYSSEY // 2019',
-    status: 'CHAMPIONS',
+    edition: 'ODYSSEY 2019',
     school: '[PLACEHOLDER: 2019 CHAMPION SCHOOL]',
-    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
-    summary:
-      'Placeholder description for the 2019 Odyssey Champions who claimed the inaugural title across the multi-stage technical trials.',
   },
   {
     year: '2020',
-    edition: 'ODYSSEY // 2020',
-    status: 'CHAMPIONS',
+    edition: 'ODYSSEY 2020',
     school: '[PLACEHOLDER: 2020 CHAMPION SCHOOL]',
-    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
-    summary:
-      'Placeholder description for the 2020 Odyssey Champions, recognized for rapid algorithmic execution and strategic adaptability.',
   },
   {
     year: '2021',
-    edition: 'ODYSSEY // 2021',
-    status: 'CHAMPIONS',
+    edition: 'ODYSSEY 2021',
     school: '[PLACEHOLDER: 2021 CHAMPION SCHOOL]',
-    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
-    summary:
-      'Placeholder description for the 2021 Odyssey Champions, excelling through virtual and remote problem-solving gauntlets.',
   },
   {
     year: '2022',
-    edition: 'ODYSSEY // 2022',
-    status: 'CHAMPIONS',
+    edition: 'ODYSSEY 2022',
     school: '[PLACEHOLDER: 2022 CHAMPION SCHOOL]',
-    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
-    summary:
-      'Placeholder description for the 2022 Odyssey Champions, demonstrating superior engineering precision and teamwork.',
   },
   {
     year: '2023',
-    edition: 'ODYSSEY // 2023',
-    status: 'CHAMPIONS',
+    edition: 'ODYSSEY 2023',
     school: '[PLACEHOLDER: 2023 CHAMPION SCHOOL]',
-    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
-    summary:
-      'Placeholder description for the 2023 Odyssey Champions, setting a high bar in cryptography, logic, and system design.',
   },
   {
     year: '2024',
-    edition: 'ODYSSEY // 2024',
-    status: 'CHAMPIONS',
+    edition: 'ODYSSEY 2024',
     school: '[PLACEHOLDER: 2024 CHAMPION SCHOOL]',
-    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
-    summary:
-      'Placeholder description for the 2024 Odyssey Champions, dominating the sector checkpoints and final beacon showdown.',
   },
   {
     year: '2025',
-    edition: 'ODYSSEY // 2025',
+    edition: 'ODYSSEY 2025',
     status: 'DEFENDING CHAMPIONS',
     school: '[PLACEHOLDER: 2025 CHAMPION SCHOOL]',
-    team: '[PLACEHOLDER: WINNING SQUAD / DELEGATION]',
-    summary:
-      'Placeholder description for the 2025 Odyssey Champions—the reigning title holders entering the SYNC\u201926 era.',
   },
 ];
 
 const EXTENDED_RULES = [
   {
-    code: 'REG // 01',
+    code: '01',
     category: 'ELIGIBILITY & TEAM COMPOSITION',
     items: [
       '[PLACEHOLDER] Open to students from Grades 6–13 representing recognized schools and institutions.',
@@ -107,7 +80,7 @@ const EXTENDED_RULES = [
     ],
   },
   {
-    code: 'REG // 02',
+    code: '02',
     category: 'COMPETITION FORMAT & STAGES',
     items: [
       '[PLACEHOLDER] Odyssey consists of multiple sequential rounds: Preliminary Qualifier, Sector Gauntlet, and the Final Beacon.',
@@ -116,7 +89,7 @@ const EXTENDED_RULES = [
     ],
   },
   {
-    code: 'REG // 03',
+    code: '03',
     category: 'TOOLS, RESOURCES & FAIR PLAY',
     items: [
       '[PLACEHOLDER] All solutions and code artifacts must be produced originally by the squad during the designated window.',
@@ -125,7 +98,7 @@ const EXTENDED_RULES = [
     ],
   },
   {
-    code: 'REG // 04',
+    code: '04',
     category: 'EVALUATION & ARBITRATION',
     items: [
       '[PLACEHOLDER] Submissions are evaluated on accuracy, execution efficiency, architectural clarity, and time of completion.',
@@ -308,16 +281,10 @@ export function OdysseyPage() {
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
-              <span className="dot-mint pl-3 font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
-                001 // OVERVIEW
-              </span>
               <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
                 ABOUT ODYSSEY<span className="text-mint-leaf">.</span>
               </h2>
             </div>
-            <span className="font-mono text-[10px] tracking-[0.2em] text-white/50 uppercase">
-              PROTOCOL // EXPEDITION BRIEFING
-            </span>
           </div>
 
           {/* Main Description Grid */}
@@ -360,13 +327,11 @@ export function OdysseyPage() {
             {/* Right Visual Column */}
             <div className="lg:col-span-5 p-6 sm:p-10 flex flex-col items-center justify-between gap-6 bg-evergreen/15">
               <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/50 tracking-widest uppercase">
-                <span>ARCHIVE VISUAL // 01</span>
-                <span className="text-mint-leaf">PLACEHOLDER MEDIA</span>
               </div>
 
               <div className="w-full max-w-sm my-auto">
                 <ImageTilt
-                  src="./images/about-image.png"
+                  src="./images/ody1.jpg"
                   alt="About Odyssey Visual Placeholder"
                   className="border border-mint-leaf/30 rounded-lg overflow-hidden"
                   tiltOptions={{ max: 15, scale: 1.02, perspective: 1200, speed: 400 }}
@@ -375,7 +340,7 @@ export function OdysseyPage() {
 
               <div className="w-full flex items-center justify-between font-mono text-[9px] text-mint-leaf/80 tracking-widest uppercase border-t border-white/15 pt-4">
                 <span>DHARMARAJA ICT SOCIETY</span>
-                <span>SYNC&apos;26 // ODYSSEY</span>
+                <span>SYNC&apos;26</span>
               </div>
             </div>
           </div>
@@ -393,16 +358,10 @@ export function OdysseyPage() {
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
-              <span className="dot-mint pl-3 font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
-                HALL OF RECORDS
-              </span>
               <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
                 PREVIOUS WINNERS<span className="text-mint-leaf">.</span>
               </h2>
             </div>
-            <span className="px-3 py-1 border border-mint-leaf/40 bg-mint-leaf/10 font-mono text-[10px] tracking-[0.2em] text-mint-leaf uppercase">
-              LEGACY ARCHIVE
-            </span>
           </div>
 
           {/* Legacy Description */}
@@ -414,20 +373,6 @@ export function OdysseyPage() {
               <p>
                 [PLACEHOLDER] Year after year since 2019, competing delegations have faced an intensive series of problem-solving and ICT challenges. Each title-winning squad distinguished themselves through analytical precision, composure under time constraints, and innovative thinking—building a legacy that continues in SYNC&apos;26.
               </p>
-            </div>
-            <div className="lg:col-span-4 flex flex-col justify-between p-5 border border-mint-leaf/30 bg-evergreen/30 font-mono text-[11px] space-y-2">
-              <div className="flex justify-between text-mint-leaf">
-                <span>ARCHIVE TIMELINE</span>
-                <span>2019 — 2025</span>
-              </div>
-              <div className="flex justify-between text-white/70">
-                <span>EDITIONS RECORDED</span>
-                <span>07 CHAMPIONS</span>
-              </div>
-              <div className="flex justify-between text-white/70">
-                <span>NEXT EDITION</span>
-                <span className="text-mint-leaf">SYNC&apos;26</span>
-              </div>
             </div>
           </div>
 
@@ -449,7 +394,7 @@ export function OdysseyPage() {
                       <span
                         className={`px-2.5 py-1 border font-mono text-[9px] tracking-[0.18em] uppercase ${isLatest
                           ? 'border-mint-leaf bg-mint-leaf/15 text-mint-leaf'
-                          : 'border-white/30 bg-white/5 text-white/80'
+                          : 'border-none'
                           }`}
                       >
                         {champion.status}
@@ -472,7 +417,6 @@ export function OdysseyPage() {
 
                   <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/45 uppercase">
                     <span>{champion.edition}</span>
-                    <span className="text-mint-leaf">ARCHIVE // 0{idx + 1}</span>
                   </div>
                 </div>
               );
@@ -539,7 +483,6 @@ export function OdysseyPage() {
 
                 <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">
                   <span>SYNC&apos;26 ODYSSEY RULEBOOK</span>
-                  <span className="text-mint-leaf/80">SECTION 0{idx + 1}</span>
                 </div>
               </div>
             ))}
