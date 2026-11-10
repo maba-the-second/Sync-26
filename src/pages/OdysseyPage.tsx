@@ -378,7 +378,7 @@ export function OdysseyPage() {
 
           {/* Yearly Champions Grid (2019 - 2025) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {PAST_CHAMPIONS.map((champion, idx) => {
+            {PAST_CHAMPIONS.map((champion) => {
               const isLatest = champion.year === '2025';
               return (
                 <div
@@ -402,17 +402,10 @@ export function OdysseyPage() {
                     </div>
 
                     <div className="pt-2 border-t border-white/15">
-                      <span className="font-mono text-[10px] tracking-[0.2em] text-mint-leaf/80 uppercase block mb-1">
-                        {champion.team}
-                      </span>
                       <h3 className="font-ethnocentric text-sm sm:text-base text-white uppercase leading-snug">
                         {champion.school}
                       </h3>
                     </div>
-
-                    <p className="font-mono text-xs leading-relaxed text-white/75">
-                      {champion.summary}
-                    </p>
                   </div>
 
                   <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/45 uppercase">
