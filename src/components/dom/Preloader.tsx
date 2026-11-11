@@ -39,7 +39,7 @@ export function Preloader() {
       )}
     >
       <div className="flex justify-between text-white/50">
-        <span>SYNC&apos;26 // ENGINE BOOT SEQUENCE</span>
+        <span>SYNC'26  ENGINE BOOT SEQUENCE</span>
         <span>REV 26.04</span>
       </div>
 

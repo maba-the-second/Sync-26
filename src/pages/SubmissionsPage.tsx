@@ -368,7 +368,7 @@ export function SubmissionsPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
               <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC&apos;26 // SUBMISSIONS</span>
+                <span>SYNC'26 // SUBMISSIONS</span>
                 <span>3D ROTATION ACTIVE</span>
               </div>
             </div>
@@ -418,7 +418,7 @@ export function SubmissionsPage() {
               DIR // 03 — SUBMISSIONS
             </span>
             <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
-              Transmit your builds, prototypes, and technical dossiers to the SYNC&apos;26 evaluation core before the uplink lock engages.
+              Transmit your builds, prototypes, and technical dossiers to the SYNC'26 evaluation core before the uplink lock engages.
             </p>
           </div>
 
@@ -491,7 +491,7 @@ export function SubmissionsPage() {
               </div>
 
               <h6 className="block max-w-xs text-[13px] leading-[18px] text-white/80 section-title">
-                Ensure all source repositories, documentation, and demo recordings meet the SYNC&apos;26 submission protocol.
+                Ensure all source repositories, documentation, and demo recordings meet the SYNC'26 submission protocol.
               </h6>
             </div>
           </div>
@@ -504,7 +504,7 @@ export function SubmissionsPage() {
             <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
             <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
               <span>HOVER CARD TO TILT</span>
-              <span>SYNC&apos;26 ARCHIVE</span>
+              <span>SYNC'26 ARCHIVE</span>
             </div>
           </div>
         </div>
@@ -629,7 +629,7 @@ export function SubmissionsPage() {
             <div className="p-8 h-full w-[30%] border-r border-white/20" />
             <div className="p-8 h-full w-[35%] border-r border-white/20 flex flex-col justify-between">
               <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
-                SYNC&apos;26 <br /> SUBMISSIONS // ARCHIVE
+                SYNC'26 <br /> SUBMISSIONS // ARCHIVE
               </p>
               <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
             </div>
@@ -725,7 +725,7 @@ export function SubmissionsPage() {
                 Evaluation Protocol
               </span>
               <p className="text-[13px] leading-[18px] text-white/80 max-w-md">
-                Every submission is evaluated on architecture, originality, execution, and visual craft by the SYNC&apos;26 review council.
+                Every submission is evaluated on architecture, originality, execution, and visual craft by the SYNC'26 review council.
               </p>
             </div>
           </div>
@@ -790,7 +790,7 @@ export function SubmissionsPage() {
             003 . FINAL REVIEW
           </span>
           <p className="text-sm sm:text-base text-white/90">
-            Shortlisted entries advance to live demonstrations before the SYNC&apos;26 judging panel.
+            Shortlisted entries advance to live demonstrations before the SYNC'26 judging panel.
           </p>
         </div>
       </section>
@@ -808,10 +808,10 @@ export function SubmissionsPage() {
 
           <div className="min-h-[42vh] w-full flex flex-col justify-between py-8 px-12 max-sm:px-4">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
-              SUBMISSIONS // SYNC&apos;26
+              SUBMISSIONS // SYNC'26
             </span>
             <span className="font-normal text-[13px] max-w-xs leading-5 block text-white/80 s7-fade-up">
-              Upload your final deliverable and verify your submission hash in the SYNC&apos;26 portal.
+              Upload your final deliverable and verify your submission hash in the SYNC'26 portal.
             </span>
           </div>
 

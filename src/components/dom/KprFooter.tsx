@@ -6,7 +6,7 @@ const FOOTER_LINKS: {
   items: { label: string; target?: string; href?: string }[];
 }[] = [
   {
-    heading: '01 // NAVIGATION',
+    heading: ' NAVIGATION',
     items: [
       { label: 'FRONTIER', target: '#project' },
       { label: 'ROADMAP', target: '#the-keep' },
@@ -15,7 +15,7 @@ const FOOTER_LINKS: {
     ],
   },
   {
-    heading: '02 // COMMUNITY & SOCIALS',
+    heading: ' COMMUNITY & SOCIALS',
     items: [
       { label: 'WHATSAPP COMMUNITY', href: 'https://chat.whatsapp.com/IaBJyTRhZcACMFKUOrYndg' },
       { label: 'DIRECT WHATSAPP', href: 'https://wa.link/05138r' },
@@ -24,10 +24,10 @@ const FOOTER_LINKS: {
     ],
   },
   {
-    heading: '03 // DIRECT DISPATCH',
+    heading: ' DIRECT DISPATCH',
     items: [
-      { label: 'MUDITHA // +94 70 264 5851', href: 'tel:+94702645851' },
-      { label: 'NETHUN // +94 71 490 6145', href: 'tel:+94714906145' },
+      { label: 'MUDITHA  +94 70 264 5851', href: 'tel:+94702645851' },
+      { label: 'NETHUN  +94 71 490 6145', href: 'tel:+94714906145' },
       { label: 'DRCK.ICTSOCIETY@GMAIL.COM', href: 'mailto:drck.ictsociety@gmail.com' },
       { label: 'MISSION DIRECTIVE', target: '#about' },
     ],
@@ -40,7 +40,7 @@ export function KprFooter() {
   useEffect(() => {
     return useAppStore.subscribe((state) => {
       if (depthTextRef.current) {
-        depthTextRef.current.textContent = `DEPTH LOCK // ${(state.scrollProgress * 100).toFixed(1)}% — SECURE CONNECTION`;
+        depthTextRef.current.textContent = `DEPTH LOCK — ${(state.scrollProgress * 100).toFixed(1)}% — SECURE CONNECTION`;
       }
     });
   }, []);
@@ -83,10 +83,6 @@ export function KprFooter() {
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-b border-white/15 py-8 font-mono text-xs uppercase tracking-widest">
         {/* Left Brand Brief */}
         <div className="md:col-span-5 flex flex-col justify-between space-y-6 pr-6">
-          <div className="inline-flex items-center gap-2 text-mint-leaf text-[10px] tracking-[0.25em]">
-            <span className="w-2 h-2 bg-mint-leaf inline-block animate-pulse" />
-            <span>TERMINAL // END OF TRANSMISSION</span>
-          </div>
           <p className="font-mono text-xs text-white/80 leading-relaxed tracking-normal normal-case max-w-sm">
             Official competition and registration platform of the Dharmaraja College Information &amp; Communication Technology Society.
           </p>
@@ -137,20 +133,13 @@ export function KprFooter() {
       {/* MASSIVE KPR-STYLE FULL-BLEED BANNER AT THE BOTTOM */}
       <div className="relative z-10 flex flex-col justify-end my-auto pt-6">
         <div className="flex items-end justify-between mb-2 font-mono text-[10px] tracking-[0.25em] text-white/50 uppercase">
-          <span>04F // DHARMARAJA COLLEGE ICT SOCIETY</span>
-          <button
-            type="button"
-            onClick={scrollToTop}
-            className="pointer-events-auto px-4 py-2 border border-mint-leaf/40 bg-black/40 text-mint-leaf hover:bg-mint-leaf hover:text-black transition-colors cursor-pointer"
-          >
-            [ RETURN TO SURFACE ↑ ]
-          </button>
+          <span>DHARMARAJA COLLEGE ICT SOCIETY</span>
         </div>
 
         {/* Giant Monumental SYNC'26 Banner */}
         <div className="w-full overflow-hidden border-t border-white/15 pt-4">
           <div className="font-ethnocentric text-[clamp(3.2rem,13.2vw,14rem)] leading-[0.82] tracking-tighter uppercase text-white select-none drop-shadow-[0_0_50px_rgba(65,210,162,0.3)]">
-            SYNC&apos;26<span className="text-mint-leaf">.</span>
+            SYNC'26<span className="text-mint-leaf">.</span>
           </div>
         </div>
 

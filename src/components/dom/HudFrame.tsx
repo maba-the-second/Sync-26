@@ -181,7 +181,7 @@ export function HudFrame() {
               <div className="flex items-center gap-16 border-t border-white/20 p-4">
                 <span className="text-[9px] text-white/50">SYSTEM</span>
                 <span className="text-[10px] text-mint-leaf">
-                  DHARMARAJA ICT SOCIETY // SYNC&apos;26
+                  DHARMARAJA ICT SOCIETY // SYNC'26
                 </span>
               </div>
             </div>

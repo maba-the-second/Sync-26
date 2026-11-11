@@ -377,7 +377,7 @@ export function AspectPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
               <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC&apos;26 // ASPECT</span>
+                <span>SYNC'26 // ASPECT</span>
                 <span>3D ROTATION ACTIVE</span>
               </div>
             </div>
@@ -427,7 +427,7 @@ export function AspectPage() {
               DIR // 04 — ASPECT
             </span>
             <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
-              Shift your perspective inside SYNC&apos;26. Aspect celebrates visual direction, creative design systems, and immersive digital craft.
+              Shift your perspective inside SYNC'26. Aspect celebrates visual direction, creative design systems, and immersive digital craft.
             </p>
           </div>
 
@@ -500,7 +500,7 @@ export function AspectPage() {
               </div>
 
               <h6 className="block max-w-xs font-mono text-[12px] leading-[18px] text-white/80 section-title">
-                Where motion, 3D aesthetics, and interactive storytelling converge to define the visual language of SYNC&apos;26.
+                Where motion, 3D aesthetics, and interactive storytelling converge to define the visual language of SYNC'26.
               </h6>
             </div>
           </div>
@@ -513,7 +513,7 @@ export function AspectPage() {
             <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
             <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
               <span>HOVER CARD TO TILT</span>
-              <span>SYNC&apos;26 ARCHIVE</span>
+              <span>SYNC'26 ARCHIVE</span>
             </div>
           </div>
         </div>
@@ -638,7 +638,7 @@ export function AspectPage() {
             <div className="p-8 h-full w-[30%] border-r border-white/20" />
             <div className="p-8 h-full w-[35%] border-r border-white/20 flex flex-col justify-between">
               <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
-                SYNC&apos;26 <br /> ASPECT // ARCHIVE
+                SYNC'26 <br /> ASPECT // ARCHIVE
               </p>
               <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
             </div>
@@ -734,7 +734,7 @@ export function AspectPage() {
                 Creative Direction
               </span>
               <p className="font-mono text-[12px] leading-[18px] text-white/80 max-w-md">
-                Explore curated visual studies, 3D artifacts, and motion concepts produced for the Aspect division of SYNC&apos;26.
+                Explore curated visual studies, 3D artifacts, and motion concepts produced for the Aspect division of SYNC'26.
               </p>
             </div>
           </div>
@@ -817,10 +817,10 @@ export function AspectPage() {
 
           <div className="min-h-[42vh] w-full flex flex-col justify-between py-8 px-12 max-sm:px-4">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
-              ASPECT // SYNC&apos;26
+              ASPECT // SYNC'26
             </span>
             <span className="font-mono font-normal text-[12px] max-w-xs leading-5 block text-white/80 s7-fade-up">
-              Experience the creative and visual dimension of SYNC&apos;26 through Aspect.
+              Experience the creative and visual dimension of SYNC'26 through Aspect.
             </span>
           </div>
 

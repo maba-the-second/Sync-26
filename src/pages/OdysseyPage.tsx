@@ -252,13 +252,13 @@ export function OdysseyPage() {
             {/* Main Heading */}
             <div className="space-y-3 max-w-4xl">
               <span className="font-mono text-[10px] sm:text-xs tracking-[0.3em] text-mint-leaf uppercase block">
-                SYNC&apos;26
+                SYNC'26
               </span>
               <h1 className="font-ethnocentric text-[clamp(2.4rem,7vw,6.2rem)] leading-[0.9] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
                 ODYSSEY<span className="text-mint-leaf">.</span>
               </h1>
               <p className="font-mono text-xs sm:text-sm text-white/80 max-w-xl mx-auto leading-relaxed pt-2">
-                Chart the unknown frontiers of SYNC&apos;26. An elite multi-stage problem-solving and technical expedition across uncharted digital realms.
+                Chart the unknown frontiers of SYNC'26. An elite multi-stage problem-solving and technical expedition across uncharted digital realms.
               </p>
             </div>
           </div>
@@ -293,7 +293,7 @@ export function OdysseyPage() {
             <div className="lg:col-span-7 p-6 sm:p-10 border-b lg:border-b-0 lg:border-r border-white/20 flex flex-col justify-between gap-8">
               <div className="space-y-5 font-mono text-xs sm:text-sm leading-relaxed text-white/85">
                 <p className="text-white font-medium text-sm sm:text-base">
-                  [PLACEHOLDER] Odyssey is the premier team-based technical and analytical challenge of SYNC&apos;26, crafted to push participants beyond conventional classroom boundaries.
+                  [PLACEHOLDER] Odyssey is the premier team-based technical and analytical challenge of SYNC'26, crafted to push participants beyond conventional classroom boundaries.
                 </p>
                 <p>
                   [PLACEHOLDER] Designed as an immersive expedition, Odyssey brings together aspiring technologists, coders, and strategic thinkers to tackle interconnected rounds of logic, software engineering, cryptography, and rapid prototyping.
@@ -340,7 +340,7 @@ export function OdysseyPage() {
 
               <div className="w-full flex items-center justify-between font-mono text-[9px] text-mint-leaf/80 tracking-widest uppercase border-t border-white/15 pt-4">
                 <span>DHARMARAJA ICT SOCIETY</span>
-                <span>SYNC&apos;26</span>
+                <span>SYNC'26</span>
               </div>
             </div>
           </div>
@@ -371,7 +371,7 @@ export function OdysseyPage() {
                 [PLACEHOLDER] Honoring the champions of Odyssey from 2019 onwards who set the benchmark for excellence, teamwork, and technical mastery.
               </p>
               <p>
-                [PLACEHOLDER] Year after year since 2019, competing delegations have faced an intensive series of problem-solving and ICT challenges. Each title-winning squad distinguished themselves through analytical precision, composure under time constraints, and innovative thinking—building a legacy that continues in SYNC&apos;26.
+                [PLACEHOLDER] Year after year since 2019, competing delegations have faced an intensive series of problem-solving and ICT challenges. Each title-winning squad distinguished themselves through analytical precision, composure under time constraints, and innovative thinking—building a legacy that continues in SYNC'26.
               </p>
             </div>
           </div>
@@ -475,7 +475,7 @@ export function OdysseyPage() {
                 </div>
 
                 <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">
-                  <span>SYNC&apos;26 ODYSSEY RULEBOOK</span>
+                  <span>SYNC'26 ODYSSEY RULEBOOK</span>
                 </div>
               </div>
             ))}
@@ -503,7 +503,7 @@ export function OdysseyPage() {
                 FORGE YOUR LEGACY BEYOND THE HORIZON<span className="text-mint-leaf">.</span>
               </h2>
               <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
-                Every great breakthrough begins with a single step into the unknown. Assemble your squad, calibrate your resolve, and claim your place among the pioneers of SYNC&apos;26 Odyssey.
+                Every great breakthrough begins with a single step into the unknown. Assemble your squad, calibrate your resolve, and claim your place among the pioneers of SYNC'26 Odyssey.
               </p>
             </div>
 
