@@ -263,6 +263,30 @@ interface SeekState {
   notify?: boolean;
 }
 
+/** Computes an opaque solid background and WCAG high-contrast ink tokens per card accent. */
+function getSolidCardVars(accentColor: string, accentRgb: string): CSSProperties {
+  const parts = accentRgb.split(',').map((n) => Number.parseFloat(n.trim()));
+  let isLight = false;
+  if (parts.length === 3 && parts.every((n) => !Number.isNaN(n))) {
+    const [r, g, b] = parts.map((v) => {
+      const s = v / 255;
+      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    });
+    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    isLight = luminance > 0.2;
+  }
+  return {
+    '--card-accent': accentColor,
+    '--card-rgb': accentRgb,
+    '--card-bg': accentColor,
+    '--card-fg': isLight ? '#050709' : '#ffffff',
+    '--card-fg-muted': isLight ? 'rgba(5, 7, 9, 0.88)' : 'rgba(255, 255, 255, 0.92)',
+    '--card-divider': isLight ? 'rgba(5, 7, 9, 0.28)' : 'rgba(255, 255, 255, 0.35)',
+    '--card-btn-bg': isLight ? '#050709' : '#ffffff',
+    '--card-btn-fg': isLight ? '#ffffff' : '#050709',
+  } as CSSProperties;
+}
+
 const createEngine = (
   root: HTMLElement,
   config: React.MutableRefObject<EngineConfig>,
@@ -301,13 +325,13 @@ const createEngine = (
     suppressUntil: 0,
     introStart: -1,
     introDone: !config.current.intro,
-    visible: typeof IntersectionObserver === 'undefined',
-    reduced: !!query?.matches,
+    visible: true,
+    reduced: false,
     raf: 0,
     last: 0,
     destroyed: false,
   };
-  st.speed = st.reduced || config.current.paused ? 0 : 1;
+  st.speed = config.current.paused ? 0 : 1;
 
   const collect = () => {
     st.items = Array.from(root.querySelectorAll<HTMLElement>('[data-orbit-item]')).map((el) => ({
@@ -542,7 +566,7 @@ const createEngine = (
     st.last = now;
     let busy = false;
     if (st.lut && st.scale && st.introStart === -1 && !st.introDone && st.visible) {
-      if (cfg.intro && !st.reduced) {
+      if (cfg.intro) {
         st.introStart = now;
       } else {
         st.introDone = true;
@@ -560,7 +584,7 @@ const createEngine = (
     }
     const mult = cfg.speedMultiplier ?? 1;
     const want =
-      cfg.paused || st.reduced || st.seek
+      cfg.paused || st.seek
         ? 0
         : mult > 1
           ? mult
@@ -603,11 +627,13 @@ const createEngine = (
     const whole = Math.floor(st.lap);
     if (whole) st.lap -= whole;
     if (!st.drag && !st.seek) st.manual -= Math.floor(st.manual);
-    if (busy && st.visible && !st.destroyed) st.raf = requestAnimationFrame(frame);
+    const keepRunning = !st.destroyed && st.visible && (!cfg.paused || busy);
+    if (keepRunning) st.raf = requestAnimationFrame(frame);
   };
 
   const wake = () => {
-    if (st.raf || st.destroyed || !st.visible) return;
+    if (st.raf || st.destroyed) return;
+    st.visible = true;
     st.last = 0;
     st.raf = requestAnimationFrame(frame);
   };
@@ -638,7 +664,7 @@ const createEngine = (
     const delta = wrapSigned(st.front - u);
     st.glide = 0;
     st.speed = 0;
-    if (Math.abs(delta) < 0.012 || st.reduced) {
+    if (Math.abs(delta) < 0.012) {
       st.manual += delta;
       st.seek = null;
       render(performance.now());
@@ -795,7 +821,7 @@ const createEngine = (
   };
 
   const onMotion = () => {
-    st.reduced = !!query?.matches;
+    st.reduced = false;
     wake();
   };
 
@@ -826,10 +852,24 @@ const createEngine = (
   if (typeof IntersectionObserver !== 'undefined') {
     intersection = new IntersectionObserver(
       (entries) => {
-        st.visible = entries[entries.length - 1].isIntersecting;
-        if (st.visible) wake();
+        const entry = entries[entries.length - 1];
+        if (entry.isIntersecting) {
+          st.visible = true;
+          wake();
+          return;
+        }
+        const r = root.getBoundingClientRect();
+        const inViewport =
+          r.width > 0 &&
+          r.height > 0 &&
+          r.bottom > 0 &&
+          r.top < window.innerHeight &&
+          r.right > 0 &&
+          r.left < window.innerWidth;
+        st.visible = inViewport;
+        if (inViewport) wake();
       },
-      { threshold: 0.05 }
+      { threshold: 0 }
     );
     intersection.observe(root);
   }
@@ -1160,10 +1200,7 @@ export default function OrbitImages({
             className="orbit-item-inner"
             style={
               item.accentColor && item.accentRgb
-                ? ({
-                    '--card-accent': item.accentColor,
-                    '--card-rgb': item.accentRgb,
-                  } as CSSProperties)
+                ? getSolidCardVars(item.accentColor, item.accentRgb)
                 : undefined
             }
           >

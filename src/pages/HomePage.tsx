@@ -158,7 +158,10 @@ export function HomePage() {
             height: '82vh',
             x: '0vw',
             y: '0vh',
-            rotateY: 540,
+
+            rotateY: 180,
+            rotateX: 0,
+            rotateZ: 0,
             scale: 1.08,
             keyframes: {
               rotateX: [0, -18, 0],
@@ -204,10 +207,16 @@ export function HomePage() {
         gsap.fromTo(
           heroCardBodyRef.current,
           {
+            rotateY: 180,
+            rotateX: 0,
+            rotateZ: 0,
             scale: 1.08,
             opacity: 1,
           },
           {
+            rotateY: 180,
+            rotateX: 0,
+            rotateZ: 0,
             scale: 0,
             opacity: 0,
             ease: 'power3.inOut',
@@ -503,18 +512,12 @@ export function HomePage() {
             </div>
 
             <div className="ml-[18%] sm:ml-[30%] md:ml-[37%] flex flex-col items-start mt-1 sm:mt-2">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-white/75 mb-0.5">
-                02D
-              </span>
               <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                 DESIGN<span className="text-mint-leaf">.</span>
               </div>
             </div>
 
             <div className="ml-0 sm:ml-[2%] flex flex-col items-start mt-1 sm:mt-2">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-mint-leaf mb-0.5 -ml-1 sm:-ml-3">
-                03S
-              </span>
               <h1 className="font-ethnocentric text-[clamp(2.4rem,7.8vw,7.4rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
                 SYNC'26<span className="text-mint-leaf">.</span>
               </h1>
@@ -551,10 +554,6 @@ export function HomePage() {
                   className="border border-mint-leaf/30"
                   tiltOptions={{ max: 20, scale: 1.03, perspective: 1200, speed: 400 }}
                 />
-                <div className="mt-2 flex items-center gap-2 font-mono text-[9px] text-mint-leaf uppercase tracking-widest">
-                  <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                  <span>DHARMARAJA ICT - ARCHIVE 01</span>
-                </div>
               </div>
 
               <h6 className="block max-w-md font-mono text-[12px] leading-[18px] text-white/80 section-title">
@@ -565,8 +564,7 @@ export function HomePage() {
 
           <div className="w-[38%] min-h-[86vh] border-l border-white/20 p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
             <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
-            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span>HOVER CARD TO TILT</span>
+            <div className="w-full flex items-center justify-end font-mono text-[9px] text-white/40 uppercase tracking-widest">
               <span>SYNC'26 ARCHIVE</span>
             </div>
           </div>
@@ -590,17 +588,10 @@ export function HomePage() {
                     THE COMPETITION EXPERIENCE:
                   </h3>
                   <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black mt-1.5 uppercase">
-                    FROM REGISTRATION TO
-                  </h3>
-                  <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black mt-1.5 uppercase">
                     THE GRAND STAGE<span className="text-mint-leaf">.</span>
                   </h3>
                 </div>
 
-                <div className="max-lg:hidden text-right font-mono text-[9px] text-mint-leaf/70 tracking-widest uppercase shrink-0 pb-1">
-                  <p>SYS.CHRONO LIVE</p>
-                  <p className="text-white/40">06 RINGS - 10 EVENTS</p>
-                </div>
               </div>
 
               <div className="flex-1 w-full">
@@ -723,8 +714,7 @@ export function HomePage() {
               </p>
               <img src="./images/logo.png" alt="Symbol" className="w-14 opacity-75 shrink-0" />
             </div>
-            <div className="p-8 w-[35%] flex flex-col justify-between font-mono text-[10px] text-white/45 uppercase">
-              <span>VENUE_PROTOCOL</span>
+            <div className="p-8 w-[35%] flex flex-col justify-end font-mono text-[10px] text-white/45 uppercase">
               <p className="text-mint-leaf/80 leading-relaxed">
                 ONLINE QUALIFIERS &amp; PHYSICAL FINALE AT AUDITORIUM
               </p>
@@ -756,9 +746,6 @@ export function HomePage() {
               <h2 className="font-ethnocentric text-[10vw] max-md:text-[22vw] leading-none tracking-tighter font-black text-white">
                 08
               </h2>
-              <span className="font-mono text-[11px] uppercase tracking-widest text-mint-leaf flex items-center gap-2">
-                <span>&gt;&gt;</span> Competition Tracks
-              </span>
             </div>
           </div>
 
@@ -813,9 +800,6 @@ export function HomePage() {
 
           <div className="w-1/2 max-md:w-full p-6 flex items-center">
             <div className="relative space-y-4">
-              <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf uppercase block">
-                Official ICT Day Arena • Grades 6–13
-              </span>
               <p className="font-mono text-[12px] leading-[18px] text-white/80 max-w-md">
                 Compete across 7 core disciplines plus ASPECT Gaming: Logo Designing, Poster Designing, Game Designing, Web Designing, Algorithm (HackerRank), Video Editing, Odyssey Inter-School ICT Quiz, and Call of Duty 3 Esports.
               </p>
