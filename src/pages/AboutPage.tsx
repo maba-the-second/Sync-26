@@ -377,7 +377,7 @@ export function AboutPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
               <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC&apos;26 // ABOUT</span>
+                <span>SYNC'26 // ABOUT</span>
                 <span>3D ROTATION ACTIVE</span>
               </div>
             </div>
@@ -427,7 +427,7 @@ export function AboutPage() {
               DIR // 05 — ABOUT
             </span>
             <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
-              Discover the collective behind SYNC&apos;26. We unite builders, designers, and storytellers to engineer the next generation of interactive experiences.
+              Discover the collective behind SYNC'26. We unite builders, designers, and storytellers to engineer the next generation of interactive experiences.
             </p>
           </div>
 
@@ -480,7 +480,7 @@ export function AboutPage() {
                   THE ARCHITECTS OF...
                 </h3>
                 <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black tracking-tight mt-1 uppercase">
-                  THE SYNC&apos;26 PROTOCOL<span className="text-mint-leaf">.</span>
+                  THE SYNC'26 PROTOCOL<span className="text-mint-leaf">.</span>
                 </h3>
               </div>
             </div>
@@ -513,7 +513,7 @@ export function AboutPage() {
             <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
             <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
               <span>HOVER CARD TO TILT</span>
-              <span>SYNC&apos;26 ARCHIVE</span>
+              <span>SYNC'26 ARCHIVE</span>
             </div>
           </div>
         </div>
@@ -638,7 +638,7 @@ export function AboutPage() {
             <div className="p-8 h-full w-[30%] border-r border-white/20" />
             <div className="p-8 h-full w-[35%] border-r border-white/20 flex flex-col justify-between">
               <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
-                SYNC&apos;26 <br /> ABOUT // ARCHIVE
+                SYNC'26 <br /> ABOUT // ARCHIVE
               </p>
               <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
             </div>
@@ -734,7 +734,7 @@ export function AboutPage() {
                 Who We Are
               </span>
               <p className="font-mono text-[12px] leading-[18px] text-white/80 max-w-md">
-                SYNC&apos;26 brings together interdisciplinary teams dedicated to pushing boundaries across code, design, and narrative architecture.
+                SYNC'26 brings together interdisciplinary teams dedicated to pushing boundaries across code, design, and narrative architecture.
               </p>
             </div>
           </div>
@@ -799,7 +799,7 @@ export function AboutPage() {
             003 . IMAGINATION
           </span>
           <p className="font-mono text-xs sm:text-sm text-white/90">
-            Hold [DECRYPT] or press [SPACE] to peer into the underlying vision of SYNC&apos;26.
+            Hold [DECRYPT] or press [SPACE] to peer into the underlying vision of SYNC'26.
           </p>
         </div>
       </section>
@@ -811,16 +811,16 @@ export function AboutPage() {
         <div className="h-full w-[97vw] max-md:w-full pt-[70px] pl-[68px] max-md:pl-4 flex flex-col justify-between z-30 relative overflow-hidden">
           <div className="min-h-[42vh] w-full border-b border-white/20 p-8 flex items-end justify-center s7-fade-up">
             <h2 className="font-ethnocentric text-[11vw] leading-none font-black tracking-tight text-white uppercase">
-              SYNC&apos;26<span className="text-mint-leaf">.</span>
+              SYNC'26<span className="text-mint-leaf">.</span>
             </h2>
           </div>
 
           <div className="min-h-[42vh] w-full flex flex-col justify-between py-8 px-12 max-sm:px-4">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
-              ABOUT // SYNC&apos;26 COLLECTIVE
+              ABOUT // SYNC'26 COLLECTIVE
             </span>
             <span className="font-mono font-normal text-[12px] max-w-xs leading-5 block text-white/80 s7-fade-up">
-              SYNC&apos;26 is a brand that focuses on collective narrative and empowering storytellers.
+              SYNC'26 is a brand that focuses on collective narrative and empowering storytellers.
             </span>
           </div>
 

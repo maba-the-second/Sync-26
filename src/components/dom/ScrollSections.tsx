@@ -389,7 +389,7 @@ export function ScrollSections() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
               <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC&apos;26 // CORE ARTIFACT</span>
+                <span>SYNC'26 // CORE ARTIFACT</span>
                 <span>3D ROTATION ACTIVE</span>
               </div>
             </div>
@@ -441,7 +441,7 @@ export function ScrollSections() {
           {/* Top-Left KPRverse Narrative Intro Paragraph */}
           <div className="max-w-[310px] sm:max-w-[340px]">
             <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
-              SYNC&apos;26 is a brand that focuses on collective narrative and empowering storytellers. Keepers is a living story, an uncharted world waiting to be explored, to be imagined.
+              SYNC'26 is a brand that focuses on collective narrative and empowering storytellers. Keepers is a living story, an uncharted world waiting to be explored, to be imagined.
             </p>
           </div>
 
@@ -473,7 +473,7 @@ export function ScrollSections() {
                 03S
               </span>
               <h1 className="font-ethnocentric text-[clamp(2.4rem,7.8vw,7.4rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
-                SYNC&apos;26<span className="text-mint-leaf">.</span>
+                SYNC'26<span className="text-mint-leaf">.</span>
               </h1>
             </div>
           </div>
@@ -536,7 +536,7 @@ export function ScrollSections() {
             <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
             <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
               <span>HOVER CARD TO TILT</span>
-              <span>SYNC&apos;26 ARCHIVE</span>
+              <span>SYNC'26 ARCHIVE</span>
             </div>
           </div>
         </div>
@@ -700,7 +700,7 @@ export function ScrollSections() {
             <div className="p-8 h-full w-[30%] border-r border-white/20" />
             <div className="p-8 h-full w-[35%] border-r border-white/20 flex flex-col justify-between">
               <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
-                SYNC&apos;26 <br /> SYMBOL // ARCHIVE
+                SYNC'26 <br /> SYMBOL // ARCHIVE
               </p>
               <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
             </div>
@@ -801,7 +801,7 @@ export function ScrollSections() {
                 Initial Collection
               </span>
               <p className="text-[13px] leading-[18px] text-white/80 max-w-md">
-                Every Keeper is born, endowed with attributes from a collection of over 400 meticulously hand-painted assets. They are personable, iconic possessions that represent SYNC&apos;26&apos;s foundational pillars of evolution, inclusion, and imagination.
+                Every Keeper is born, endowed with attributes from a collection of over 400 meticulously hand-painted assets. They are personable, iconic possessions that represent SYNC'26's foundational pillars of evolution, inclusion, and imagination.
               </p>
             </div>
           </div>
@@ -853,7 +853,7 @@ export function ScrollSections() {
             001 . THE KEEP
           </span>
           <p className="text-sm sm:text-base text-white/90">
-            SYNC&apos;26 is a fortress of collective narrative and empowering storytellers. Keepers is a living story, an uncharted world waiting to be explored.
+            SYNC'26 is a fortress of collective narrative and empowering storytellers. Keepers is a living story, an uncharted world waiting to be explored.
           </p>
         </div>
 
@@ -891,10 +891,10 @@ export function ScrollSections() {
 
           <div className="min-h-[42vh] w-full flex flex-col justify-between py-8 px-12 max-sm:px-4">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
-              BECOME A KEEPER // SYNC&apos;26
+              BECOME A KEEPER // SYNC'26
             </span>
             <span className="font-normal text-[13px] max-w-xs leading-5 block text-white/80 s7-fade-up">
-              SYNC&apos;26 is a brand that focuses on collective narrative and empowering storytellers. Keepers is a living story.
+              SYNC'26 is a brand that focuses on collective narrative and empowering storytellers. Keepers is a living story.
             </span>
           </div>
 

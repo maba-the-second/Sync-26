@@ -185,7 +185,7 @@ export function OrbitTimeline({
         <div className="pointer-events-none absolute top-4 left-5 flex flex-col gap-0.5 font-mono text-[9px] text-mint-leaf/70 tracking-widest uppercase">
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-            <span>ORBITAL_RADAR // SYNC&apos;26</span>
+            <span>ORBITAL_RADAR // SYNC'26</span>
           </div>
           <span className="text-white/40">RINGS: 0{ringCount} // NODES: {flatNodes.length}</span>
         </div>
@@ -200,7 +200,7 @@ export function OrbitTimeline({
         </div>
 
         <div className="pointer-events-none absolute bottom-4 right-5 font-mono text-[9px] text-mint-leaf/60 tracking-widest uppercase">
-          <span>SECTOR // 07°17&apos;N 80°38&apos;E</span>
+          <span>SECTOR // 07°17'N 80°38'E</span>
         </div>
 
         {/* Radar Square Canvas */}
@@ -570,7 +570,7 @@ export function OrbitTimeline({
         </div>
 
         <div className="px-4 py-2.5 border-t border-white/20 flex items-center justify-between font-mono text-[9px] text-white/45 tracking-widest uppercase">
-          <span>SYNC&apos;26 CHRONOLOGY</span>
+          <span>SYNC'26 CHRONOLOGY</span>
           <span className="text-mint-leaf">INTERACTIVE</span>
         </div>
       </div>

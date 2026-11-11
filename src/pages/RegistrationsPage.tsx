@@ -1301,7 +1301,7 @@ export function RegistrationsPage() {
 
                       <div>
                         <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Team Captain&apos;s Full Name{' '}
+                          Team Captain's Full Name{' '}
                           <span style={{ color: activeComp.accentColor }}>*</span>
                         </label>
                         <input
@@ -1320,7 +1320,7 @@ export function RegistrationsPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
                         <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Captain&apos;s Grade{' '}
+                          Captain's Grade{' '}
                           <span style={{ color: activeComp.accentColor }}>* (10–13)</span>
                         </label>
                         <select
@@ -1342,7 +1342,7 @@ export function RegistrationsPage() {
 
                       <div>
                         <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Captain&apos;s Email{' '}
+                          Captain's Email{' '}
                           <span style={{ color: activeComp.accentColor }}>*</span>
                         </label>
                         <input
@@ -1359,7 +1359,7 @@ export function RegistrationsPage() {
 
                       <div>
                         <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Captain&apos;s Phone{' '}
+                          Captain's Phone{' '}
                           <span style={{ color: activeComp.accentColor }}>*</span>
                         </label>
                         <input

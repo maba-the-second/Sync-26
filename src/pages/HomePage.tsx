@@ -423,7 +423,7 @@ export function HomePage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
               <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC&apos;26 // CORE ARTIFACT</span>
+                <span>SYNC'26 - CORE ARTIFACT</span>
                 <span>3D ROTATION ACTIVE</span>
               </div>
 
@@ -440,7 +440,7 @@ export function HomePage() {
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/50" />
                 <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf/80 tracking-widest">
-                  <span>SYNC&apos;26 // THE KEEP</span>
+                  <span>SYNC'26 - THE KEEP</span>
                   <span>SECTOR 04-K</span>
                 </div>
               </div>
@@ -497,9 +497,6 @@ export function HomePage() {
 
           <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-10 sm:pt-14">
             <div className="ml-[14%] sm:ml-[24%] md:ml-[29%] flex flex-col items-start">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-white/75 mb-0.5 -ml-3 sm:-ml-4">
-                01T
-              </span>
               <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                 THINK<span className="text-mint-leaf">.</span>
               </div>
@@ -519,7 +516,7 @@ export function HomePage() {
                 03S
               </span>
               <h1 className="font-ethnocentric text-[clamp(2.4rem,7.8vw,7.4rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
-                SYNC&apos;26<span className="text-mint-leaf">.</span>
+                SYNC'26<span className="text-mint-leaf">.</span>
               </h1>
             </div>
           </div>
@@ -537,9 +534,6 @@ export function HomePage() {
           <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
             <div className="px-6 py-8 max-md:p-4 text-white border-b border-white/20">
               <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  001
-                </span>
                 <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black tracking-tight pl-20 uppercase">
                   WHERE CREATIVE INTELLECT...
                 </h3>
@@ -559,7 +553,7 @@ export function HomePage() {
                 />
                 <div className="mt-2 flex items-center gap-2 font-mono text-[9px] text-mint-leaf uppercase tracking-widest">
                   <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                  <span>DHARMARAJA ICT // ARCHIVE 01</span>
+                  <span>DHARMARAJA ICT - ARCHIVE 01</span>
                 </div>
               </div>
 
@@ -570,14 +564,10 @@ export function HomePage() {
           </div>
 
           <div className="w-[38%] min-h-[86vh] border-l border-white/20 p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
-            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span>DOCKING BAY // 01</span>
-              <span className="text-mint-leaf">3D OBJECT LOCK</span>
-            </div>
             <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
             <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
               <span>HOVER CARD TO TILT</span>
-              <span>SYNC&apos;26 ARCHIVE</span>
+              <span>SYNC'26 ARCHIVE</span>
             </div>
           </div>
         </div>
@@ -596,9 +586,6 @@ export function HomePage() {
             <div className="w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0 flex flex-col justify-between">
               <div className="px-6 py-7 border-b border-white/20 flex items-end justify-between gap-4">
                 <div className="relative">
-                  <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                    002
-                  </span>
                   <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black pl-20 max-sm:pl-12 uppercase">
                     THE COMPETITION EXPERIENCE:
                   </h3>
@@ -611,8 +598,8 @@ export function HomePage() {
                 </div>
 
                 <div className="max-lg:hidden text-right font-mono text-[9px] text-mint-leaf/70 tracking-widest uppercase shrink-0 pb-1">
-                  <p>SYS.CHRONO // LIVE</p>
-                  <p className="text-white/40">06 RINGS // 10 EVENTS</p>
+                  <p>SYS.CHRONO LIVE</p>
+                  <p className="text-white/40">06 RINGS - 10 EVENTS</p>
                 </div>
               </div>
 
@@ -633,16 +620,6 @@ export function HomePage() {
               </div>
 
               <div className="p-6 sm:p-8 overflow-hidden flex flex-col justify-between gap-4">
-                <div className="w-full flex items-center justify-between font-mono text-[10px] text-mint-leaf">
-                  <div>
-                    <p>N 07°17.43</p>
-                    <p>E 080°38.82</p>
-                  </div>
-                  <span className="px-2 py-0.5 border border-mint-leaf/40 text-[9px] flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-mint-leaf animate-ping" />
-                    KANDY // LIVE
-                  </span>
-                </div>
 
                 <div className="relative border border-mint-leaf/30 rounded overflow-hidden bg-evergreen/40 h-44 flex items-center justify-center">
                   <img
@@ -697,7 +674,7 @@ export function HomePage() {
                     <circle cx="168" cy="76" r="3" fill="#41D2A2" />
                   </svg>
                   <div className="pointer-events-none absolute bottom-2 left-2.5 right-2.5 flex justify-between font-mono text-[8px] text-mint-leaf/80 tracking-widest">
-                    <span>ELEV // +500M</span>
+                    <span>ELEV - +500M</span>
                     <span>DHARMARAJA COLLEGE</span>
                   </div>
                 </div>
@@ -707,16 +684,13 @@ export function HomePage() {
 
           <div className="relative flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
             <div className="px-6 py-8 w-[30%] border-r border-white/20 relative overflow-hidden max-sm:hidden flex flex-col justify-between font-mono text-[9px] text-mint-leaf/60 tracking-widest uppercase">
-              <span>// SECTOR_DIAGONAL</span>
+              <span></span>
               <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_49.5%,rgba(65,210,162,0.35)_50%,transparent_50.5%)] pointer-events-none" />
-              <span className="self-end text-white/40">DRCIS // 2026</span>
+              <span className="self-end text-white/40">DRCIS - 2026</span>
             </div>
 
             <div className="px-6 py-10 w-[70%] max-sm:w-full">
               <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  003
-                </span>
                 {[
                   "WHY PARTICIPATE IN SYNC'26?",
                   'APPLIED ENGINEERING & DESIGN,',
@@ -738,19 +712,19 @@ export function HomePage() {
 
           <div className="relative max-sm:hidden flex w-full text-white border-b border-white/20 bg-black/50">
             <div className="p-8 w-[30%] border-r border-white/20 flex flex-col justify-between font-mono text-[10px] text-white/45 uppercase">
-              <span>// DIVISION_SCOPE</span>
+              <span> DIVISION_SCOPE</span>
               <p className="text-mint-leaf/80 leading-relaxed">
-                INTRA-SCHOOL &amp; INTER-SCHOOL TRACKS // GRADES 06–13
+                INTRA-SCHOOL &amp; INTER-SCHOOL TRACKS  GRADES 06–13
               </p>
             </div>
             <div className="p-8 w-[35%] border-r border-white/20 flex items-center justify-between gap-4">
               <p className="text-[10px] leading-4 uppercase font-mono text-mint-leaf">
-                DHARMARAJA COLLEGE <br /> ICT SOCIETY // OVER A DECADE OF EXCELLENCE
+                DHARMARAJA COLLEGE <br /> ICT SOCIETY  OVER A DECADE OF EXCELLENCE
               </p>
               <img src="./images/logo.png" alt="Symbol" className="w-14 opacity-75 shrink-0" />
             </div>
             <div className="p-8 w-[35%] flex flex-col justify-between font-mono text-[10px] text-white/45 uppercase">
-              <span>// VENUE_PROTOCOL</span>
+              <span>VENUE_PROTOCOL</span>
               <p className="text-mint-leaf/80 leading-relaxed">
                 ONLINE QUALIFIERS &amp; PHYSICAL FINALE AT AUDITORIUM
               </p>
@@ -828,9 +802,6 @@ export function HomePage() {
         <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
           <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
             <div className="relative">
-              <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                004
-              </span>
               <h3 className="text-2xl sm:text-3xl md:text-[38px] leading-none font-black pl-20 uppercase">
                 08 PREMIER COMPETITION
               </h3>
@@ -866,81 +837,20 @@ export function HomePage() {
       </section>
 
       {/* =====================================================================
-          SECTION 6: PINNED 300VH POLYGON CLIP-PATH WORLD REVEAL (#the-world)
-      ===================================================================== */}
-      <section
-        id="the-world"
-        className="section6 w-full h-screen z-30 relative overflow-hidden font-ethnocentric text-white bg-black"
-      >
-        <div className="absolute inset-0 z-10 overflow-hidden">
-          <img
-            src="./images/section3-image.png"
-            alt="The Keep"
-            className="s6-img-1 w-full h-full object-cover opacity-75"
-          />
-        </div>
-
-        <div className="absolute inset-0 z-20 overflow-hidden">
-          <img
-            src="./images/section3-bg.jpg"
-            alt="Factions"
-            className="s6-img-2 w-full h-full object-cover"
-            style={{ clipPath: 'polygon(40% 25%, 60% 25%, 60% 75%, 40% 75%)' }}
-          />
-        </div>
-
-        <div className="absolute inset-0 z-30 overflow-hidden">
-          <img
-            src="./images/protocol-bg.jpg"
-            alt="The World"
-            className="s6-img-3 w-full h-full object-cover"
-            style={{ clipPath: 'polygon(50% 25%, 50% 25%, 50% 75%, 50% 75%)' }}
-          />
-        </div>
-
-        <div className="s6-text1 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            001 . THE KEEP
-          </span>
-          <p className="font-mono text-xs sm:text-sm text-white/90">
-            SYNC&apos;26 is a fortress of collective narrative and empowering storytellers. Keepers is a living story, an uncharted world waiting to be explored.
-          </p>
-        </div>
-
-        <div className="s6-text2 opacity-0 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            002 . FACTIONS
-          </span>
-          <p className="font-mono text-xs sm:text-sm text-white/90">
-            Rival syndicates and guardians converge across the frontier. Every faction shapes the protocol through collective action.
-          </p>
-        </div>
-
-        <div className="s6-text3 opacity-0 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            003 . THE WORLD
-          </span>
-          <p className="font-mono text-xs sm:text-sm text-white/90">
-            An ever-expanding synthetic biosphere engineered for the next generation of Keepers and creators.
-          </p>
-        </div>
-      </section>
-
-      {/* =====================================================================
           SECTION 7: FINAL CTA & COORDINATOR CONTACT MATRIX
       ===================================================================== */}
       <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-ethnocentric bg-black/85 border-t border-white/20">
         <div className="h-full w-[97vw] max-md:w-full pt-[70px] pl-[68px] max-md:pl-4 flex flex-col justify-between z-30 relative overflow-hidden">
           <div className="min-h-[42vh] w-full border-b border-white/20 p-8 flex items-end justify-center s7-fade-up">
             <h2 className="font-ethnocentric text-[11vw] leading-none font-black tracking-tight text-white uppercase">
-              SYNC&apos;26<span className="text-mint-leaf">.</span>
+              SYNC'26<span className="text-mint-leaf">.</span>
             </h2>
           </div>
 
           <div className="min-h-[42vh] w-full flex max-md:flex-col justify-between items-start md:items-end py-8 px-12 max-sm:px-4 gap-8">
             <div className="flex flex-col justify-between space-y-4 s7-fade-up max-w-sm pointer-events-auto">
               <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf">
-                YOUR NEXT BREAKTHROUGH STARTS HERE // SYNC&apos;26
+                YOUR NEXT BREAKTHROUGH STARTS HERE  SYNC'26
               </span>
               <span className="font-mono font-normal text-[12px] leading-5 block text-white/80">
                 Step into the futuristic dimension. Submit your entry or contact the Dharmaraja College ICT Society organizing committee.
@@ -969,7 +879,7 @@ export function HomePage() {
 
             <div className="flex flex-col space-y-2.5 font-mono text-[11px] s7-fade-up pointer-events-auto md:text-right">
               <span className="text-[10px] tracking-[0.25em] text-mint-leaf uppercase">
-                COMMUNICATION MATRIX // GET IN TOUCH
+                GET IN TOUCH
               </span>
               <div className="text-white/85">
                 <span className="text-white/50 text-[10px] mr-2">COORDINATOR:</span>
@@ -998,7 +908,7 @@ export function HomePage() {
                   rel="noopener noreferrer"
                   className="text-mint-leaf hover:underline"
                 >
-                  [ CHAT ON WHATSAPP &nearr; ]
+                  CHAT ON WHATSAPP &nearr;
                 </a>
               </div>
             </div>
