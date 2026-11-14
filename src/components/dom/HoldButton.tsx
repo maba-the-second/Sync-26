@@ -56,9 +56,21 @@ export function HoldButton() {
 
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
+
+    // A key/pointer release that lands outside the window never reaches the
+    // button. Clear the hold so the scene doesn't stay locked in fast-spin.
+    const releaseHold = () => setIsHolding(false);
+    const handleVisibility = () => {
+      if (document.hidden) releaseHold();
+    };
+    window.addEventListener('blur', releaseHold);
+    document.addEventListener('visibilitychange', handleVisibility);
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('blur', releaseHold);
+      document.removeEventListener('visibilitychange', handleVisibility);
     };
   }, [setIsHolding]);
 

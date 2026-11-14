@@ -4,6 +4,7 @@ import { Mask, useMask, Sparkles, Edges } from '@react-three/drei';
 import * as THREE from 'three';
 import { useAppStore } from '../../store/useAppStore';
 import { createPrismaticCrystalGeometry } from './rhombicBipyramid';
+import { clampedDelta, damp, LAMBDA } from './frameUtils';
 
 const TARGET_VEC = new THREE.Vector3();
 
@@ -21,7 +22,8 @@ export function PortalMask() {
   const prismaticGeo = useMemo(() => createPrismaticCrystalGeometry(0.56, 1.65, 0.85), []);
   const innerCoreGeo = useMemo(() => createPrismaticCrystalGeometry(0.32, 1.15, 0.58), []);
 
-  useFrame((state, delta) => {
+  useFrame((state, frameDelta) => {
+    const delta = clampedDelta(frameDelta);
     const { isHolding: storeHolding, activePage, scrollProgress: scroll } = useAppStore.getState();
     const isHolding = activePage !== 'home' && storeHolding;
     const t = state.clock.elapsedTime;
@@ -33,8 +35,8 @@ export function PortalMask() {
 
     if (maskRef.current) {
       maskRef.current.scale.lerp(TARGET_VEC, delta * 6);
-      maskRef.current.position.x = THREE.MathUtils.lerp(maskRef.current.position.x, 0, 0.12);
-      maskRef.current.position.y = THREE.MathUtils.lerp(maskRef.current.position.y, 0, 0.12);
+      maskRef.current.position.x = damp(maskRef.current.position.x, 0, LAMBDA.snappy, delta);
+      maskRef.current.position.y = damp(maskRef.current.position.y, 0, LAMBDA.snappy, delta);
       maskRef.current.rotation.z += delta * 0.5;
       maskRef.current.visible = maskRef.current.scale.x > 0.005;
     }
@@ -62,15 +64,17 @@ export function PortalMask() {
       innerGroupRef.current.visible = isVisible;
       if (isVisible) {
         innerGroupRef.current.position.y = Math.sin(t * 1.4) * 0.08;
-        innerGroupRef.current.rotation.y = THREE.MathUtils.lerp(
+        innerGroupRef.current.rotation.y = damp(
           innerGroupRef.current.rotation.y,
           state.pointer.x * 0.4 - scroll * Math.PI * 0.75 + outerSpinAngleRef.current,
-          0.12
+          LAMBDA.snappy,
+          delta
         );
-        innerGroupRef.current.rotation.x = THREE.MathUtils.lerp(
+        innerGroupRef.current.rotation.x = damp(
           innerGroupRef.current.rotation.x,
           -state.pointer.y * 0.22 + scroll * 0.35,
-          0.06
+          LAMBDA.medium,
+          delta
         );
       }
     }

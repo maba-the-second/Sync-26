@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { useAppStore } from '../../store/useAppStore';
 import { PortalMask } from './PortalMask';
 import { createPrismaticCrystalGeometry } from './rhombicBipyramid';
+import { clampedDelta, damp, LAMBDA } from './frameUtils';
 
 interface OrbitConfig {
   radius: number;
@@ -94,7 +95,8 @@ export function WorldScene() {
     []
   );
 
-  useFrame((state, delta) => {
+  useFrame((state, frameDelta) => {
+    const delta = clampedDelta(frameDelta);
     const { scrollProgress: scroll, isHolding: storeHolding, activePage } = useAppStore.getState();
     const isHolding = activePage !== 'home' && storeHolding;
     const t = state.clock.elapsedTime;
@@ -110,15 +112,17 @@ export function WorldScene() {
 
     if (crystalRef.current) {
       crystalRef.current.position.y = Math.sin(t * 1.4) * 0.08;
-      crystalRef.current.rotation.y = THREE.MathUtils.lerp(
+      crystalRef.current.rotation.y = damp(
         crystalRef.current.rotation.y,
         state.pointer.x * 0.4 - scroll * Math.PI * 0.75 + outerSpinAngleRef.current,
-        0.12
+        LAMBDA.snappy,
+        delta
       );
-      crystalRef.current.rotation.x = THREE.MathUtils.lerp(
+      crystalRef.current.rotation.x = damp(
         crystalRef.current.rotation.x,
         -state.pointer.y * 0.22 + scroll * 0.35,
-        0.06
+        LAMBDA.medium,
+        delta
       );
     }
 
@@ -133,15 +137,17 @@ export function WorldScene() {
 
     if (orbitGroupRef.current) {
       orbitGroupRef.current.position.y = Math.sin(t * 1.4) * 0.05;
-      orbitGroupRef.current.rotation.y = THREE.MathUtils.lerp(
+      orbitGroupRef.current.rotation.y = damp(
         orbitGroupRef.current.rotation.y,
         state.pointer.x * 0.25 - scroll * Math.PI * 0.35,
-        0.05
+        LAMBDA.smooth,
+        delta
       );
-      orbitGroupRef.current.rotation.x = THREE.MathUtils.lerp(
+      orbitGroupRef.current.rotation.x = damp(
         orbitGroupRef.current.rotation.x,
         -state.pointer.y * 0.15 + scroll * 0.2,
-        0.05
+        LAMBDA.smooth,
+        delta
       );
     }
   });
