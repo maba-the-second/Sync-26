@@ -15,8 +15,6 @@ export interface OrbitTimelineDateGroup {
 export interface OrbitTimelineProps {
   data?: OrbitTimelineDateGroup[];
   showDates?: boolean;
-  speed?: number;
-  direction?: 'same' | 'alternate';
   style?: React.CSSProperties;
   className?: string;
 }
@@ -24,42 +22,28 @@ export interface OrbitTimelineProps {
 export function OrbitTimeline({
   data = SYNC_TIMELINE_DATA,
   showDates = true,
-  speed = 1,
-  direction = 'alternate',
   style,
   className = '',
 }: OrbitTimelineProps) {
   const stageRef = useRef<HTMLDivElement>(null);
-  const nodeRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const progressRef = useRef(0);
-  const [growth, setGrowth] = useState(0);
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
   const activeKey = hoveredKey ?? selectedKey;
 
-  // Flatten all events with their circular ring index and initial angle offset
+  // Flatten all events into a single chronological roster
   const flatNodes = React.useMemo(() => {
     const list: {
       key: string;
-      indexLabel: string;
-      ringIndex: number;
       groupDate: string;
-      initialProgress: number;
       event: OrbitTimelineEvent;
     }[] = [];
 
-    let globalIdx = 1;
     data.forEach((group, rIdx) => {
-      const count = group.events.length;
       group.events.forEach((ev, eIdx) => {
-        const baseOffset = (rIdx * 0.19 + eIdx / Math.max(1, count)) % 1;
         list.push({
           key: `${rIdx}-${eIdx}`,
-          indexLabel: String(globalIdx++).padStart(2, '0'),
-          ringIndex: rIdx,
           groupDate: group.dateLabel,
-          initialProgress: baseOffset,
           event: ev,
         });
       });
@@ -68,7 +52,7 @@ export function OrbitTimeline({
     return list;
   }, [data]);
 
-  // Close clicked pop-out card when clicking outside
+  // Close clicked roster entry when clicking outside
   useEffect(() => {
     const handlePointerDown = (e: MouseEvent) => {
       if (stageRef.current && !stageRef.current.contains(e.target as Node)) {
@@ -79,80 +63,6 @@ export function OrbitTimeline({
     return () => window.removeEventListener('mousedown', handlePointerDown);
   }, []);
 
-  // Outward growth animation on mount
-  useEffect(() => {
-    let rafId: number;
-    const start = performance.now();
-    const duration = 900;
-
-    const animateGrowth = (now: number) => {
-      const elapsed = now - start;
-      const t = Math.min(1, elapsed / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setGrowth(eased);
-      if (t < 1) {
-        rafId = requestAnimationFrame(animateGrowth);
-      }
-    };
-
-    rafId = requestAnimationFrame(animateGrowth);
-    return () => cancelAnimationFrame(rafId);
-  }, []);
-
-  // Continuous circular orbit animation
-  useEffect(() => {
-    let rafId: number;
-    let lastTime = performance.now();
-
-    const tick = (now: number) => {
-      const dt = (now - lastTime) / 1000;
-      lastTime = now;
-
-      const isPaused = activeKey !== null;
-      if (!isPaused) {
-        progressRef.current += dt * 0.038 * speed;
-      }
-
-      const ringCount = data.length;
-      const minR = 14;
-      const maxR = 42;
-
-      flatNodes.forEach((item, idx) => {
-        const wrapper = nodeRefs.current[idx];
-        if (!wrapper) return;
-
-        const rIdx = item.ringIndex;
-        const ringSpeedFactor = 1 - (rIdx / Math.max(1, ringCount)) * 0.38;
-        const dirSign = direction === 'alternate' && rIdx % 2 === 1 ? -1 : 1;
-
-        const currentT =
-          item.initialProgress + progressRef.current * ringSpeedFactor * dirSign;
-
-        const baseR =
-          ringCount > 1
-            ? minR + (rIdx / (ringCount - 1)) * (maxR - minR)
-            : 28;
-        const r = baseR * growth;
-
-        const angle = currentT * Math.PI * 2 - Math.PI / 2;
-        const x = 50 + r * Math.cos(angle);
-        const y = 50 + r * Math.sin(angle);
-
-        wrapper.style.left = `${x}%`;
-        wrapper.style.top = `${y}%`;
-      });
-
-      rafId = requestAnimationFrame(tick);
-    };
-
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [data.length, flatNodes, speed, direction, growth, activeKey]);
-
-  const ringCount = data.length;
-  const minR = 14;
-  const maxR = 42;
-
   return (
     <div
       ref={stageRef}
@@ -160,14 +70,14 @@ export function OrbitTimeline({
       onClick={(e) => {
         if (e.target === e.currentTarget) setSelectedKey(null);
       }}
-      className={`relative w-full h-full select-none grid grid-cols-1 lg:grid-cols-[1fr_270px] xl:grid-cols-[1fr_300px] ${className}`}
+      className={`relative w-full h-full select-none grid grid-cols-1 ${className}`}
     >
       {/* =====================================================================
-          RIGHT ARCHITECTURAL SUB-COLUMN: SYNCHRONIZED EVENT TELEMETRY ROSTER
+          SYNCHRONIZED EVENT TELEMETRY ROSTER
       ===================================================================== */}
-      <div className="border-t lg:border-t-0 lg:border-l border-white/20 flex flex-col justify-between bg-black/35 pl-10">
+      <div className="border-t border-white/20 flex flex-col justify-between bg-black/35">
         <div className="px-4 py-3 border-b border-white/20 flex items-center justify-between font-mono text-[10px] text-mint-leaf tracking-widest uppercase">
-          <span className="text-white/50">10 EVENTS</span>
+          <span className="text-white/50">{flatNodes.length} EVENTS</span>
         </div>
 
         <div className="divide-y divide-white/10 flex-1 flex flex-col justify-between">
@@ -190,15 +100,17 @@ export function OrbitTimeline({
                     : 'hover:bg-white/5 text-white/75'
                 }`}
               >
-                <span
-                  className={`font-mono text-[9px] px-1.5 py-0.5 border tracking-wider uppercase shrink-0 ${
-                    isActive
-                      ? 'bg-mint-leaf text-black border-mint-leaf font-bold'
-                      : 'border-mint-leaf/35 text-mint-leaf/85 bg-evergreen/40'
-                  }`}
-                >
-                  {item.groupDate}
-                </span>
+                {showDates && (
+                  <span
+                    className={`font-mono text-[9px] px-1.5 py-0.5 border tracking-wider uppercase shrink-0 ${
+                      isActive
+                        ? 'bg-mint-leaf text-black border-mint-leaf font-bold'
+                        : 'border-mint-leaf/35 text-mint-leaf/85 bg-evergreen/40'
+                    }`}
+                  >
+                    {item.groupDate}
+                  </span>
+                )}
 
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-[11px] uppercase tracking-wider truncate text-white">
