@@ -58,10 +58,6 @@ export default function App() {
     } else {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
-    const timer = window.setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 60);
-    return () => window.clearTimeout(timer);
   }, [activePage]);
 
   const renderActivePage = () => {

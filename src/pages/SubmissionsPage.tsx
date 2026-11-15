@@ -68,13 +68,14 @@ export function SubmissionsPage() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const isDesktop = window.innerWidth > 768;
+      const aboutSection = rootRef.current?.querySelector('.about-section');
 
       if (heroCardBodyRef.current) {
         const heroToCardTl = gsap.timeline({
           scrollTrigger: {
             trigger: '.hero-section',
             start: 'top top',
-            endTrigger: '.about-section',
+            endTrigger: aboutSection || '.about-section',
             end: 'top top',
             scrub: 0.65,
           },
@@ -162,149 +163,6 @@ export function SubmissionsPage() {
         scrollTrigger: {
           trigger: '.about-section',
           start: 'top 65%',
-        },
-      });
-
-      gsap.fromTo(
-        '.s3image',
-        {
-          scale: 0,
-          y: window.innerWidth < 768 ? -120 : 0,
-          transformOrigin: 'center',
-        },
-        {
-          scale: 1.08,
-          y: 0,
-          ease: 'power3.inOut',
-          scrollTrigger: {
-            trigger: '.section3',
-            start: 'top 45%',
-            end: 'top -20%',
-            scrub: true,
-          },
-        }
-      );
-
-      gsap.to('.s3image', {
-        scale: 0,
-        ease: 'power3.inOut',
-        scrollTrigger: {
-          trigger: '.section4',
-          start: 'top 35%',
-          end: 'center center',
-          scrub: true,
-        },
-      });
-
-      gsap.fromTo(
-        '.s4-center-portrait',
-        { scale: 0.35, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.section4',
-            start: 'top 55%',
-            end: 'center center',
-            scrub: 1,
-          },
-        }
-      );
-
-      const blockTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.section5',
-          start: 'top 75%',
-          end: 'center 35%',
-          scrub: 1,
-        },
-      });
-
-      blockTl
-        .fromTo(
-          '.bg-block1',
-          { scale: 0, transformOrigin: 'center' },
-          { scale: 1.05, duration: 1, ease: 'power3.inOut' }
-        )
-        .fromTo(
-          '.bg-block2',
-          { scale: 0, transformOrigin: 'center' },
-          { scale: 1.15, duration: 1, ease: 'power3.inOut' },
-          '-=0.5'
-        )
-        .fromTo(
-          '.bg-block3',
-          { scale: 0, transformOrigin: 'center' },
-          { scale: 1.25, duration: 1, ease: 'power3.inOut' },
-          '-=0.4'
-        );
-
-      const s6Tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.section6',
-          start: 'top top',
-          end: () => `+=${window.innerHeight * 2.6}`,
-          scrub: true,
-          pin: true,
-          pinSpacing: true,
-        },
-      });
-
-      s6Tl.to('.s6-text1', { opacity: 1, ease: 'none' }, 0);
-      s6Tl.to('.s6-img-1', { scale: 1.2, ease: 'none' }, 0);
-
-      s6Tl.fromTo(
-        '.s6-img-2',
-        {
-          clipPath: 'polygon(40% 25%, 60% 25%, 60% 75%, 40% 75%)',
-          scale: 1,
-        },
-        {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          scale: 1.18,
-          ease: 'none',
-        },
-        0.2
-      );
-      s6Tl.to('.s6-text1', { opacity: 0, ease: 'none' }, 0.35);
-      s6Tl.to('.s6-text2', { opacity: 1, ease: 'none' }, 0.45);
-
-      s6Tl.fromTo(
-        '.s6-img-3',
-        {
-          clipPath: 'polygon(50% 25%, 50% 25%, 50% 75%, 50% 75%)',
-        },
-        {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          ease: 'none',
-        },
-        0.75
-      );
-      s6Tl.to('.s6-text2', { opacity: 0, ease: 'none' }, 0.85);
-      s6Tl.to('.s6-text3', { opacity: 1, ease: 'none' }, 0.95);
-
-      gsap.from('.s7-scale-up', {
-        scale: 0.25,
-        opacity: 0,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.section7',
-          start: 'top 65%',
-          end: 'top 10%',
-          scrub: true,
-        },
-      });
-
-      gsap.from('.s7-fade-up', {
-        opacity: 0.2,
-        y: 100,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.section7',
-          start: 'top 65%',
-          end: 'top 10%',
-          scrub: true,
         },
       });
     }, rootRef);
@@ -464,9 +322,6 @@ export function SubmissionsPage() {
           <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
             <div className="px-6 py-8 max-md:p-4 text-white border-b border-white/20">
               <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  001
-                </span>
                 <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black tracking-tight pl-20 uppercase">
                   PAYLOAD UPLINK...
                 </h3>
@@ -529,9 +384,6 @@ export function SubmissionsPage() {
           <div className="relative min-h-[52vh] flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
             <div className="px-6 py-8 w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0">
               <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  002
-                </span>
                 <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black pl-20 max-sm:pl-12 uppercase">
                   EVERY LINE OF CODE AND
                 </h3>
@@ -603,9 +455,6 @@ export function SubmissionsPage() {
 
             <div className="px-6 py-8 w-[70%] max-sm:w-full">
               <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  003
-                </span>
                 {[
                   'PACKAGE YOUR REPOSITORY.',
                   'VERIFY YOUR DEPLOYMENT',
@@ -707,9 +556,6 @@ export function SubmissionsPage() {
         <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
           <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
             <div className="relative">
-              <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                004
-              </span>
               <h3 className="text-3xl sm:text-4xl md:text-[42px] leading-none font-black pl-20 uppercase">
                 SUBMITTED ARTIFACTS &amp;
               </h3>
@@ -769,7 +615,7 @@ export function SubmissionsPage() {
 
         <div className="s6-text1 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
           <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            001 . CODE &amp; BUILD
+            CODE &amp; BUILD
           </span>
           <p className="text-sm sm:text-base text-white/90">
             Push your production build and source repository before the final submission checkpoint.
@@ -778,7 +624,7 @@ export function SubmissionsPage() {
 
         <div className="s6-text2 opacity-0 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
           <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            002 . DOCUMENTATION
+            DOCUMENTATION
           </span>
           <p className="text-sm sm:text-base text-white/90">
             Include your architecture overview and walkthrough deck inside your submission packet.
@@ -787,7 +633,7 @@ export function SubmissionsPage() {
 
         <div className="s6-text3 opacity-0 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
           <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            003 . FINAL REVIEW
+            FINAL REVIEW
           </span>
           <p className="text-sm sm:text-base text-white/90">
             Shortlisted entries advance to live demonstrations before the SYNC'26 judging panel.
