@@ -34,7 +34,7 @@ export function Preloader() {
   return (
     <div
       className={cn(
-        'fixed inset-0 z-50 bg-black flex flex-col justify-between p-8 font-mono text-xs uppercase tracking-widest transition-opacity duration-700',
+        'fixed inset-0 z-50 bg-black flex flex-col justify-between p-10 font-mono text-xs uppercase tracking-widest transition-opacity duration-700',
         isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
       )}
     >

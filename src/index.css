@@ -19,29 +19,17 @@
 }
 
 @font-face {
-  font-family: 'Whyte Inktrap';
-  src: url('../assets/fonts/WhyteInktrap-Regular.woff2') format('woff2'),
-       url('../assets/fonts/WhyteInktrap-Regular.ttf') format('truetype');
+  font-family: 'Eightgon';
+  src: url('../assets/fonts/eightgon-font/Eightgon-OGn6p.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Whyte Inktrap';
-  src: url('../assets/fonts/WhyteInktrap-Bold.woff2') format('woff2'),
-       url('../assets/fonts/WhyteInktrap-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Whyte Inktrap';
-  src: url('../assets/fonts/WhyteInktrap-Heavy.woff2') format('woff2'),
-       url('../assets/fonts/WhyteInktrap-Heavy.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
+  font-family: 'Eightgon';
+  src: url('../assets/fonts/eightgon-font/EightgonItalic-Zpw6z.ttf') format('truetype');
+  font-style: italic;
   font-display: swap;
 }
 
@@ -64,12 +52,15 @@
   --gradient-bottom-left: linear-gradient(315deg, #043826ff, #0D6F51ff, #178966ff, #41D2A2ff, #D6F8EDff);
   --gradient-radial: radial-gradient(#043826ff, #0D6F51ff, #178966ff, #41D2A2ff, #D6F8EDff);
 }
-
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 @theme {
-  --font-ethnocentric: 'Ethnocentric', sans-serif;
+  --font-ethnocentric: 'Hexaframe CF', 'Ethnocentric', sans-serif;
   --font-hexaframe: 'Hexaframe CF', sans-serif;
-  --font-whyte: 'Ethnocentric', sans-serif;
-  --font-mono: 'Whyte Inktrap', monospace;
+  /* --font-whyte: 'Ethnocentric', sans-serif; */
+  --font-mono: 'Eightgon', monospace;
   --color-evergreen: #043826;
   --color-turf-green: #0D6F51;
   --color-sea-green: #178966;

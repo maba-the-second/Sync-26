@@ -6,7 +6,6 @@ const NAV_ITEMS = [
   { label: 'FRONTIER', target: '#project', section: 0 },
   { label: 'ROADMAP', target: '#the-keep', section: 1 },
   { label: 'CATEGORIES', target: '#factions', section: 2 },
-  { label: 'THE WORLD', target: '#the-world', section: 3 },
 ];
 
 const SIDEBAR_ITEMS: { label: string; page: PageId }[] = [
@@ -38,7 +37,7 @@ export function HudFrame() {
         progressBarRef.current.style.width = pct;
       }
       if (progressTextRef.current) {
-        progressTextRef.current.textContent = `SYS.LOC // ${pct}`;
+        progressTextRef.current.textContent = `SYS.LOC - ${pct}`;
       }
     });
   }, []);
@@ -104,7 +103,7 @@ export function HudFrame() {
   };
 
   return (
-    <div className="fixed inset-0 z-40 pointer-events-none p-2.5 sm:p-3.5 md:p-4 font-mono text-[10px] tracking-[0.2em] uppercase select-none">
+    <div className="fixed inset-0 z-40 pointer-events-none p-2.5 sm:p-3.5 md:p-4 font-mono text-[15px] tracking-[0.2em] uppercase select-none">
       {/* Main 1px KPRverse Outer Grid Frame */}
       <div className="relative w-full h-full border border-white/20 rounded-lg overflow-hidden flex">
         {/* SLIDE-OUT SIDEBAR DRAWER */}
@@ -115,7 +114,7 @@ export function HudFrame() {
         >
           <div className="w-[320px] sm:w-[520px] md:w-[600px] h-full flex flex-col justify-between pt-8">
             <div className="flex items-start gap-6 sm:gap-10 px-6">
-              <span className="text-[9px] text-mint-leaf shrink-0 pt-2">
+              <span className="text-[11px] text-mint-leaf shrink-0 pt-2">
                 <ShuffleText text="DISCOVER" />
               </span>
               <ul className="font-ethnocentric flex flex-col gap-3 text-base sm:text-xl md:text-2xl tracking-wider">
@@ -266,7 +265,7 @@ export function HudFrame() {
             />
 
             {/* Subtle Left Telemetry Counter */}
-            <div className="relative z-10 hidden lg:flex items-center gap-2 pl-5 text-[9px] text-white/60">
+            <div className="relative z-10 hidden lg:flex items-center gap-2 pl-5 text-[13px] text-white/60">
               <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
               <span ref={progressTextRef}>SYS.LOC // 0.0%</span>
             </div>
@@ -292,7 +291,7 @@ export function HudFrame() {
                       key={item.label}
                       type="button"
                       onClick={() => scrollToTarget(item.target)}
-                      className={`nav-hover-pill px-2 py-1 flex items-center gap-2 text-[10px] tracking-[0.22em] transition-colors cursor-pointer ${
+                      className={`nav-hover-pill px-2 py-1 flex items-center gap-2 text-[13px] tracking-[0.22em] transition-colors cursor-pointer ${
                         isActive ? 'text-white font-semibold' : 'text-white/65'
                       }`}
                     >
@@ -316,7 +315,7 @@ export function HudFrame() {
                     setActivePage('registrations');
                     window.scrollTo({ top: 0, behavior: 'instant' });
                   }}
-                  className="pointer-events-auto h-full bg-white hover:bg-mint-leaf text-black font-mono font-bold text-[10px] tracking-[0.22em] px-6 sm:px-7 transition-colors cursor-pointer"
+                  className="pointer-events-auto h-full bg-white hover:bg-mint-leaf text-black font-mono font-bold text-[13px] tracking-[0.22em] px-6 sm:px-7 transition-colors cursor-pointer"
                   style={{
                     clipPath:
                       'polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px))',

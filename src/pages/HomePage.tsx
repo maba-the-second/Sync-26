@@ -8,7 +8,7 @@ import { OrbitTimeline } from '../components/dom/OrbitTimeline';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SECTION_ANCHORS = ['#project', '#the-keep', '#factions', '#the-world'];
+const SECTION_ANCHORS = ['#project', '#the-keep', '#factions'];
 
 export function HomePage() {
   const setActiveSection = useAppStore((state) => state.setActiveSection);
@@ -59,6 +59,7 @@ export function HomePage() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const isDesktop = window.innerWidth > 768;
+      const aboutSection = rootRef.current?.querySelector('.about-section');
 
       SECTION_ANCHORS.forEach((selector, idx) => {
         ScrollTrigger.create({
@@ -78,7 +79,7 @@ export function HomePage() {
           scrollTrigger: {
             trigger: '.hero-section',
             start: 'top top',
-            endTrigger: '.about-section',
+            endTrigger: aboutSection || '.about-section',
             end: 'top top',
             scrub: 0.65,
           },
@@ -301,52 +302,7 @@ export function HomePage() {
           '-=0.4'
         );
 
-      // 6. Section 6 Pinned 300vh Clip-Path Polygon World Reveal
-      const s6Tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.section6',
-          start: 'top top',
-          end: () => `+=${window.innerHeight * 2.6}`,
-          scrub: true,
-          pin: true,
-          pinSpacing: true,
-        },
-      });
-
-      s6Tl.to('.s6-text1', { opacity: 1, ease: 'none' }, 0);
-      s6Tl.to('.s6-img-1', { scale: 1.2, ease: 'none' }, 0);
-
-      s6Tl.fromTo(
-        '.s6-img-2',
-        {
-          clipPath: 'polygon(40% 25%, 60% 25%, 60% 75%, 40% 75%)',
-          scale: 1,
-        },
-        {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          scale: 1.18,
-          ease: 'none',
-        },
-        0.2
-      );
-      s6Tl.to('.s6-text1', { opacity: 0, ease: 'none' }, 0.35);
-      s6Tl.to('.s6-text2', { opacity: 1, ease: 'none' }, 0.45);
-
-      s6Tl.fromTo(
-        '.s6-img-3',
-        {
-          clipPath: 'polygon(50% 25%, 50% 25%, 50% 75%, 50% 75%)',
-        },
-        {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          ease: 'none',
-        },
-        0.75
-      );
-      s6Tl.to('.s6-text2', { opacity: 0, ease: 'none' }, 0.85);
-      s6Tl.to('.s6-text3', { opacity: 1, ease: 'none' }, 0.95);
-
-      // 7. Section 7 Scale-Up & Fade-Up
+      // 6. Section 7 Scale-Up & Fade-Up
       gsap.from('.s7-scale-up', {
         scale: 0.25,
         opacity: 0,
@@ -496,7 +452,7 @@ export function HomePage() {
       >
         <div className="hero-section-content flex flex-col justify-between flex-1">
           <div className="max-w-[340px] sm:max-w-[380px]">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
+            <span className="font-mono text-[13px] tracking-[0.25em] text-mint-leaf block mb-2">
               DHARMARAJA COLLEGE ICT SOCIETY PRESENTS
             </span>
             <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
@@ -556,7 +512,7 @@ export function HomePage() {
                 />
               </div>
 
-              <h6 className="block max-w-md font-mono text-[12px] leading-[18px] text-white/80 section-title">
+              <h6 className="block max-w-md font-mono text-[15px] leading-[18px] text-white/80 section-title">
                 The Information and Communication Technology Society of Dharmaraja College creates an arena celebrating innovation, analytical thinking, cutting-edge software development, and boundary-pushing multimedia design.
               </h6>
             </div>
@@ -564,7 +520,7 @@ export function HomePage() {
 
           <div className="w-[38%] min-h-[86vh] border-l border-white/20 p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
             <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
-            <div className="w-full flex items-center justify-end font-mono text-[9px] text-white/40 uppercase tracking-widest">
+            <div className="w-full flex items-center justify-end font-mono text-[12px] text-white/40 uppercase tracking-widest">
               <span>SYNC'26 ARCHIVE</span>
             </div>
           </div>
@@ -674,10 +630,9 @@ export function HomePage() {
           </div>
 
           <div className="relative flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[30%] border-r border-white/20 relative overflow-hidden max-sm:hidden flex flex-col justify-between font-mono text-[9px] text-mint-leaf/60 tracking-widest uppercase">
+            <div className="px-6 py-8 w-[30%] border-r border-white/20 relative overflow-hidden max-sm:hidden flex flex-col justify-between font-mono text-[11px] text-mint-leaf/60 tracking-widest uppercase">
               <span></span>
               <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_49.5%,rgba(65,210,162,0.35)_50%,transparent_50.5%)] pointer-events-none" />
-              <span className="self-end text-white/40">DRCIS - 2026</span>
             </div>
 
             <div className="px-6 py-10 w-[70%] max-sm:w-full">
@@ -800,7 +755,7 @@ export function HomePage() {
 
           <div className="w-1/2 max-md:w-full p-6 flex items-center">
             <div className="relative space-y-4">
-              <p className="font-mono text-[12px] leading-[18px] text-white/80 max-w-md">
+              <p className="font-mono text-[15px] leading-[18px] text-white/80 max-w-md">
                 Compete across 7 core disciplines plus ASPECT Gaming: Logo Designing, Poster Designing, Game Designing, Web Designing, Algorithm (HackerRank), Video Editing, Odyssey Inter-School ICT Quiz, and Call of Duty 3 Esports.
               </p>
               <button
@@ -833,10 +788,10 @@ export function HomePage() {
 
           <div className="min-h-[42vh] w-full flex max-md:flex-col justify-between items-start md:items-end py-8 px-12 max-sm:px-4 gap-8">
             <div className="flex flex-col justify-between space-y-4 s7-fade-up max-w-sm pointer-events-auto">
-              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf">
+              <span className="font-mono text-[12px] tracking-[0.25em] text-mint-leaf">
                 YOUR NEXT BREAKTHROUGH STARTS HERE  SYNC'26
               </span>
-              <span className="font-mono font-normal text-[12px] leading-5 block text-white/80">
+              <span className="font-mono font-normal text-[14px] leading-5 block text-white/80">
                 Step into the futuristic dimension. Submit your entry or contact the Dharmaraja College ICT Society organizing committee.
               </span>
               <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -846,7 +801,7 @@ export function HomePage() {
                     setActivePage('registrations');
                     window.scrollTo({ top: 0, behavior: 'instant' });
                   }}
-                  className="px-4 py-2 bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[10px] tracking-[0.18em] uppercase transition-colors cursor-pointer"
+                  className="px-4 py-2 bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[13px] tracking-[0.18em] uppercase transition-colors cursor-pointer"
                 >
                   REGISTER NOW &rarr;
                 </button>
@@ -854,32 +809,32 @@ export function HomePage() {
                   href="https://chat.whatsapp.com/IaBJyTRhZcACMFKUOrYndg"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 border border-mint-leaf/40 bg-black/60 hover:bg-mint-leaf hover:text-black text-mint-leaf font-mono text-[10px] tracking-[0.18em] uppercase transition-colors"
+                  className="px-4 py-2 border border-mint-leaf/40 bg-black/60 hover:bg-mint-leaf hover:text-black text-mint-leaf font-mono text-[13px] tracking-[0.18em] uppercase transition-colors"
                 >
                   WHATSAPP COMMUNITY
                 </a>
               </div>
             </div>
 
-            <div className="flex flex-col space-y-2.5 font-mono text-[11px] s7-fade-up pointer-events-auto md:text-right">
-              <span className="text-[10px] tracking-[0.25em] text-mint-leaf uppercase">
+            <div className="flex flex-col space-y-2.5 font-mono text-[13px] s7-fade-up pointer-events-auto md:text-right">
+              <span className="text-[14px] tracking-[0.25em] text-mint-leaf uppercase">
                 GET IN TOUCH
               </span>
               <div className="text-white/85">
-                <span className="text-white/50 text-[10px] mr-2">COORDINATOR:</span>
+                <span className="text-white/50 text-[12px] mr-2">COORDINATOR:</span>
                 <span>MUDITHA KORALEGEDARA — </span>
                 <a href="tel:+94702645851" className="text-mint-leaf hover:underline">
                   +94 70 264 5851
                 </a>
               </div>
               <div className="text-white/85">
-                <span className="text-white/50 text-[10px] mr-2">CHIEF EDITOR &amp; TECH LEAD:</span>
+                <span className="text-white/50 text-[12px] mr-2">CHIEF EDITOR &amp; TECH LEAD:</span>
                 <span>NETHUN THE EDITOR — </span>
                 <a href="tel:+94714906145" className="text-mint-leaf hover:underline">
                   +94 71 490 6145
                 </a>
               </div>
-              <div className="flex flex-wrap md:justify-end items-center gap-4 pt-1 text-[10px]">
+              <div className="flex flex-wrap md:justify-end items-center gap-4 pt-1 text-[12px]">
                 <a
                   href="mailto:drck.ictsociety@gmail.com"
                   className="text-white/75 hover:text-mint-leaf transition-colors"
@@ -892,7 +847,7 @@ export function HomePage() {
                   rel="noopener noreferrer"
                   className="text-mint-leaf hover:underline"
                 >
-                  CHAT ON WHATSAPP &nearr;
+                  CHAT ON WHATSAPP &rarr; 
                 </a>
               </div>
             </div>

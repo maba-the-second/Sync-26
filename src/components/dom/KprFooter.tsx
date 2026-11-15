@@ -83,10 +83,10 @@ export function KprFooter() {
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-b border-white/15 py-8 font-mono text-xs uppercase tracking-widest">
         {/* Left Brand Brief */}
         <div className="md:col-span-5 flex flex-col justify-between space-y-6 pr-6">
-          <p className="font-mono text-xs text-white/80 leading-relaxed tracking-normal normal-case max-w-sm">
+          <p className="font-mono text-xs text-white/80 leading-relaxed tracking-normal normal-case max-w-sm text-[15px]">
             Official competition and registration platform of the Dharmaraja College Information &amp; Communication Technology Society.
           </p>
-          <div ref={depthTextRef} className="text-[10px] text-white/40 tracking-[0.2em]">
+          <div ref={depthTextRef} className="text-[11px] text-white/40 tracking-[0.2em]">
             DEPTH LOCK // 0.0% — SECURE CONNECTION
           </div>
         </div>
@@ -95,7 +95,7 @@ export function KprFooter() {
         <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6">
           {FOOTER_LINKS.map((col) => (
             <div key={col.heading} className="space-y-3">
-              <div className="text-[10px] text-mint-leaf tracking-[0.22em]">
+              <div className="text-[13px] text-mint-leaf tracking-[0.22em]">
                 {col.heading}
               </div>
               <ul className="space-y-2">
@@ -106,7 +106,7 @@ export function KprFooter() {
                         href={item.href}
                         target={item.href.startsWith('http') ? '_blank' : undefined}
                         rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] text-white/70 hover:text-mint-leaf transition-colors"
+                        className="pointer-events-auto inline-flex items-center gap-1.5 text-[12px] text-white/70 hover:text-mint-leaf transition-colors"
                       >
                         <span>{item.label}</span>
                       </a>
@@ -117,7 +117,7 @@ export function KprFooter() {
                           e.preventDefault();
                           handleLinkClick(item.target);
                         }}
-                        className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] text-white/70 hover:text-mint-leaf transition-colors"
+                        className="pointer-events-auto inline-flex items-center gap-1.5 text-[12px] text-white/70 hover:text-mint-leaf transition-colors"
                       >
                         <span>{item.label}</span>
                       </a>
@@ -132,7 +132,7 @@ export function KprFooter() {
 
       {/* MASSIVE KPR-STYLE FULL-BLEED BANNER AT THE BOTTOM */}
       <div className="relative z-10 flex flex-col justify-end my-auto pt-6">
-        <div className="flex items-end justify-between mb-2 font-mono text-[10px] tracking-[0.25em] text-white/50 uppercase">
+        <div className="flex items-end justify-between mb-2 font-mono text-[13px] tracking-[0.25em] text-white/50 uppercase">
           <span>DHARMARAJA COLLEGE ICT SOCIETY</span>
         </div>
 
@@ -144,7 +144,7 @@ export function KprFooter() {
         </div>
 
         {/* Bottom Sub-bar */}
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] tracking-[0.2em] text-white/45 uppercase">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-4 font-mono text-[12px] tracking-[0.2em] text-white/45 uppercase">
           <span>© 2026 DHARMARAJA COLLEGE ICT SOCIETY. ALL RIGHTS RESERVED.</span>
           <span className="text-mint-leaf/80">THINK BEYOND. DESIGN BEYOND. COMPETE BEYOND.</span>
         </div>

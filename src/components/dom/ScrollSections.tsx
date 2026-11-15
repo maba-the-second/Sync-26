@@ -71,6 +71,7 @@ export function ScrollSections() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const isDesktop = window.innerWidth > 768;
+      const aboutSection = rootRef.current?.querySelector('.about-section');
 
       // =========================================================================
       // 1. 3D HERO BACKGROUND -> ABOUT CARD ROTATION & MORPH TIMELINE
@@ -80,7 +81,7 @@ export function ScrollSections() {
           scrollTrigger: {
             trigger: '.hero-section',
             start: 'top top',
-            endTrigger: '.about-section',
+            endTrigger: aboutSection || '.about-section',
             end: 'top top',
             scrub: 0.65,
           },

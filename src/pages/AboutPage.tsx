@@ -8,7 +8,7 @@ import { PerspectiveCardGallery } from '../components/dom/PerspectiveCardGallery
 gsap.registerPlugin(ScrollTrigger);
 
 const TERMINAL_LINES = [
-  '//INITIALIZING',
+  'INITIALIZING',
   "SYNC'26 MANIFESTO",
   '',
   'CORE_ARCHIVE...[UNLOCKED]',
@@ -18,7 +18,7 @@ const TERMINAL_LINES = [
   'FOUNDATION_PROTOCOL',
 ];
 
-const SECTION_ANCHORS = ['#project', '#the-keep', '#factions', '#the-world'];
+const SECTION_ANCHORS = ['#project', '#the-keep', '#factions'];
 
 export function AboutPage() {
   const setActiveSection = useAppStore((state) => state.setActiveSection);
@@ -66,6 +66,7 @@ export function AboutPage() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const isDesktop = window.innerWidth > 768;
+      const aboutSection = rootRef.current?.querySelector('.about-section');
 
       SECTION_ANCHORS.forEach((selector, idx) => {
         ScrollTrigger.create({
@@ -82,7 +83,7 @@ export function AboutPage() {
           scrollTrigger: {
             trigger: '.hero-section',
             start: 'top top',
-            endTrigger: '.about-section',
+            endTrigger: aboutSection || '.about-section',
             end: 'top top',
             scrub: 0.65,
           },
@@ -248,50 +249,6 @@ export function AboutPage() {
           '-=0.4'
         );
 
-      const s6Tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.section6',
-          start: 'top top',
-          end: () => `+=${window.innerHeight * 2.6}`,
-          scrub: true,
-          pin: true,
-          pinSpacing: true,
-        },
-      });
-
-      s6Tl.to('.s6-text1', { opacity: 1, ease: 'none' }, 0);
-      s6Tl.to('.s6-img-1', { scale: 1.2, ease: 'none' }, 0);
-
-      s6Tl.fromTo(
-        '.s6-img-2',
-        {
-          clipPath: 'polygon(40% 25%, 60% 25%, 60% 75%, 40% 75%)',
-          scale: 1,
-        },
-        {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          scale: 1.18,
-          ease: 'none',
-        },
-        0.2
-      );
-      s6Tl.to('.s6-text1', { opacity: 0, ease: 'none' }, 0.35);
-      s6Tl.to('.s6-text2', { opacity: 1, ease: 'none' }, 0.45);
-
-      s6Tl.fromTo(
-        '.s6-img-3',
-        {
-          clipPath: 'polygon(50% 25%, 50% 25%, 50% 75%, 50% 75%)',
-        },
-        {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          ease: 'none',
-        },
-        0.75
-      );
-      s6Tl.to('.s6-text2', { opacity: 0, ease: 'none' }, 0.85);
-      s6Tl.to('.s6-text3', { opacity: 1, ease: 'none' }, 0.95);
-
       gsap.from('.s7-scale-up', {
         scale: 0.25,
         opacity: 0,
@@ -377,7 +334,7 @@ export function AboutPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
               <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC'26 // ABOUT</span>
+                <span>SYNC'26 - ABOUT</span>
                 <span>3D ROTATION ACTIVE</span>
               </div>
             </div>
@@ -424,7 +381,7 @@ export function AboutPage() {
         <div className="hero-section-content flex flex-col justify-between flex-1">
           <div className="max-w-[310px] sm:max-w-[340px]">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-              DIR // 05 — ABOUT
+              ABOUT
             </span>
             <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
               Discover the collective behind SYNC'26. We unite builders, designers, and storytellers to engineer the next generation of interactive experiences.
@@ -433,27 +390,18 @@ export function AboutPage() {
 
           <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-10 sm:pt-14">
             <div className="ml-[14%] sm:ml-[24%] md:ml-[29%] flex flex-col items-start">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-white/75 mb-0.5 -ml-3 sm:-ml-4">
-                01M
-              </span>
               <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                 ORIGIN<span className="text-mint-leaf">.</span>
               </div>
             </div>
 
             <div className="ml-[18%] sm:ml-[30%] md:ml-[37%] flex flex-col items-start mt-1 sm:mt-2">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-white/75 mb-0.5">
-                02M
-              </span>
               <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                 COLLECTIVE<span className="text-mint-leaf">.</span>
               </div>
             </div>
 
             <div className="ml-0 sm:ml-[2%] flex flex-col items-start mt-1 sm:mt-2">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-mint-leaf mb-0.5 -ml-1 sm:-ml-3">
-                03M
-              </span>
               <h1 className="font-ethnocentric text-[clamp(2.4rem,7.8vw,7.4rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
                 ABOUT<span className="text-mint-leaf">.</span>
               </h1>
@@ -473,9 +421,6 @@ export function AboutPage() {
           <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
             <div className="px-6 py-8 max-md:p-4 text-white border-b border-white/20">
               <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  001
-                </span>
                 <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black tracking-tight pl-20 uppercase">
                   THE ARCHITECTS OF...
                 </h3>
@@ -495,7 +440,7 @@ export function AboutPage() {
                 />
                 <div className="mt-2 flex items-center gap-2 font-mono text-[9px] text-mint-leaf uppercase tracking-widest">
                   <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                  <span>MANIFESTO // ARCHIVE 06</span>
+                  <span>MANIFESTO  ARCHIVE 06</span>
                 </div>
               </div>
 
@@ -507,7 +452,7 @@ export function AboutPage() {
 
           <div className="w-[38%] min-h-[86vh] border-l border-white/20 p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
             <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span>DOCKING BAY // 06</span>
+              <span>DOCKING BAY - 06</span>
               <span className="text-mint-leaf">3D OBJECT LOCK</span>
             </div>
             <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
@@ -538,9 +483,6 @@ export function AboutPage() {
           <div className="relative min-h-[52vh] flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
             <div className="px-6 py-8 w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0">
               <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  002
-                </span>
                 <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black pl-20 max-sm:pl-12 uppercase">
                   A LIVING NARRATIVE FORGED BY
                 </h3>
@@ -572,7 +514,7 @@ export function AboutPage() {
                 </div>
                 <span className="px-2 py-0.5 border border-mint-leaf/40 text-[9px] flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-mint-leaf animate-ping" />
-                  ARCHIVE // LIVE
+                  ARCHIVE - LIVE
                 </span>
               </div>
 
@@ -597,10 +539,6 @@ export function AboutPage() {
                   <line x1="160" y1="0" x2="160" y2="160" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
                   <circle cx="168" cy="76" r="3" fill="#41D2A2" />
                 </svg>
-                <div className="pointer-events-none absolute bottom-2 left-2.5 right-2.5 flex justify-between font-mono text-[8px] text-mint-leaf/80 tracking-widest">
-                  <span>ELEV // +412M</span>
-                  <span>SECTOR 06-M</span>
-                </div>
               </div>
             </div>
           </div>
@@ -612,9 +550,6 @@ export function AboutPage() {
 
             <div className="px-6 py-8 w-[70%] max-sm:w-full">
               <div className="relative">
-                <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                  003
-                </span>
                 {[
                   'OUR MISSION IS TO EMPOWER',
                   'STORYTELLERS AND BUILDERS',
@@ -638,7 +573,7 @@ export function AboutPage() {
             <div className="p-8 h-full w-[30%] border-r border-white/20" />
             <div className="p-8 h-full w-[35%] border-r border-white/20 flex flex-col justify-between">
               <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
-                SYNC'26 <br /> ABOUT // ARCHIVE
+                SYNC'26 <br /> ABOUT - ARCHIVE
               </p>
               <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
             </div>
@@ -716,9 +651,6 @@ export function AboutPage() {
         <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
           <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
             <div className="relative">
-              <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf absolute top-2 left-2">
-                004
-              </span>
               <h3 className="text-3xl sm:text-4xl md:text-[42px] leading-none font-black pl-20 uppercase">
                 FOUNDATIONAL PILLARS &amp;
               </h3>
@@ -742,68 +674,6 @@ export function AboutPage() {
 
         <PerspectiveCardGallery className="my-auto py-8" />
       </section>
-
-      {/* =====================================================================
-          SECTION 6: PINNED 300VH POLYGON CLIP-PATH WORLD REVEAL (#the-world)
-      ===================================================================== */}
-      <section
-        id="the-world"
-        className="section6 w-full h-screen z-30 relative overflow-hidden font-ethnocentric text-white bg-black"
-      >
-        <div className="absolute inset-0 z-10 overflow-hidden">
-          <img
-            src="./images/section3-image.png"
-            alt="The Keep"
-            className="s6-img-1 w-full h-full object-cover opacity-75"
-          />
-        </div>
-
-        <div className="absolute inset-0 z-20 overflow-hidden">
-          <img
-            src="./images/section3-bg.jpg"
-            alt="Factions"
-            className="s6-img-2 w-full h-full object-cover"
-            style={{ clipPath: 'polygon(40% 25%, 60% 25%, 60% 75%, 40% 75%)' }}
-          />
-        </div>
-
-        <div className="absolute inset-0 z-30 overflow-hidden">
-          <img
-            src="./images/protocol-bg.jpg"
-            alt="The World"
-            className="s6-img-3 w-full h-full object-cover"
-            style={{ clipPath: 'polygon(50% 25%, 50% 25%, 50% 75%, 50% 75%)' }}
-          />
-        </div>
-
-        <div className="s6-text1 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            001 . EVOLUTION
-          </span>
-          <p className="font-mono text-xs sm:text-sm text-white/90">
-            Relentless iteration and forward-looking engineering drive everything we build.
-          </p>
-        </div>
-
-        <div className="s6-text2 opacity-0 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            002 . INCLUSION
-          </span>
-          <p className="font-mono text-xs sm:text-sm text-white/90">
-            An open protocol where every voice and discipline contributes to the shared narrative.
-          </p>
-        </div>
-
-        <div className="s6-text3 opacity-0 absolute bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[85%] text-center bg-black/75 border border-mint-leaf/40 backdrop-blur-md p-6">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-            003 . IMAGINATION
-          </span>
-          <p className="font-mono text-xs sm:text-sm text-white/90">
-            Hold [DECRYPT] or press [SPACE] to peer into the underlying vision of SYNC'26.
-          </p>
-        </div>
-      </section>
-
       {/* =====================================================================
           SECTION 7: FOOTER CALLOUT
       ===================================================================== */}
@@ -817,7 +687,7 @@ export function AboutPage() {
 
           <div className="min-h-[42vh] w-full flex flex-col justify-between py-8 px-12 max-sm:px-4">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
-              ABOUT // SYNC'26 COLLECTIVE
+              ABOUT - SYNC'26 COLLECTIVE
             </span>
             <span className="font-mono font-normal text-[12px] max-w-xs leading-5 block text-white/80 s7-fade-up">
               SYNC'26 is a brand that focuses on collective narrative and empowering storytellers.
