@@ -1,0 +1,19 @@
+.odyssey-hero {
+  isolation: isolate;
+}
+@supports (-moz-appearance: none) {
+  .odyssey-reveal {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .odyssey-panel {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    background-image: linear-gradient(
+      135deg,
+      rgba(8, 45, 33, 0.62) 0%,
+      rgba(0, 0, 0, 0.72) 55%,
+      rgba(0, 0, 0, 0.78) 100%
+    ) !important;
+  }
+}

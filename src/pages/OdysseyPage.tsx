@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '../store/useAppStore';
 import { ImageTilt } from '../components/dom/ImageTilt';
 import { ShuffleText } from '../components/dom/ShuffleText';
+import "./style.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -209,15 +210,14 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section
         id="project"
-        className="odyssey-hero relative min-h-screen w-full overflow-hidden flex items-center justify-center pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 pb-14"
-      >
+        className="odyssey-hero relative min-h-[100vh] min-h-[100svh] w-full overflow-hidden flex items-center justify-center pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 pb-14">
         {/* Parallax Banner Image Container */}
         <div className="absolute inset-0 z-0 overflow-hidden bg-black">
           <img
             ref={bannerImgRef}
             src="./images/odybanner.jpg"
             alt="Odyssey Banner Placeholder"
-            className="w-full h-full object-cover opacity-75 will-change-transform"
+            className="w-full h-full object-cover opacity-75 "
             draggable={false}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/95" />
@@ -225,7 +225,7 @@ export function OdysseyPage() {
         </div>
 
         {/* Architectural Inner HUD Frame */}
-        <div className="relative z-10 w-full max-w-[1400px] min-h-[78vh] border border-white/20 bg-black/35 backdrop-blur-[2px] flex flex-col justify-between p-6 sm:p-10 md:p-14">
+        <div className="relative z-10 w-full max-w-[1400px] min-h-[78vh] border border-white/20 bg-black/50 flex flex-col justify-between p-6 sm:p-10 md:p-14">
           {/* Corner Accents */}
           <div className="pointer-events-none absolute -top-px -left-px w-4 h-4 border-t-2 border-l-2 border-mint-leaf" />
           <div className="pointer-events-none absolute -top-px -right-px w-4 h-4 border-t-2 border-r-2 border-mint-leaf" />
@@ -236,7 +236,7 @@ export function OdysseyPage() {
           {/* Center Stage: Logo Placeholder + Hero Title */}
           <div
             ref={heroContentRef}
-            className="my-auto py-10 flex flex-col items-center text-center gap-8 will-change-transform"
+            className="my-auto py-10 flex flex-col items-center text-center gap-8 "
           >
             {/* Logo Placeholder */}
             <div>
@@ -277,7 +277,7 @@ export function OdysseyPage() {
         id="the-keep"
         className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center"
       >
-        <div className="odyssey-reveal w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
+        <div className="odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
@@ -354,7 +354,7 @@ export function OdysseyPage() {
         id="factions"
         className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center"
       >
-        <div className="odyssey-reveal w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
+        <div className="odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
@@ -425,7 +425,7 @@ export function OdysseyPage() {
         id="the-world"
         className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center"
       >
-        <div className="odyssey-reveal w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
+        <div className="odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">

@@ -1,13 +1,15 @@
 import { Suspense, useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
+import { setConsoleFunction } from 'three';
 import { CameraRig } from './CameraRig';
 import { WorldScene } from './WorldScene';
 import { useAppStore } from '../../store/useAppStore';
 
-// The crystal drifts slowly, so 30fps is visually identical to 60fps for idle
-// motion. The fast portal spin while holding is the one case that benefits
-// from full rate.
+setConsoleFunction((type, message, ...params) => {
+  if (type === 'warn' && message.startsWith('THREE.Clock: This module has been deprecated')) return;
+  console[type](message, ...params);
+});
 const IDLE_FPS = 30;
 const ACTIVE_FPS = 60;
 
@@ -22,8 +24,6 @@ function FrameGovernor() {
       raf = requestAnimationFrame(tick);
 
       const targetFps = useAppStore.getState().isHolding ? ACTIVE_FPS : IDLE_FPS;
-      // One frame per target interval, with a single rAF of tolerance so a
-      // 60Hz display lands exactly on 30fps and 120Hz on 60fps.
       if (now - last < 1000 / targetFps - 1) return;
       last = now;
       invalidate();
