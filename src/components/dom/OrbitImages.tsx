@@ -263,27 +263,17 @@ interface SeekState {
   notify?: boolean;
 }
 
-/** Computes an opaque solid background and WCAG high-contrast ink tokens per card accent. */
+/** Computes an opaque solid background with high-contrast black text tokens per card accent. */
 function getSolidCardVars(accentColor: string, accentRgb: string): CSSProperties {
-  const parts = accentRgb.split(',').map((n) => Number.parseFloat(n.trim()));
-  let isLight = false;
-  if (parts.length === 3 && parts.every((n) => !Number.isNaN(n))) {
-    const [r, g, b] = parts.map((v) => {
-      const s = v / 255;
-      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-    });
-    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    isLight = luminance > 0.2;
-  }
   return {
     '--card-accent': accentColor,
     '--card-rgb': accentRgb,
     '--card-bg': accentColor,
-    '--card-fg': isLight ? '#050709' : '#ffffff',
-    '--card-fg-muted': isLight ? 'rgba(5, 7, 9, 0.88)' : 'rgba(255, 255, 255, 0.92)',
-    '--card-divider': isLight ? 'rgba(5, 7, 9, 0.28)' : 'rgba(255, 255, 255, 0.35)',
-    '--card-btn-bg': isLight ? '#050709' : '#ffffff',
-    '--card-btn-fg': isLight ? '#ffffff' : '#050709',
+    '--card-fg': '#050709',
+    '--card-fg-muted': 'rgba(5, 7, 9, 0.88)',
+    '--card-divider': 'rgba(5, 7, 9, 0.28)',
+    '--card-btn-bg': '#050709',
+    '--card-btn-fg': '#ffffff',
   } as CSSProperties;
 }
 
@@ -1208,12 +1198,8 @@ export default function OrbitImages({
               <div className="orbit-card">
                 <div className="orbit-card-header">
                   <span className="orbit-card-code">
-                    {item.code ?? `0${index + 1}`}
+                    {item.code ?? "SYNC'26"}
                   </span>
-                  {item.eligibility && (
-                    <span className="orbit-card-elig">{item.eligibility}</span>
-                  )}
-                  <span className="orbit-card-dot" />
                 </div>
                 <div className="orbit-card-body">
                   <h3 className="orbit-card-title">{item.title}</h3>

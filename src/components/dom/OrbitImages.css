@@ -42,30 +42,66 @@
   cursor: pointer;
 }
 
+@keyframes orbit-border-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .orbit-item-inner {
+  position: relative;
   width: 100%;
   height: 100%;
+  padding: 3.5px;
+  box-sizing: border-box;
   overflow: hidden;
-  border-radius: var(--orbit-radius, 0px);
-  background: var(--card-bg, #41d2a2);
-  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--orbit-radius, 10px);
+  background: #000000;
   box-shadow:
     0 calc(var(--orbit-shadow, 0) * 16px) calc(var(--orbit-shadow, 0) * 36px)
       rgba(0, 0, 0, calc(var(--orbit-shadow, 0) * 0.45)),
-    0 0 18px rgba(var(--card-rgb, 65, 210, 162), 0.22);
+    0 0 18px rgba(var(--card-rgb, 65, 210, 162), 0.28);
   transition:
     transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 0.3s ease,
     box-shadow 0.3s ease;
+}
+
+.orbit-item-inner::before {
+  content: '';
+  position: absolute;
+  inset: -70%;
+  background: conic-gradient(
+    from 0deg,
+    #000000 0deg,
+    rgba(var(--card-rgb, 65, 210, 162), 0.25) 45deg,
+    var(--card-accent, #41d2a2) 90deg,
+    rgba(var(--card-rgb, 65, 210, 162), 0.25) 135deg,
+    #000000 180deg,
+    rgba(var(--card-rgb, 65, 210, 162), 0.25) 225deg,
+    var(--card-accent, #41d2a2) 270deg,
+    rgba(var(--card-rgb, 65, 210, 162), 0.25) 315deg,
+    #000000 360deg
+  );
+  filter: blur(8px);
+  animation: orbit-border-spin 8s linear infinite;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .orbit-item:hover .orbit-item-inner,
 .orbit-item:focus-visible .orbit-item-inner {
   transform: scale(var(--orbit-hover-scale, 1));
-  border-color: #ffffff;
   box-shadow:
-    0 14px 34px rgba(0, 0, 0, 0.78),
-    0 0 28px rgba(var(--card-rgb, 65, 210, 162), 0.65);
+    0 14px 34px rgba(0, 0, 0, 0.82),
+    0 0 30px rgba(var(--card-rgb, 65, 210, 162), 0.7);
+}
+
+.orbit-item:hover .orbit-item-inner::before,
+.orbit-item:focus-visible .orbit-item-inner::before {
+  animation-duration: 4.5s;
 }
 
 .orbit-item:focus-visible {
@@ -73,27 +109,34 @@
 }
 
 .orbit-item:focus-visible .orbit-item-inner {
-  outline: 2px solid currentColor;
+  outline: 2px solid var(--card-accent, #41d2a2);
   outline-offset: 3px;
 }
 
 .orbit-image {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
+  border-radius: calc(var(--orbit-radius, 10px) - 3.5px);
   object-fit: cover;
   pointer-events: none;
   -webkit-user-drag: none;
 }
 
 .orbit-card {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
-  padding: 9px 11px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-radius: calc(var(--orbit-radius, 10px) - 3.5px);
   background: var(--card-bg, #41d2a2);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
   box-sizing: border-box;
 }
 

@@ -40,7 +40,7 @@ interface CompetitionItem extends OrbitCardItem {
 const COMPETITIONS: CompetitionItem[] = [
   {
     id: 'logo',
-    code: 'TRACK // 01',
+    code: "SYNC'26",
     title: 'Logo Designing',
     badge: 'FUTURISTIC IDENTITY',
     category: 'Identity & Branding',
@@ -87,7 +87,7 @@ const COMPETITIONS: CompetitionItem[] = [
   },
   {
     id: 'poster',
-    code: 'TRACK // 02',
+    code: "SYNC'26",
     title: 'Poster Designing',
     badge: 'HAPPENING NOW',
     category: 'Graphic Design',
@@ -138,7 +138,7 @@ const COMPETITIONS: CompetitionItem[] = [
   },
   {
     id: 'aspect',
-    code: 'TRACK // 03',
+    code: "SYNC'26",
     title: 'Aspect',
     badge: 'CALL OF DUTY 3',
     category: 'Esports Arena',
@@ -172,7 +172,7 @@ const COMPETITIONS: CompetitionItem[] = [
   },
   {
     id: 'odyssey',
-    code: 'TRACK // 04',
+    code: "SYNC'26",
     title: 'Odyssey',
     badge: 'KNOWLEDGE ARENA',
     category: 'Team ICT Championship',
@@ -214,7 +214,7 @@ const COMPETITIONS: CompetitionItem[] = [
   },
   {
     id: 'gamedesign',
-    code: 'TRACK // 05',
+    code: "SYNC'26",
     title: 'Game Designing',
     badge: 'INTERACTIVE WORLDS',
     category: 'Game Development',
@@ -259,7 +259,7 @@ const COMPETITIONS: CompetitionItem[] = [
   },
   {
     id: 'webdev',
-    code: 'TRACK // 06',
+    code: "SYNC'26",
     title: 'Web Designing',
     badge: 'COMMAND CENTER CHALLENGE',
     category: 'Full-Stack & Web',
@@ -310,7 +310,7 @@ const COMPETITIONS: CompetitionItem[] = [
   },
   {
     id: 'algorithm',
-    code: 'TRACK // 07',
+    code: "SYNC'26",
     title: 'Algorithm',
     badge: 'ALGORITHMIC THINKING',
     category: 'Code & Logic',
@@ -358,7 +358,7 @@ const COMPETITIONS: CompetitionItem[] = [
   },
   {
     id: 'videoedit',
-    code: 'TRACK // 08',
+    code: "SYNC'26",
     title: 'Video Editing',
     badge: 'MOTION & CINEMA',
     category: 'Visual Storytelling',
