@@ -85,7 +85,7 @@ export interface OrbitImagesProps {
   clickToFront?: boolean;
   onItemClick?: (index: number, src: string, rect?: DOMRect) => void;
   onViewDetails?: (index: number) => void;
-  onRegister?: (index: number) => void;
+  onRegister?: (index: number, rect?: DOMRect) => void;
   alignToPath?: boolean;
   intro?: boolean;
   speedMultiplier?: number;
@@ -112,7 +112,7 @@ interface EngineConfig {
   clickToFront: boolean;
   onItemClick?: (index: number, src: string, rect?: DOMRect) => void;
   onViewDetails?: (index: number) => void;
-  onRegister?: (index: number) => void;
+  onRegister?: (index: number, rect?: DOMRect) => void;
   alignToPath: boolean;
   intro: boolean;
   speedMultiplier: number;
@@ -782,7 +782,9 @@ const createEngine = (
         e.stopPropagation();
         const action = actionBtn.getAttribute('data-orbit-action');
         if (action === 'register') {
-          config.current.onRegister?.(idx);
+          const targetEl = st.items[idx]?.el;
+          const rect = targetEl ? targetEl.getBoundingClientRect() : undefined;
+          config.current.onRegister?.(idx, rect);
           return;
         }
       }

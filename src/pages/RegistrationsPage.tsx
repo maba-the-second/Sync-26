@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import OrbitImages, { type OrbitCardItem } from '../components/dom/OrbitImages';
 import { useAppStore } from '../store/useAppStore';
 
@@ -1017,10 +1017,7 @@ export function RegistrationsPage() {
           pathWidth={1.5}
           clickToFront
           onItemClick={(idx, _src, rect) => openDetailsModal(idx, rect)}
-          onRegister={(idx) => {
-            const comp = COMPETITIONS[idx];
-            if (comp) openRegistrationModal(comp.id);
-          }}
+          onRegister={(idx, rect) => openDetailsModal(idx, rect)}
         />
       </div>
 
@@ -1037,12 +1034,16 @@ export function RegistrationsPage() {
         >
           <div
             ref={detailModalRef}
-            className="w-full max-w-3xl max-h-[86vh] flex flex-col rounded-2xl bg-[#060c0a]/95 border overflow-hidden shadow-2xl origin-center will-change-transform"
-            style={{
-              borderColor: detailComp.accentColor,
-              boxShadow: `0 0 45px rgba(${detailComp.accentRgb}, 0.25)`,
-            }}
+            className="sync-modal-frame w-full max-w-3xl max-h-[86vh] flex flex-col rounded-2xl shadow-2xl origin-center will-change-transform"
+            style={
+              {
+                '--card-accent': detailComp.accentColor,
+                '--card-rgb': detailComp.accentRgb,
+                boxShadow: `0 0 45px rgba(${detailComp.accentRgb}, 0.25)`,
+              } as CSSProperties
+            }
           >
+            <div className="sync-modal-inner max-h-[calc(86vh-3px)]">
             {/* Modal Header */}
             <div
               className="p-5 sm:p-6 border-b border-white/10 flex items-start justify-between gap-4"
@@ -1080,7 +1081,7 @@ export function RegistrationsPage() {
             </div>
 
             {/* Modal Scrollable Body */}
-            <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-5 font-mono text-xs text-white/85">
+            <div data-lenis-prevent className="p-5 sm:p-6 overflow-y-auto flex-1 min-h-0 space-y-5 font-mono text-xs text-white/85">
               <p className="text-white/90 text-xs sm:text-sm leading-relaxed border-l-2 pl-3" style={{ borderColor: detailComp.accentColor }}>
                 {detailComp.shortDesc}
               </p>
@@ -1308,6 +1309,7 @@ export function RegistrationsPage() {
                 <span>REGISTER FOR THIS COMPETITION &rarr;</span>
               </button>
             </div>
+            </div>
           </div>
         </div>
       )}
@@ -1323,12 +1325,16 @@ export function RegistrationsPage() {
           }}
         >
           <div
-            className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl bg-[#060c0a]/95 border overflow-hidden shadow-2xl"
-            style={{
-              borderColor: activeComp.accentColor,
-              boxShadow: `0 0 50px rgba(${activeComp.accentRgb}, 0.25)`,
-            }}
+            className="sync-modal-frame w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl shadow-2xl"
+            style={
+              {
+                '--card-accent': activeComp.accentColor,
+                '--card-rgb': activeComp.accentRgb,
+                boxShadow: `0 0 50px rgba(${activeComp.accentRgb}, 0.25)`,
+              } as CSSProperties
+            }
           >
+            <div className="sync-modal-inner max-h-[calc(90vh-3px)]">
             {/* Header */}
             <div
               className="p-5 sm:p-6 border-b border-white/10 flex items-center justify-between"
@@ -1361,7 +1367,8 @@ export function RegistrationsPage() {
             {submitState === 'form' && (
               <form
                 onSubmit={handleFormSubmit}
-                className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-4 font-mono text-xs"
+                data-lenis-prevent
+                className="p-5 sm:p-6 overflow-y-auto flex-1 min-h-0 space-y-4 font-mono text-xs"
               >
                 {/* Competition Selector (Only the 8 Sync-26 Competitions) */}
                 <div>
@@ -1839,6 +1846,7 @@ export function RegistrationsPage() {
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
       )}
