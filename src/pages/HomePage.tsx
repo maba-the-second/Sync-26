@@ -5,10 +5,13 @@ import { useAppStore } from '../store/useAppStore';
 import { ImageTilt } from '../components/dom/ImageTilt';
 import { PerspectiveCardGallery } from '../components/dom/PerspectiveCardGallery';
 import { OrbitTimeline } from '../components/dom/OrbitTimeline';
+import TechText from '../components/TechText';
+import './TechText.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SECTION_ANCHORS = ['#project', '#the-keep', '#factions'];
+
 
 export function HomePage() {
   const setActiveSection = useAppStore((state) => state.setActiveSection);
@@ -461,24 +464,43 @@ export function HomePage() {
           </div>
 
           <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-10 sm:pt-14">
-            <div className="ml-[14%] sm:ml-[24%] md:ml-[29%] flex flex-col items-start">
-              <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
-                THINK<span className="text-mint-leaf">.</span>
+            <div className="ml-[14%] sm:ml-[24%] md:ml-[29%]">
+              <div className="font-ethnocentric text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
+                <section
+                  className="techtext-test-canvas-wrap text-[clamp(2rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight"
+                  aria-label="TechText demo area"
+                >
+                  <div className="techtext-word inline-flex items-baseline">
+                    <TechText
+                      text="THINK"
+                      fontSize="inherit"
+                      color="#e8fff6"
+                      accentColor="#4ef0b8"
+                      sweep={true}
+                      selection={true}
+                      labels={true}
+                      draggable={true}
+                      clickKick={true}
+                      className="techtext-think"
+                    />
+                    <span className="text-mint-leaf -ml-[0.22em]">.</span>
+                  </div>
+                </section>
               </div>
             </div>
-
-            <div className="ml-[18%] sm:ml-[30%] md:ml-[37%] flex flex-col items-start mt-1 sm:mt-2">
-              <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
+            <div className="ml-[18%] sm:ml-[30%] md:ml-[37%] mt-1 sm:mt-2">
+              <div className="font-ethnocentric text-[clamp(2rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                 DESIGN<span className="text-mint-leaf">.</span>
               </div>
             </div>
-
-            <div className="ml-0 sm:ml-[2%] flex flex-col items-start mt-1 sm:mt-2">
-              <h1 className="font-ethnocentric text-[clamp(2.4rem,7.8vw,7.4rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
+            <div className="ml-0 sm:ml-[2%] mt-1 sm:mt-2">
+              <h1 className="font-ethnocentric text-[clamp(2rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
                 SYNC'26<span className="text-mint-leaf">.</span>
               </h1>
             </div>
           </div>
+
+
         </div>
       </section>
 
