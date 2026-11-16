@@ -423,6 +423,242 @@ function validateEmail(email: string) {
   return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.trim());
 }
 
+interface SelectOption {
+  value: string;
+  label: string;
+  sublabel?: string;
+  accentColor?: string;
+  accentRgb?: string;
+}
+
+interface CustomSelectProps {
+  value: string;
+  onChange: (val: string) => void;
+  options: SelectOption[];
+  placeholder?: string;
+  accentColor: string;
+  accentRgb: string;
+  compact?: boolean;
+}
+
+function CustomSelect({
+  value,
+  onChange,
+  options,
+  placeholder = 'Select an option',
+  accentColor,
+  accentRgb,
+  compact = false,
+}: CustomSelectProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [hoveredIdx, setHoveredIdx] = useState<number>(-1);
+  const [openUpward, setOpenUpward] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const selectedOption = options.find((o) => o.value === value);
+
+  const toggleOpen = () => {
+    if (!isOpen && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      setOpenUpward(spaceBelow < 230 && rect.top > spaceBelow);
+    }
+    setIsOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        setIsOpen(false);
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setHoveredIdx((prev) => (prev + 1) % options.length);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setHoveredIdx((prev) => (prev - 1 + options.length) % options.length);
+      } else if (e.key === 'Enter' && hoveredIdx >= 0 && hoveredIdx < options.length) {
+        e.preventDefault();
+        onChange(options[hoveredIdx].value);
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('keydown', handleKeyDown, true);
+    };
+  }, [isOpen, hoveredIdx, options, onChange]);
+
+  return (
+    <div ref={containerRef} className="relative font-mono text-xs select-none">
+      <button
+        type="button"
+        onClick={toggleOpen}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        className={`w-full flex items-center justify-between gap-2 text-left transition-all cursor-pointer ${
+          compact ? 'px-3 py-2 rounded-lg' : 'px-3.5 py-2.5 rounded-xl'
+        } bg-black/85 border text-xs focus:outline-none`}
+        style={{
+          borderColor: isOpen
+            ? accentColor
+            : selectedOption
+            ? `rgba(${accentRgb}, 0.5)`
+            : 'rgba(255, 255, 255, 0.18)',
+          boxShadow: isOpen
+            ? `0 0 18px rgba(${accentRgb}, 0.35), inset 0 0 10px rgba(${accentRgb}, 0.12)`
+            : 'none',
+          background: isOpen
+            ? `linear-gradient(135deg, rgba(${accentRgb}, 0.16) 0%, rgba(5, 10, 8, 0.96) 100%)`
+            : 'rgba(0, 0, 0, 0.82)',
+        }}
+      >
+        <span className="flex items-center gap-2.5 min-w-0 truncate">
+          <span
+            className="w-2 h-2 rounded-full shrink-0 transition-transform duration-200"
+            style={{
+              backgroundColor: selectedOption
+                ? selectedOption.accentColor ?? accentColor
+                : `rgba(${accentRgb}, 0.45)`,
+              boxShadow: selectedOption
+                ? `0 0 8px ${selectedOption.accentColor ?? accentColor}`
+                : 'none',
+              transform: isOpen ? 'scale(1.25)' : 'scale(1)',
+            }}
+          />
+          {selectedOption ? (
+            <span className="truncate text-white font-medium">
+              {selectedOption.label}
+              {selectedOption.sublabel && (
+                <span className="text-white/55 font-normal ml-1.5 text-[11px]">
+                  ({selectedOption.sublabel})
+                </span>
+              )}
+            </span>
+          ) : (
+            <span className="truncate text-white/45">{placeholder}</span>
+          )}
+        </span>
+
+        <svg
+          className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+          style={{ color: accentColor }}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2.4}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div
+          role="listbox"
+          className={`absolute left-0 right-0 z-50 ${
+            openUpward ? 'bottom-full mb-1.5' : 'top-full mt-1.5'
+          } rounded-xl bg-[#050a08]/98 backdrop-blur-xl border overflow-hidden`}
+          style={{
+            borderColor: accentColor,
+            boxShadow: `0 16px 40px rgba(0, 0, 0, 0.92), 0 0 26px rgba(${accentRgb}, 0.32)`,
+          }}
+        >
+          <div
+            className="h-0.5 w-full"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)`,
+            }}
+          />
+          <div className="max-h-56 overflow-y-auto py-1 divide-y divide-white/[0.05]">
+            {options.map((opt, idx) => {
+              const isSelected = opt.value === value;
+              const isHovered = hoveredIdx === idx;
+              const itemColor = opt.accentColor ?? accentColor;
+              const itemRgb = opt.accentRgb ?? accentRgb;
+
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
+                  onMouseEnter={() => setHoveredIdx(idx)}
+                  onMouseLeave={() => setHoveredIdx(-1)}
+                  onClick={() => {
+                    onChange(opt.value);
+                    setIsOpen(false);
+                  }}
+                  className="w-full px-3.5 py-2.5 text-left flex items-center justify-between gap-2 transition-colors cursor-pointer"
+                  style={{
+                    backgroundColor: isSelected
+                      ? `rgba(${itemRgb}, 0.22)`
+                      : isHovered
+                      ? `rgba(${itemRgb}, 0.12)`
+                      : 'transparent',
+                    borderLeft:
+                      isSelected || isHovered
+                        ? `3px solid ${itemColor}`
+                        : '3px solid transparent',
+                  }}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{
+                        backgroundColor: itemColor,
+                        opacity: isSelected || isHovered ? 1 : 0.55,
+                        boxShadow:
+                          isSelected || isHovered ? `0 0 8px ${itemColor}` : 'none',
+                      }}
+                    />
+                    <div className="truncate">
+                      <span
+                        className={`text-xs ${
+                          isSelected ? 'font-bold text-white' : 'text-white/85'
+                        }`}
+                        style={isSelected ? { color: itemColor } : undefined}
+                      >
+                        {opt.label}
+                      </span>
+                      {opt.sublabel && (
+                        <span className="block sm:inline sm:ml-1.5 text-[10px] text-white/50">
+                          {opt.sublabel}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {isSelected && (
+                    <span
+                      className="text-xs font-bold shrink-0"
+                      style={{ color: itemColor }}
+                    >
+                      ✓
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function RegistrationsPage() {
   const isHolding = useAppStore((state) => state.isHolding);
 
@@ -1132,21 +1368,23 @@ export function RegistrationsPage() {
                   <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
                     Selected Competition <span style={{ color: activeComp.accentColor }}>*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={selectedCompId}
-                    onChange={(e) => {
-                      setSelectedCompId(e.target.value);
+                    onChange={(val) => {
+                      setSelectedCompId(val);
                       setGrade('');
                       setErrors({});
                     }}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
-                  >
-                    {COMPETITIONS.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.title} ({c.category} • {c.eligibility})
-                      </option>
-                    ))}
-                  </select>
+                    options={COMPETITIONS.map((c) => ({
+                      value: c.id,
+                      label: c.title,
+                      sublabel: `${c.category} • ${c.eligibility}`,
+                      accentColor: c.accentColor,
+                      accentRgb: c.accentRgb,
+                    }))}
+                    accentColor={activeComp.accentColor}
+                    accentRgb={activeComp.accentRgb}
+                  />
                 </div>
 
                 {/* Participation Type & School Name */}
@@ -1155,16 +1393,26 @@ export function RegistrationsPage() {
                     <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
                       Participation Type <span style={{ color: activeComp.accentColor }}>*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       value={partType}
-                      onChange={(e) =>
-                        handlePartTypeChange(e.target.value as 'intra' | 'inter')
+                      onChange={(val) =>
+                        handlePartTypeChange(val as 'intra' | 'inter')
                       }
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
-                    >
-                      <option value="intra">Intra-School — Dharmaraja College</option>
-                      <option value="inter">Inter-School — Other School</option>
-                    </select>
+                      options={[
+                        {
+                          value: 'intra',
+                          label: 'Intra-School',
+                          sublabel: 'Dharmaraja College',
+                        },
+                        {
+                          value: 'inter',
+                          label: 'Inter-School',
+                          sublabel: 'Other School',
+                        },
+                      ]}
+                      accentColor={activeComp.accentColor}
+                      accentRgb={activeComp.accentRgb}
+                    />
                   </div>
 
                   <div>
@@ -1214,18 +1462,17 @@ export function RegistrationsPage() {
                             * (Grades {activeComp.minGrade}–{activeComp.maxGrade})
                           </span>
                         </label>
-                        <select
+                        <CustomSelect
                           value={grade}
-                          onChange={(e) => setGrade(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
-                        >
-                          <option value="">Select Grade</option>
-                          {gradeOptions.map((g) => (
-                            <option key={g} value={String(g)}>
-                              Grade {g}
-                            </option>
-                          ))}
-                        </select>
+                          onChange={(val) => setGrade(val)}
+                          placeholder="Select Grade"
+                          options={gradeOptions.map((g) => ({
+                            value: String(g),
+                            label: `Grade ${g}`,
+                          }))}
+                          accentColor={activeComp.accentColor}
+                          accentRgb={activeComp.accentRgb}
+                        />
                         {errors.grade && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.grade}</p>
                         )}
@@ -1285,15 +1532,17 @@ export function RegistrationsPage() {
                         <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
                           Team <span style={{ color: activeComp.accentColor }}>*</span>
                         </label>
-                        <select
+                        <CustomSelect
                           value={teamName}
-                          onChange={(e) => setTeamName(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf cursor-pointer"
-                        >
-                          <option value="">Select Team (Team A / Team B)</option>
-                          <option value="Team A">Team A</option>
-                          <option value="Team B">Team B</option>
-                        </select>
+                          onChange={(val) => setTeamName(val)}
+                          placeholder="Select Team (Team A / Team B)"
+                          options={[
+                            { value: 'Team A', label: 'Team A', sublabel: 'Squad Alpha' },
+                            { value: 'Team B', label: 'Team B', sublabel: 'Squad Bravo' },
+                          ]}
+                          accentColor={activeComp.accentColor}
+                          accentRgb={activeComp.accentRgb}
+                        />
                         {errors.teamName && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.teamName}</p>
                         )}
@@ -1323,18 +1572,17 @@ export function RegistrationsPage() {
                           Captain's Grade{' '}
                           <span style={{ color: activeComp.accentColor }}>* (10–13)</span>
                         </label>
-                        <select
+                        <CustomSelect
                           value={grade}
-                          onChange={(e) => setGrade(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
-                        >
-                          <option value="">Select Grade</option>
-                          {[10, 11, 12, 13].map((g) => (
-                            <option key={g} value={String(g)}>
-                              Grade {g}
-                            </option>
-                          ))}
-                        </select>
+                          onChange={(val) => setGrade(val)}
+                          placeholder="Select Grade"
+                          options={[10, 11, 12, 13].map((g) => ({
+                            value: String(g),
+                            label: `Grade ${g}`,
+                          }))}
+                          accentColor={activeComp.accentColor}
+                          accentRgb={activeComp.accentRgb}
+                        />
                         {errors.grade && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.grade}</p>
                         )}
@@ -1430,20 +1678,20 @@ export function RegistrationsPage() {
                             <label className="block text-[10px] text-white/60 mb-1">
                               Grade * (10–13)
                             </label>
-                            <select
+                            <CustomSelect
                               value={member.grade}
-                              onChange={(e) =>
-                                handleMemberChange(idx, 'grade', e.target.value)
+                              onChange={(val) =>
+                                handleMemberChange(idx, 'grade', val)
                               }
-                              className="w-full px-3 py-2 rounded-lg bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
-                            >
-                              <option value="">Select Grade</option>
-                              {[10, 11, 12, 13].map((g) => (
-                                <option key={g} value={String(g)}>
-                                  Grade {g}
-                                </option>
-                              ))}
-                            </select>
+                              placeholder="Select Grade"
+                              options={[10, 11, 12, 13].map((g) => ({
+                                value: String(g),
+                                label: `Grade ${g}`,
+                              }))}
+                              accentColor={activeComp.accentColor}
+                              accentRgb={activeComp.accentRgb}
+                              compact
+                            />
                             {errors[`member_${idx}_grade`] && (
                               <p className="text-[10px] text-red-400 mt-0.5">
                                 {errors[`member_${idx}_grade`]}
