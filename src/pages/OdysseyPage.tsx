@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '../store/useAppStore';
-import { ImageTilt } from '../components/dom/ImageTilt';
 import { ShuffleText } from '../components/dom/ShuffleText';
 import "./style.css";
 
@@ -10,7 +9,15 @@ gsap.registerPlugin(ScrollTrigger);
 
 const SECTION_ANCHORS = ['#project', '#the-keep', '#factions', '#the-world'];
 
-const ABOUT_PILLARS = [
+interface AboutPillar {
+  code: string;
+  title: string;
+  description: string;
+  featured?: boolean;
+  badge?: string;
+}
+
+const ABOUT_PILLARS: AboutPillar[] = [
   {
     code: 'PHASE // 01',
     title: 'ALGORITHMIC & LOGIC TRIALS',
@@ -28,6 +35,8 @@ const ABOUT_PILLARS = [
     title: 'THE FINAL BEACON',
     description:
       '[PLACEHOLDER] Top-performing teams converge in the ultimate showdown to claim the Odyssey title at SYNC\u201926.',
+    featured: true,
+    badge: 'GRAND FINALE',
   },
 ];
 
@@ -178,7 +187,7 @@ export function OdysseyPage() {
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
               <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
-                ABOUT ODYSSEY<span className="text-mint-leaf">.</span>
+                ARE YOU THE ODYSSEUS<span className="text-mint-leaf">.</span>
               </h2>
             </div>
           </div>
@@ -186,57 +195,78 @@ export function OdysseyPage() {
           {/* Main Description Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12">
             {/* Left Narrative Column */}
-            <div className="lg:col-span-7 p-6 sm:p-10 border-b lg:border-b-0 lg:border-r border-white/20 flex flex-col justify-between gap-8">
+            <div className="lg:col-span-6 p-6 sm:p-10 border-b lg:border-b-0 lg:border-r border-white/20 flex flex-col justify-center">
               <div className="space-y-5 font-mono text-xs sm:text-sm leading-relaxed text-white/85">
                 <p className="text-white font-medium text-sm sm:text-base">
-                  [PLACEHOLDER] Odyssey is the premier team-based technical and analytical challenge of SYNC'26, crafted to push participants beyond conventional classroom boundaries.
+                  Odyssey is the flagship inter-school IT quiz competition at SYNC26, built on over 20 years of heritage and reintroduced with a refreshed identity in 2023. It aims to challenge young technology enthusiasts beyond the boundaries of conventional classroom learning, providing a competitive platform to test their knowledge and skills.
                 </p>
                 <p>
-                  [PLACEHOLDER] Designed as an immersive expedition, Odyssey brings together aspiring technologists, coders, and strategic thinkers to tackle interconnected rounds of logic, software engineering, cryptography, and rapid prototyping.
+                  Structured as a multi-stage competition, Odyssey covers key areas of information technology, including networking, computing trivia, programming, web development and databases. The competition consists of three stages: an online League Round, an online Top 8 Qualifier and the Grand Finale, where the finalists compete in a live setting for the championship title.
                 </p>
                 <p>
-                  [PLACEHOLDER] Every checkpoint unlocks a deeper layer of the Odyssey protocol—demanding seamless collaboration, adaptability under pressure, and creative execution to reach the final beacon.
+                  Each stage introduces new challenges, requiring participants to demonstrate analytical thinking, effective teamwork and the ability to adapt under pressure. Ultimately, Odyssey brings together some of the brightest young IT enthusiasts to compete for the title.
                 </p>
-              </div>
-
-              {/* Phase Breakdown */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/15">
-                {ABOUT_PILLARS.map((pillar) => (
-                  <div
-                    key={pillar.code}
-                    className="p-4 border border-white/15 bg-white/[0.02] hover:border-mint-leaf/50 transition-colors"
-                  >
-                    <span className="font-mono text-[9px] tracking-[0.2em] text-mint-leaf block mb-1.5">
-                      {pillar.code}
-                    </span>
-                    <h3 className="font-ethnocentric text-xs text-white uppercase mb-2 leading-snug">
-                      {pillar.title}
-                    </h3>
-                    <p className="font-mono text-[11px] leading-relaxed text-white/70">
-                      {pillar.description}
-                    </p>
-                  </div>
-                ))}
               </div>
             </div>
 
-            {/* Right Visual Column */}
-            <div className="lg:col-span-5 p-6 sm:p-10 flex flex-col items-center justify-between gap-6 bg-evergreen/15">
-              <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/50 tracking-widest uppercase">
-              </div>
+            {/* Right Phase Roadmap Column */}
+            <div className="lg:col-span-6 p-6 sm:p-10 flex flex-col justify-center bg-evergreen/15">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {ABOUT_PILLARS.map((pillar) => {
+                  const isFeatured = Boolean(pillar.featured);
+                  return (
+                    <div
+                      key={pillar.code}
+                      className={`relative transition-all ${
+                        isFeatured
+                          ? 'sm:col-span-2 p-5 sm:p-6 border border-mint-leaf/60 bg-gradient-to-br from-evergreen/70 via-black/85 to-black/95 shadow-[0_0_30px_rgba(65,210,162,0.14)] hover:border-mint-leaf hover:shadow-[0_0_35px_rgba(65,210,162,0.22)] overflow-hidden'
+                          : 'p-4 sm:p-5 border border-white/15 bg-white/[0.02] hover:border-mint-leaf/50'
+                      }`}
+                    >
+                      {isFeatured && (
+                        <>
+                          {/* Corner Accents */}
+                          <div className="pointer-events-none absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-mint-leaf" />
+                          <div className="pointer-events-none absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-mint-leaf" />
+                          <div className="pointer-events-none absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-mint-leaf" />
+                          <div className="pointer-events-none absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-mint-leaf" />
 
-              <div className="w-full max-w-sm my-auto">
-                <ImageTilt
-                  src="./images/ody1.jpg"
-                  alt="About Odyssey Visual Placeholder"
-                  className="border border-mint-leaf/30 rounded-lg overflow-hidden"
-                  tiltOptions={{ max: 15, scale: 1.02, perspective: 1200, speed: 400 }}
-                />
-              </div>
+                          {/* Subtle Radial Glow */}
+                          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,rgba(65,210,162,0.18)_0%,transparent_60%)]" />
+                        </>
+                      )}
 
-              <div className="w-full flex items-center justify-between font-mono text-[9px] text-mint-leaf/80 tracking-widest uppercase border-t border-white/15 pt-4">
-                <span>DHARMARAJA ICT SOCIETY</span>
-                <span>SYNC'26</span>
+                      <div className="relative z-10">
+                        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                          <span className="font-mono text-[9px] tracking-[0.2em] text-mint-leaf uppercase">
+                            {pillar.code}
+                          </span>
+                          {pillar.badge && (
+                            <span className="px-2 py-0.5 border border-mint-leaf/60 bg-mint-leaf/15 font-mono text-[9px] tracking-[0.18em] text-mint-leaf uppercase">
+                              {pillar.badge}
+                            </span>
+                          )}
+                        </div>
+                        <h3
+                          className={`font-ethnocentric text-white uppercase mb-2 leading-snug ${
+                            isFeatured ? 'text-xs sm:text-sm' : 'text-xs'
+                          }`}
+                        >
+                          {pillar.title}
+                        </h3>
+                        <p
+                          className={`font-mono leading-relaxed ${
+                            isFeatured
+                              ? 'text-[11px] sm:text-xs text-white/80'
+                              : 'text-[11px] text-white/70'
+                          }`}
+                        >
+                          {pillar.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
