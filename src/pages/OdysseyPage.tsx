@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '../store/useAppStore';
+import FlexCarousel, { type FlexCarouselItem } from '../components/dom/FlexCarousel';
 import { ShuffleText } from '../components/dom/ShuffleText';
 import "./style.css";
 
@@ -40,42 +41,42 @@ const ABOUT_PILLARS: AboutPillar[] = [
   },
 ];
 
-const PAST_CHAMPIONS = [
+const SHOWREEL_ITEMS: FlexCarouselItem[] = [
   {
-    year: '2019',
-    edition: 'ODYSSEY 2019',
-    school: '[PLACEHOLDER: 2019 CHAMPION SCHOOL]',
+    src: './images/odybanner.jpg',
+    alt: 'Odyssey 2025 Grand Finale live stage competition',
+    title: 'ODYSSEY 2025 — GRAND FINALE',
+    subtitle: 'Live Stage Championship Showdown',
   },
   {
-    year: '2020',
-    edition: 'ODYSSEY 2020',
-    school: '[PLACEHOLDER: 2020 CHAMPION SCHOOL]',
+    src: './images/ody1.jpg',
+    alt: 'Odyssey 2024 sentinel archival artwork',
+    title: 'ODYSSEY 2024 — ARCHIVAL HIGHLIGHT',
+    subtitle: 'Top 8 Qualifier & Finals Protocol',
   },
   {
-    year: '2021',
-    edition: 'ODYSSEY 2021',
-    school: '[PLACEHOLDER: 2021 CHAMPION SCHOOL]',
+    src: './images/journal-bg.png',
+    alt: 'Odyssey 2023 refreshed identity showcase',
+    title: 'ODYSSEY 2023 — REFRESHED IDENTITY',
+    subtitle: 'A New Era of Inter-School IT Competition',
   },
   {
-    year: '2022',
-    edition: 'ODYSSEY 2022',
-    school: '[PLACEHOLDER: 2022 CHAMPION SCHOOL]',
+    src: './images/hero.webp',
+    alt: 'Odyssey 2022 champions archive highlight',
+    title: 'ODYSSEY 2022 — CHAMPIONS ARCHIVE',
+    subtitle: 'Algorithmic Trials & Computing Trivia',
   },
   {
-    year: '2023',
-    edition: 'ODYSSEY 2023',
-    school: '[PLACEHOLDER: 2023 CHAMPION SCHOOL]',
+    src: './images/hero-2.webp',
+    alt: 'Odyssey 2021 virtual gauntlet highlight',
+    title: 'ODYSSEY 2021 — DIGITAL GAUNTLET',
+    subtitle: 'Online League & Strategic Finals',
   },
   {
-    year: '2024',
-    edition: 'ODYSSEY 2024',
-    school: '[PLACEHOLDER: 2024 CHAMPION SCHOOL]',
-  },
-  {
-    year: '2025',
-    edition: 'ODYSSEY 2025',
-    status: 'DEFENDING CHAMPIONS',
-    school: '[PLACEHOLDER: 2025 CHAMPION SCHOOL]',
+    src: './images/trailer-side-media.webp',
+    alt: 'Odyssey 2019 legacy highlight',
+    title: 'ODYSSEY 2019 — LEGACY SHOWREEL',
+    subtitle: '20+ Years of Dharmaraja ICT Heritage',
   },
 ];
 
@@ -179,9 +180,8 @@ export function OdysseyPage() {
         className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center pointer-events-none"
       >
         <div
-          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${
-            odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
-          }`}
+          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}
         >
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
@@ -217,11 +217,10 @@ export function OdysseyPage() {
                   return (
                     <div
                       key={pillar.code}
-                      className={`relative transition-all ${
-                        isFeatured
-                          ? 'sm:col-span-2 p-5 sm:p-6 border border-mint-leaf/60 bg-gradient-to-br from-evergreen/70 via-black/85 to-black/95 shadow-[0_0_30px_rgba(65,210,162,0.14)] hover:border-mint-leaf hover:shadow-[0_0_35px_rgba(65,210,162,0.22)] overflow-hidden'
-                          : 'p-4 sm:p-5 border border-white/15 bg-white/[0.02] hover:border-mint-leaf/50'
-                      }`}
+                      className={`relative transition-all ${isFeatured
+                        ? 'sm:col-span-2 p-5 sm:p-6 border border-mint-leaf/60 bg-gradient-to-br from-evergreen/70 via-black/85 to-black/95 shadow-[0_0_30px_rgba(65,210,162,0.14)] hover:border-mint-leaf hover:shadow-[0_0_35px_rgba(65,210,162,0.22)] overflow-hidden'
+                        : 'p-4 sm:p-5 border border-white/15 bg-white/[0.02] hover:border-mint-leaf/50'
+                        }`}
                     >
                       {isFeatured && (
                         <>
@@ -248,18 +247,16 @@ export function OdysseyPage() {
                           )}
                         </div>
                         <h3
-                          className={`font-ethnocentric text-white uppercase mb-2 leading-snug ${
-                            isFeatured ? 'text-xs sm:text-sm' : 'text-xs'
-                          }`}
+                          className={`font-ethnocentric text-white uppercase mb-2 leading-snug ${isFeatured ? 'text-xs sm:text-sm' : 'text-xs'
+                            }`}
                         >
                           {pillar.title}
                         </h3>
                         <p
-                          className={`font-mono leading-relaxed ${
-                            isFeatured
-                              ? 'text-[11px] sm:text-xs text-white/80'
-                              : 'text-[11px] text-white/70'
-                          }`}
+                          className={`font-mono leading-relaxed ${isFeatured
+                            ? 'text-[11px] sm:text-xs text-white/80'
+                            : 'text-[11px] text-white/70'
+                            }`}
                         >
                           {pillar.description}
                         </p>
@@ -274,76 +271,48 @@ export function OdysseyPage() {
       </section>
 
       {/* =====================================================================
-          3. DESCRIPTION: "PREVIOUS WINNERS FROM 2019"
+          3. ARCHIVAL PHOTO SHOWREEL (FlexCarousel)
       ===================================================================== */}
       <section
         id="factions"
         className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center pointer-events-none"
       >
         <div
-          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${
-            odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
-          }`}
+          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}
         >
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
               <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
-                PREVIOUS WINNERS<span className="text-mint-leaf">.</span>
+                LEGACY IN MOTION<span className="text-mint-leaf">.</span>
               </h2>
             </div>
           </div>
 
-          {/* Legacy Description */}
-          <div className="p-6 sm:p-10 border-b border-white/20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8 space-y-4 font-mono text-xs sm:text-sm leading-relaxed text-white/80">
-              <p className="text-white font-medium text-sm sm:text-base">
-                [PLACEHOLDER] Honoring the champions of Odyssey from 2019 onwards who set the benchmark for excellence, teamwork, and technical mastery.
-              </p>
-              <p>
-                [PLACEHOLDER] Year after year since 2019, competing delegations have faced an intensive series of problem-solving and ICT challenges. Each title-winning squad distinguished themselves through analytical precision, composure under time constraints, and innovative thinking—building a legacy that continues in SYNC'26.
-              </p>
-            </div>
+          {/* Interactive Showreel Stage */}
+          <div className="relative w-full h-[400px] sm:h-[520px] md:h-[580px] bg-gradient-to-b from-evergreen/20 via-black/40 to-black/70 overflow-hidden">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(65,210,162,0.12)_0%,transparent_65%)]" />
+
+            <FlexCarousel
+              items={SHOWREEL_ITEMS}
+              preset="liquid"
+              intro="rise"
+              cardHeight={0.48}
+              gap={16}
+              radius={12}
+              captions={false}
+              autoplay={true}
+              interval={4}
+              captureWheel={false}
+              className="odyssey-showreel text-white font-mono"
+            />
           </div>
 
-          {/* Yearly Champions Grid (2019 - 2025) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {PAST_CHAMPIONS.map((champion) => {
-              const isLatest = champion.year === '2025';
-              return (
-                <div
-                  key={champion.year}
-                  className={`p-6 sm:p-8 border-b border-r border-white/20 flex flex-col justify-between gap-6 hover:bg-white/[0.02] transition-colors ${isLatest ? 'md:col-span-2 lg:col-span-3 bg-evergreen/20' : ''
-                    }`}
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="font-ethnocentric text-3xl sm:text-4xl text-mint-leaf leading-none">
-                        {champion.year}
-                      </span>
-                      <span
-                        className={`px-2.5 py-1 border font-mono text-[9px] tracking-[0.18em] uppercase ${isLatest
-                          ? 'border-mint-leaf bg-mint-leaf/15 text-mint-leaf'
-                          : 'border-none'
-                          }`}
-                      >
-                        {champion.status}
-                      </span>
-                    </div>
-
-                    <div className="pt-2 border-t border-white/15">
-                      <h3 className="font-ethnocentric text-sm sm:text-base text-white uppercase leading-snug">
-                        {champion.school}
-                      </h3>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/45 uppercase">
-                    <span>{champion.edition}</span>
-                  </div>
-                </div>
-              );
-            })}
+          {/* Footer Interaction Hint */}
+          <div className="px-6 sm:px-10 py-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-4 font-mono text-[9px] sm:text-[10px] tracking-[0.22em] text-white/50 uppercase">
+            <span>DRAG TO SCRUB // CLICK TO FOCUS</span>
+            <span className="text-mint-leaf/80">SYNC&apos;26 ARCHIVES</span>
           </div>
         </div>
       </section>
@@ -356,9 +325,8 @@ export function OdysseyPage() {
         className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center pointer-events-none"
       >
         <div
-          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${
-            odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
-          }`}
+          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}
         >
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
@@ -422,9 +390,8 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 py-16 sm:py-28 flex justify-center pointer-events-none">
         <div
-          className={`odyssey-reveal relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-8 sm:p-14 md:p-20 overflow-hidden ${
-            odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
-          }`}
+          className={`odyssey-reveal relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-8 sm:p-14 md:p-20 overflow-hidden ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}
         >
           {/* Corner Brackets */}
           <div className="pointer-events-none absolute -top-px -left-px w-5 h-5 border-t-2 border-l-2 border-mint-leaf" />

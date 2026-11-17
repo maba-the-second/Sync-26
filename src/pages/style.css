@@ -17,3 +17,35 @@
     ) !important;
   }
 }
+
+.odyssey-showreel .flex-carousel__title {
+  font-family: var(--font-ethnocentric);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.odyssey-showreel .flex-carousel__subtitle {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 1;
+}
+
+.odyssey-showreel .flex-carousel__count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--color-mint-leaf);
+  opacity: 0.85;
+}
+
+@media (min-width: 640px) {
+  .odyssey-showreel .flex-carousel__title {
+    font-size: 14px;
+  }
+}
