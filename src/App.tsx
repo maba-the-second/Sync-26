@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from './store/useAppStore';
 import { SceneCanvas } from './components/canvas/SceneCanvas';
+import { OdysseyCanvas } from './components/canvas/OdysseyCanvas';
 import { HudFrame } from './components/dom/HudFrame';
 import { Preloader } from './components/dom/Preloader';
 import { KprFooter } from './components/dom/KprFooter';
@@ -26,8 +27,11 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   const activePage = useAppStore((state) => state.activePage);
+  const odysseyStage2 = useAppStore((state) => state.odysseyStage2);
   const setScrollProgress = useAppStore((state) => state.setScrollProgress);
   const lenisRef = useRef<Lenis | null>(null);
+
+  const isScrollLocked = activePage === 'odyssey' && !odysseyStage2;
 
   useEffect(() => {
     const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
@@ -59,6 +63,46 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }, [activePage]);
+
+  useEffect(() => {
+    const lenis = lenisRef.current;
+    if (isScrollLocked) {
+      lenis?.scrollTo(0, { immediate: true });
+      lenis?.stop();
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+
+      const preventScroll = (e: Event) => {
+        e.preventDefault();
+      };
+      const preventKeyScroll = (e: KeyboardEvent) => {
+        if (
+          ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End'].includes(e.key)
+        ) {
+          e.preventDefault();
+        }
+      };
+
+      window.addEventListener('wheel', preventScroll, { passive: false });
+      window.addEventListener('touchmove', preventScroll, { passive: false });
+      window.addEventListener('keydown', preventKeyScroll, { passive: false });
+
+      return () => {
+        window.removeEventListener('wheel', preventScroll);
+        window.removeEventListener('touchmove', preventScroll);
+        window.removeEventListener('keydown', preventKeyScroll);
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        lenis?.start();
+        ScrollTrigger.refresh();
+      };
+    } else {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      lenis?.start();
+      ScrollTrigger.refresh();
+    }
+  }, [isScrollLocked]);
 
   const renderActivePage = () => {
     switch (activePage) {
@@ -105,7 +149,7 @@ export default function App() {
               activePage === 'registrations' ? 'pl-11 sm:pl-12 md:pl-14 pt-12' : ''
             }`}
           >
-            <SceneCanvas />
+            {activePage === 'odyssey' ? <OdysseyCanvas /> : <SceneCanvas />}
           </div>
 
           {/* Active Directory Standalone View */}

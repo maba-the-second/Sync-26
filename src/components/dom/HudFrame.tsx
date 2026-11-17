@@ -24,6 +24,9 @@ export function HudFrame() {
   const activeSection = useAppStore((state) => state.activeSection);
   const audioMuted = useAppStore((state) => state.audioMuted);
   const toggleAudio = useAppStore((state) => state.toggleAudio);
+  const odysseyStage2 = useAppStore((state) => state.odysseyStage2);
+
+  const isOdysseyStage1 = activePage === 'odyssey' && !odysseyStage2;
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -96,6 +99,7 @@ export function HudFrame() {
   };
 
   const scrollToTarget = (selector: string) => {
+    if (isOdysseyStage1) return;
     const el = document.querySelector(selector);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -103,12 +107,18 @@ export function HudFrame() {
   };
 
   return (
-    <div className="fixed inset-0 z-40 pointer-events-none p-2.5 sm:p-3.5 md:p-4 font-mono text-[15px] tracking-[0.2em] uppercase select-none">
+    <div
+      className={`fixed inset-0 z-40 pointer-events-none p-2.5 sm:p-3.5 md:p-4 font-mono text-[15px] tracking-[0.2em] uppercase select-none transition-opacity duration-1000 ${
+        isOdysseyStage1 ? 'opacity-0' : 'opacity-100'
+      }`}
+    >
       {/* Main 1px KPRverse Outer Grid Frame */}
       <div className="relative w-full h-full border border-white/20 rounded-lg overflow-hidden flex">
         {/* SLIDE-OUT SIDEBAR DRAWER */}
         <div
-          className={`pointer-events-auto absolute top-0 bottom-0 left-0 z-50 bg-black/95 backdrop-blur-xl border-r border-white/20 transition-transform duration-500 ease-in-out flex ${
+          className={`${
+            isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
+          } absolute top-0 bottom-0 left-0 z-50 bg-black/95 backdrop-blur-xl border-r border-white/20 transition-transform duration-500 ease-in-out flex ${
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
@@ -206,7 +216,9 @@ export function HudFrame() {
           <button
             type="button"
             onClick={() => setIsSidebarOpen(true)}
-            className="pointer-events-auto w-full h-12 border-b border-white/20 flex flex-col items-center justify-center gap-1.5 hover:bg-white/5 transition-colors cursor-pointer group"
+            className={`${
+              isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
+            } w-full h-12 border-b border-white/20 flex flex-col items-center justify-center gap-1.5 hover:bg-white/5 transition-colors cursor-pointer group`}
             aria-label="Open Menu"
           >
             <span className="w-5 h-[1.5px] bg-white group-hover:bg-mint-leaf transition-colors" />
@@ -222,7 +234,9 @@ export function HudFrame() {
           <button
             type="button"
             onClick={handleAudioToggle}
-            className="pointer-events-auto w-full h-12 border-t border-white/20 flex items-center justify-center gap-[2px] hover:bg-white/5 transition-colors cursor-pointer group"
+            className={`${
+              isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
+            } w-full h-12 border-t border-white/20 flex items-center justify-center gap-[2px] hover:bg-white/5 transition-colors cursor-pointer group`}
             title={audioMuted ? 'Play BGM' : 'Pause BGM'}
           >
             <span
@@ -283,7 +297,11 @@ export function HudFrame() {
                 />
               </div>
             ) : (
-              <nav className="relative z-10 pointer-events-auto flex items-center gap-5 sm:gap-8 md:gap-10 mx-auto">
+              <nav
+                className={`relative z-10 ${
+                  isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
+                } flex items-center gap-5 sm:gap-8 md:gap-10 mx-auto`}
+              >
                 {NAV_ITEMS.map((item, idx) => {
                   const isActive = activeSection === idx;
                   return (
@@ -315,7 +333,9 @@ export function HudFrame() {
                     setActivePage('registrations');
                     window.scrollTo({ top: 0, behavior: 'instant' });
                   }}
-                  className="pointer-events-auto h-full bg-white hover:bg-mint-leaf text-black font-mono font-bold text-[13px] tracking-[0.22em] px-6 sm:px-7 transition-colors cursor-pointer"
+                  className={`${
+                    isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
+                  } h-full bg-white hover:bg-mint-leaf text-black font-mono font-bold text-[13px] tracking-[0.22em] px-6 sm:px-7 transition-colors cursor-pointer`}
                   style={{
                     clipPath:
                       'polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px))',
@@ -342,9 +362,13 @@ export function HudFrame() {
               )}
             </div>
 
-            {/* Bottom-Right SCROLL V Indicator (Hidden on Registrations Page) */}
+            {/* Bottom-Right SCROLL V Indicator (Hidden on Registrations Page or during Odyssey Stage 1) */}
             {activePage !== 'registrations' && (
-              <div className="flex items-center gap-2 text-[10px] tracking-[0.25em] text-white/80">
+              <div
+                className={`flex items-center gap-2 text-[10px] tracking-[0.25em] text-white/80 transition-opacity duration-700 ${
+                  isOdysseyStage1 ? 'opacity-0' : 'opacity-100'
+                }`}
+              >
                 <span>SCROLL</span>
                 <svg
                   className="w-3 h-3 text-mint-leaf animate-bounce"

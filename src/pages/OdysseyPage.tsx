@@ -112,11 +112,9 @@ const EXTENDED_RULES = [
 export function OdysseyPage() {
   const setActiveSection = useAppStore((state) => state.setActiveSection);
   const setActivePage = useAppStore((state) => state.setActivePage);
+  const odysseyStage2 = useAppStore((state) => state.odysseyStage2);
 
   const rootRef = useRef<HTMLDivElement>(null);
-  const bannerImgRef = useRef<HTMLImageElement>(null);
-  const logoPlaceholderRef = useRef<HTMLDivElement>(null);
-  const heroContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -129,55 +127,6 @@ export function OdysseyPage() {
           onEnterBack: () => setActiveSection(idx),
         });
       });
-
-      // Parallax Effect on Banner Image
-      if (bannerImgRef.current) {
-        gsap.fromTo(
-          bannerImgRef.current,
-          { yPercent: -10, scale: 1.14 },
-          {
-            yPercent: 20,
-            scale: 1.0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: '.odyssey-hero',
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
-            },
-          }
-        );
-      }
-
-      // Parallax Effect on Logo Placeholder
-      if (logoPlaceholderRef.current) {
-        gsap.to(logoPlaceholderRef.current, {
-          yPercent: -35,
-          opacity: 0.25,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.odyssey-hero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-          },
-        });
-      }
-
-      // Parallax Effect on Hero Foreground Content
-      if (heroContentRef.current) {
-        gsap.to(heroContentRef.current, {
-          yPercent: -20,
-          opacity: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.odyssey-hero',
-            start: 'top top',
-            end: 'bottom 35%',
-            scrub: true,
-          },
-        });
-      }
 
       // Subtle reveal animations for sections
       gsap.utils.toArray<HTMLElement>('.odyssey-reveal').forEach((el) => {
@@ -204,80 +153,27 @@ export function OdysseyPage() {
   };
 
   return (
-    <div ref={rootRef} className="w-full text-white pointer-events-auto">
+    <div ref={rootRef} className="w-full text-white pointer-events-none">
       {/* =====================================================================
-          1. HERO SECTION WITH LOGO PLACEHOLDER & PARALLAX BANNER IMAGE
+          1. HERO SECTION — FULL UNOBSTRUCTED 3D ODYSSEY PARTICLE CANVAS VIEW
       ===================================================================== */}
       <section
         id="project"
-        className="odyssey-hero relative min-h-[100vh] min-h-[100svh] w-full overflow-hidden flex items-center justify-center pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 pb-14">
-        {/* Parallax Banner Image Container */}
-        <div className="absolute inset-0 z-0 overflow-hidden bg-black">
-          <img
-            ref={bannerImgRef}
-            src="./images/odybanner.jpg"
-            alt="Odyssey Banner Placeholder"
-            className="w-full h-full object-cover opacity-75 "
-            draggable={false}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/95" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(65,210,162,0.14)_0%,transparent_70%)]" />
-        </div>
-
-        {/* Architectural Inner HUD Frame */}
-        <div className="relative z-10 w-full max-w-[1400px] min-h-[78vh] border border-white/20 bg-black/50 flex flex-col justify-between p-6 sm:p-10 md:p-14">
-          {/* Corner Accents */}
-          <div className="pointer-events-none absolute -top-px -left-px w-4 h-4 border-t-2 border-l-2 border-mint-leaf" />
-          <div className="pointer-events-none absolute -top-px -right-px w-4 h-4 border-t-2 border-r-2 border-mint-leaf" />
-          <div className="pointer-events-none absolute -bottom-px -left-px w-4 h-4 border-b-2 border-l-2 border-mint-leaf" />
-          <div className="pointer-events-none absolute -bottom-px -right-px w-4 h-4 border-b-2 border-r-2 border-mint-leaf" />
-
-
-          {/* Center Stage: Logo Placeholder + Hero Title */}
-          <div
-            ref={heroContentRef}
-            className="my-auto py-10 flex flex-col items-center text-center gap-8 "
-          >
-            {/* Logo Placeholder */}
-            <div>
-
-              <img
-                src="./images/logo.png"
-                alt="Odyssey Logo Placeholder"
-                className="w-14 sm:w-16 object-contain opacity-90 mb-2.5"
-              />
-
-            </div>
-
-            {/* Main Heading */}
-            <div className="space-y-3 max-w-4xl">
-              <span className="font-mono text-[10px] sm:text-xs tracking-[0.3em] text-mint-leaf uppercase block">
-                SYNC'26
-              </span>
-              <h1 className="font-ethnocentric text-[clamp(2.4rem,7vw,6.2rem)] leading-[0.9] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
-                ODYSSEY<span className="text-mint-leaf">.</span>
-              </h1>
-              <p className="font-mono text-xs sm:text-sm text-white/80 max-w-xl mx-auto leading-relaxed pt-2">
-                Chart the unknown frontiers of SYNC'26. An elite multi-stage problem-solving and technical expedition across uncharted digital realms.
-              </p>
-            </div>
-          </div>
-
-          {/* Bottom Bar Metadata */}
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-4 font-mono text-[10px] tracking-[0.2em] text-white/50">
-            <span>C03 - ODYSSEY</span>
-          </div>
-        </div>
-      </section>
+        className="odyssey-hero relative min-h-[100vh] min-h-[100svh] w-full pointer-events-none"
+      />
 
       {/* =====================================================================
           2. DESCRIPTION: "ABOUT ODYSSEY"
       ===================================================================== */}
       <section
         id="the-keep"
-        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center"
+        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center pointer-events-none"
       >
-        <div className="odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
+        <div
+          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${
+            odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+          }`}
+        >
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
@@ -352,9 +248,13 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section
         id="factions"
-        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center"
+        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center pointer-events-none"
       >
-        <div className="odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
+        <div
+          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${
+            odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+          }`}
+        >
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
@@ -423,9 +323,13 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section
         id="the-world"
-        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center"
+        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center pointer-events-none"
       >
-        <div className="odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md">
+        <div
+          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${
+            odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+          }`}
+        >
           {/* Section Header */}
           <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
@@ -486,8 +390,12 @@ export function OdysseyPage() {
       {/* =====================================================================
           5. REDIRECT BUTTON TO REGISTRATION PAGE WITH INSPIRING TEXT
       ===================================================================== */}
-      <section className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 py-16 sm:py-28 flex justify-center">
-        <div className="odyssey-reveal relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-8 sm:p-14 md:p-20 overflow-hidden">
+      <section className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 py-16 sm:py-28 flex justify-center pointer-events-none">
+        <div
+          className={`odyssey-reveal relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-8 sm:p-14 md:p-20 overflow-hidden ${
+            odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+          }`}
+        >
           {/* Corner Brackets */}
           <div className="pointer-events-none absolute -top-px -left-px w-5 h-5 border-t-2 border-l-2 border-mint-leaf" />
           <div className="pointer-events-none absolute -top-px -right-px w-5 h-5 border-t-2 border-r-2 border-mint-leaf" />
