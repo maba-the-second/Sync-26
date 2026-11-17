@@ -100,7 +100,11 @@ export default function App() {
           } [clip-path:inset(0)]`}
         >
           {/* Sticky 3D WebGL Background inside the upper content curtain */}
-          <div className="sticky top-0 left-0 w-full h-screen z-0 pointer-events-auto">
+          <div
+            className={`sticky top-0 left-0 w-full h-screen z-0 pointer-events-auto ${
+              activePage === 'registrations' ? 'pl-11 sm:pl-12 md:pl-14 pt-12' : ''
+            }`}
+          >
             <SceneCanvas />
           </div>
 

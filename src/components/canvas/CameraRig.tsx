@@ -5,7 +5,8 @@ import { clampedDelta, damp, LAMBDA } from './frameUtils';
 export function CameraRig() {
   useFrame((state, frameDelta) => {
     const delta = clampedDelta(frameDelta);
-    const scroll = useAppStore.getState().scrollProgress;
+    const { scrollProgress: scroll, activePage } = useAppStore.getState();
+    const parallax = activePage === 'registrations' ? 0 : 0.6;
 
     // Move camera forward on Z axis based on scroll, plus subtle mouse parallax
     state.camera.position.z = damp(
@@ -16,13 +17,13 @@ export function CameraRig() {
     );
     state.camera.position.x = damp(
       state.camera.position.x,
-      state.pointer.x * 0.6,
+      state.pointer.x * parallax,
       LAMBDA.smooth,
       delta
     );
     state.camera.position.y = damp(
       state.camera.position.y,
-      state.pointer.y * 0.6,
+      state.pointer.y * parallax,
       LAMBDA.smooth,
       delta
     );

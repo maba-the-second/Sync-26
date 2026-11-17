@@ -264,23 +264,23 @@ export function HudFrame() {
               style={{ width: '0.0%' }}
             />
 
-            {/* Subtle Left Telemetry Counter */}
-            <div className="relative z-10 hidden lg:flex items-center gap-2 pl-5 text-[13px] text-white/60">
-              <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-              <span ref={progressTextRef}>SYS.LOC // 0.0%</span>
-            </div>
+            {/* Subtle Left Telemetry Counter (Hidden on Registrations Page) */}
+            {activePage !== 'registrations' && (
+              <div className="relative z-10 hidden lg:flex items-center gap-2 pl-5 text-[13px] text-white/60">
+                <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
+                <span ref={progressTextRef}>SYS.LOC // 0.0%</span>
+              </div>
+            )}
 
-            {/* Center Top Navigation Links or Page Title on Registrations */}
+            {/* Center Top Navigation Links or Logo on Registrations */}
             {activePage === 'registrations' ? (
-              <div className="relative z-10 pointer-events-auto mx-auto pr-0 lg:pr-24">
-                <button
-                  type="button"
-                  className="nav-hover-pill px-2 py-1 flex items-center gap-2 text-[10px] tracking-[0.22em] text-white font-semibold transition-colors cursor-pointer"
-                >
-                  <span>
-                    ■ <ShuffleText text="REGISTRATIONS AND SUBMISSIONS" />
-                  </span>
-                </button>
+              <div className="relative z-10 pointer-events-auto mx-auto flex items-center justify-center">
+                <img
+                  src="./images/Sync logo 2.png"
+                  alt="SYNC'26 Logo"
+                  className="h-8 sm:h-9 w-auto object-contain opacity-95"
+                  draggable={false}
+                />
               </div>
             ) : (
               <nav className="relative z-10 pointer-events-auto flex items-center gap-5 sm:gap-8 md:gap-10 mx-auto">
