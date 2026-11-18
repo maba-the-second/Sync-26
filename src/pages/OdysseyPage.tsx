@@ -43,37 +43,37 @@ const ABOUT_PILLARS: AboutPillar[] = [
 
 const SHOWREEL_ITEMS: FlexCarouselItem[] = [
   {
-    src: './images/odybanner.jpg',
+    src: './images/odessy1.jpg',
     alt: 'Odyssey 2025 Grand Finale live stage competition',
     title: 'ODYSSEY 2025 — GRAND FINALE',
     subtitle: 'Live Stage Championship Showdown',
   },
   {
-    src: './images/ody1.jpg',
+    src: './images/odessy2.jpg',
     alt: 'Odyssey 2024 sentinel archival artwork',
     title: 'ODYSSEY 2024 — ARCHIVAL HIGHLIGHT',
     subtitle: 'Top 8 Qualifier & Finals Protocol',
   },
   {
-    src: './images/journal-bg.png',
+    src: './images/odessy3.jpg',
     alt: 'Odyssey 2023 refreshed identity showcase',
     title: 'ODYSSEY 2023 — REFRESHED IDENTITY',
     subtitle: 'A New Era of Inter-School IT Competition',
   },
   {
-    src: './images/hero.webp',
+    src: './images/odessy4.jpg',
     alt: 'Odyssey 2022 champions archive highlight',
     title: 'ODYSSEY 2022 — CHAMPIONS ARCHIVE',
     subtitle: 'Algorithmic Trials & Computing Trivia',
   },
   {
-    src: './images/hero-2.webp',
+    src: './images/odessy5.jpg',
     alt: 'Odyssey 2021 virtual gauntlet highlight',
     title: 'ODYSSEY 2021 — DIGITAL GAUNTLET',
     subtitle: 'Online League & Strategic Finals',
   },
   {
-    src: './images/trailer-side-media.webp',
+    src: './images/odessy6.jpg',
     alt: 'Odyssey 2019 legacy highlight',
     title: 'ODYSSEY 2019 — LEGACY SHOWREEL',
     subtitle: '20+ Years of Dharmaraja ICT Heritage',
@@ -201,7 +201,7 @@ export function OdysseyPage() {
                   Odyssey is the flagship inter-school IT quiz competition at SYNC26, built on over 20 years of heritage and reintroduced with a refreshed identity in 2023. It aims to challenge young technology enthusiasts beyond the boundaries of conventional classroom learning, providing a competitive platform to test their knowledge and skills.
                 </p>
                 <p>
-                  Structured as a multi-stage competition, Odyssey covers key areas of information technology, including networking, computing trivia, programming, web development and databases. The competition consists of three stages: an online League Round, an online Top 8 Qualifier and the Grand Finale, where the finalists compete in a live setting for the championship title.
+                  Structured as a multi-stage competition, Odyssey covers key areas of information technology, including Networking, Programming and Database, AI & ML, IoT, and General ICT. The competition consists of three stages: an online League Round, an online Top 8 Qualifier and the Grand Finale, where the finalists compete in a live setting for the championship title.
                 </p>
                 <p>
                   Each stage introduces new challenges, requiring participants to demonstrate analytical thinking, effective teamwork and the ability to adapt under pressure. Ultimately, Odyssey brings together some of the brightest young IT enthusiasts to compete for the title.
@@ -310,9 +310,8 @@ export function OdysseyPage() {
           </div>
 
           {/* Footer Interaction Hint */}
-          <div className="px-6 sm:px-10 py-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-4 font-mono text-[9px] sm:text-[10px] tracking-[0.22em] text-white/50 uppercase">
+          <div className="px-6 sm:px-10 py-4 border-t border-white/15 flex items-center font-mono text-[9px] sm:text-[10px] tracking-[0.22em] text-white/50 uppercase">
             <span>DRAG TO SCRUB // CLICK TO FOCUS</span>
-            <span className="text-mint-leaf/80">SYNC&apos;26 ARCHIVES</span>
           </div>
         </div>
       </section>
