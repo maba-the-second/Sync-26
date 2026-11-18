@@ -145,7 +145,11 @@ export default function App() {
         >
           {/* Sticky 3D WebGL Background inside the upper content curtain */}
           <div
-            className={`sticky top-0 left-0 w-full h-screen h-[100dvh] z-0 pointer-events-auto ${
+            className={`sticky top-0 left-0 w-full h-screen h-[100dvh] z-0 ${
+              activePage === 'odyssey' && odysseyStage2
+                ? 'pointer-events-none'
+                : 'pointer-events-auto'
+            } ${
               activePage === 'registrations'
                 ? 'pl-11 pt-12 pr-0 sm:pl-12 sm:pt-12 sm:pr-0 md:pl-14 md:pt-12 md:pr-0'
                 : ''

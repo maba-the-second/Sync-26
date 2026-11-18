@@ -222,6 +222,7 @@ interface ParticleSwarmProps {
   controlsRef: React.RefObject<OrbitControlsImpl | null>;
   skipRequestedRef: React.MutableRefObject<boolean>;
   isMobile: boolean;
+  odysseyStage2: boolean;
 }
 
 function ParticleSwarm({
@@ -230,6 +231,7 @@ function ParticleSwarm({
   controlsRef,
   skipRequestedRef,
   isMobile,
+  odysseyStage2,
 }: ParticleSwarmProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const { camera } = useThree();
@@ -251,8 +253,19 @@ function ParticleSwarm({
   const currentPositions = useMemo(() => new Float32Array(count * 3), [count]);
   const logoTargetsRef = useRef<LogoTargetBuffers>(createInitialTargets(count, stride));
   const pointerNdcRef = useRef(new THREE.Vector2(9999, 9999));
+  const odysseyStage2Ref = useRef(odysseyStage2);
 
-  // Track pointer globally on window so particles repel at cursor or active touch
+  useEffect(() => {
+    odysseyStage2Ref.current = odysseyStage2;
+    if (odysseyStage2) {
+      userInteractedRef.current = false;
+      if (isCoarseDevice()) {
+        pointerNdcRef.current.set(9999, 9999);
+      }
+    }
+  }, [odysseyStage2, userInteractedRef]);
+
+  // Track pointer globally on window for desktop hover repel; ignore touch swipes while scrolling in Stage 2
   useEffect(() => {
     const updateNdc = (e: PointerEvent) => {
       pointerNdcRef.current.set(
@@ -261,13 +274,16 @@ function ParticleSwarm({
       );
     };
     const handlePointerMove = (e: PointerEvent) => {
-      if (e.pointerType === 'touch' && isCoarseDevice()) {
-        updateNdc(e);
+      if (e.pointerType === 'touch' && odysseyStage2Ref.current) {
+        pointerNdcRef.current.set(9999, 9999);
         return;
       }
       updateNdc(e);
     };
     const handlePointerDown = (e: PointerEvent) => {
+      if (e.pointerType === 'touch' && odysseyStage2Ref.current) {
+        return;
+      }
       updateNdc(e);
     };
     const handlePointerUpOrCancel = (e: PointerEvent) => {
@@ -526,7 +542,9 @@ export function OdysseyCanvas() {
   const [isSoftwareGl, setIsSoftwareGl] = useState(false);
 
   const isMobile = useMemo(() => isMobileViewport(), []);
+  const isCoarse = useMemo(() => isCoarseDevice(), []);
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const canvasDomRef = useRef<HTMLCanvasElement | null>(null);
   const userInteractedRef = useRef(false);
   const skipRequestedRef = useRef(false);
   const bloomResolution = useMemo(() => {
@@ -540,6 +558,12 @@ export function OdysseyCanvas() {
     setOdysseyStage2(false);
   }, [setOdysseyStage2]);
 
+  useEffect(() => {
+    if (canvasDomRef.current) {
+      canvasDomRef.current.style.touchAction = odysseyStage2 || isCoarse ? 'pan-y' : 'none';
+    }
+  }, [odysseyStage2, isCoarse]);
+
   const handleRevealComplete = useCallback(() => {
     setIsHolding(false);
     setOdysseyStage2(true);
@@ -547,66 +571,84 @@ export function OdysseyCanvas() {
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-black text-white font-mono select-none">
-      <Canvas
-        camera={{ position: [0, 8, 250], fov: 60, near: 0.1, far: 1500 }}
-        dpr={isMobile ? [1, 1.25] : [1, 1.5]}
-        onCreated={({ gl }) => {
-          try {
-            const rawGl = gl.getContext();
-            const dbg = rawGl.getExtension('WEBGL_debug_renderer_info');
-            const rendererStr = dbg
-              ? String(rawGl.getParameter(dbg.UNMASKED_RENDERER_WEBGL))
-              : String(rawGl.getParameter(rawGl.RENDERER));
-            if (/SwiftShader|llvmpipe|Software|Microsoft Basic Render/i.test(rendererStr)) {
-              setIsSoftwareGl(true);
-            }
-          } catch {
-            // Ignore renderer query failure
-          }
-
-          const dom = gl.domElement;
-          dom.addEventListener('webglcontextlost', (e) => {
-            e.preventDefault();
-            setContextLost(true);
-          });
-          dom.addEventListener('webglcontextrestored', () => {
-            setContextLost(false);
-          });
-        }}
+      {/* Stable 100lvh canvas wrapper prevents mobile URL-bar resize/aspect jumps during scroll */}
+      <div
+        className={`absolute inset-x-0 top-0 h-screen h-[100lvh] ${
+          odysseyStage2 ? 'pointer-events-none' : 'pointer-events-auto'
+        }`}
+        style={{ touchAction: odysseyStage2 || isCoarse ? 'pan-y' : 'none' }}
       >
-        <color attach="background" args={['#000000']} />
-        <ParticleSwarm
-          onRevealComplete={handleRevealComplete}
-          userInteractedRef={userInteractedRef}
-          controlsRef={controlsRef}
-          skipRequestedRef={skipRequestedRef}
-          isMobile={isMobile}
-        />
-        <OrbitControls
-          ref={controlsRef}
-          autoRotate={false}
-          enableZoom={false}
-          enablePan={false}
-          enableDamping
-          dampingFactor={0.05}
-          minDistance={22}
-          maxDistance={460}
-          onStart={() => {
-            userInteractedRef.current = true;
+        <Canvas
+          resize={{ scroll: false }}
+          camera={{ position: [0, 8, 250], fov: 60, near: 0.1, far: 1500 }}
+          dpr={isMobile ? [1, 1.25] : [1, 1.5]}
+          style={{
+            touchAction: odysseyStage2 || isCoarse ? 'pan-y' : 'none',
+            pointerEvents: odysseyStage2 ? 'none' : 'auto',
           }}
-        />
-        {!isSoftwareGl && (
-          <Effects disableGamma>
-            <unrealBloomPass
-              args={[bloomResolution, 0.55, 0.35, 0.25]}
-              threshold={0.25}
-              strength={0.55}
-              radius={0.35}
+          onCreated={({ gl }) => {
+            try {
+              const rawGl = gl.getContext();
+              const dbg = rawGl.getExtension('WEBGL_debug_renderer_info');
+              const rendererStr = dbg
+                ? String(rawGl.getParameter(dbg.UNMASKED_RENDERER_WEBGL))
+                : String(rawGl.getParameter(rawGl.RENDERER));
+              if (/SwiftShader|llvmpipe|Software|Microsoft Basic Render/i.test(rendererStr)) {
+                setIsSoftwareGl(true);
+              }
+            } catch {
+              // Ignore renderer query failure
+            }
+
+            const dom = gl.domElement;
+            canvasDomRef.current = dom;
+            dom.style.touchAction = odysseyStage2 || isCoarse ? 'pan-y' : 'none';
+            dom.addEventListener('webglcontextlost', (e) => {
+              e.preventDefault();
+              setContextLost(true);
+            });
+            dom.addEventListener('webglcontextrestored', () => {
+              setContextLost(false);
+            });
+          }}
+        >
+          <color attach="background" args={['#000000']} />
+          <ParticleSwarm
+            onRevealComplete={handleRevealComplete}
+            userInteractedRef={userInteractedRef}
+            controlsRef={controlsRef}
+            skipRequestedRef={skipRequestedRef}
+            isMobile={isMobile}
+            odysseyStage2={odysseyStage2}
+          />
+          {!odysseyStage2 && !isCoarse && (
+            <OrbitControls
+              ref={controlsRef}
+              autoRotate={false}
+              enableZoom={false}
+              enablePan={false}
+              enableDamping
+              dampingFactor={0.05}
+              minDistance={22}
+              maxDistance={460}
+              onStart={() => {
+                userInteractedRef.current = true;
+              }}
             />
-            <shaderPass args={[COMPOSITE_BG_SHADER]} />
-          </Effects>
-        )}
-      </Canvas>
+          )}
+          {!isSoftwareGl && (
+            <Effects disableGamma>
+              <unrealBloomPass
+                args={[bloomResolution, 0.55, 0.35, 0.25]}
+                threshold={0.25}
+                strength={0.55}
+                radius={0.35}
+              />
+              <shaderPass args={[COMPOSITE_BG_SHADER]} />
+            </Effects>
+          )}
+        </Canvas>
+      </div>
 
       {/* Stage 1 Intro Controls (accessible on touch & mobile while scroll is locked) */}
       {!odysseyStage2 && !contextLost && (
