@@ -310,132 +310,127 @@ export function OdysseyPage() {
           </div>
 
           {/* Footer Interaction Hint */}
-<<<<<<< HEAD
-  <div className="px-6 sm:px-10 py-4 border-t border-white/15 flex items-center font-mono text-[9px] sm:text-[10px] tracking-[0.22em] text-white/50 uppercase">
-    <span>DRAG TO SCRUB // CLICK TO FOCUS</span>
-=======
           <div className="px-4 sm:px-10 py-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-2 sm:gap-4 font-mono text-[9px] sm:text-[10px] tracking-[0.16em] sm:tracking-[0.22em] text-white/50 uppercase">
-      <span>DRAG / SWIPE TO SCRUB // TAP TO FOCUS</span>
-      <span className="text-mint-leaf/80">SYNC&apos;26 ARCHIVES</span>
->>>>>>> 51737609acd7b58c05d859c2ed4e590eb6270add
-    </div>
-  </div>
-      </section >
+            <span>DRAG / SWIPE TO SCRUB // TAP TO FOCUS</span>
+            <span className="text-mint-leaf/80">SYNC&apos;26 ARCHIVES</span>
+          </div>
+        </div>
+      </section>
 
-  {/* =====================================================================
+      {/* =====================================================================
           4. DESCRIPTION: "RULES AND REGULATIONS - EXTENDED"
       ===================================================================== */}
-    < section
-  id = "the-world"
-  className = "relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 pt-14 sm:pt-24 flex justify-center pointer-events-none"
-    >
-    <div
-      className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
-        }`}
-    >
-      {/* Section Header */}
-      <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
-        <div className="relative">
-          <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
-            RULES AND REGULATIONS — EXTENDED<span className="text-mint-leaf">.</span>
-          </h2>
-        </div>
-      </div>
-
-      {/* Introductory Note */}
-      <div className="px-4 sm:px-10 py-5 sm:py-6 border-b border-white/20 bg-evergreen/20 flex flex-wrap items-center justify-between gap-4">
-        <p className="font-mono text-xs sm:text-sm text-white/85 max-w-3xl leading-relaxed">
-          [PLACEHOLDER] All participating squads must adhere strictly to the extended Odyssey operational directives below. Violation of any protocol clause may result in penalty or disqualification.
-        </p>
-      </div>
-
-      {/* Rules Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/20">
-        {EXTENDED_RULES.map((block, idx) => (
-          <div
-            key={block.code}
-            className={`p-5 sm:p-10 flex flex-col justify-between gap-6 ${idx >= 2 ? 'md:border-t md:border-white/20' : ''
-              }`}
-          >
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-white/15 pb-3">
-                <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase">
-                  {block.code}
-                </span>
-              </div>
-
-              <h3 className="font-ethnocentric text-sm sm:text-lg text-white uppercase leading-snug break-words">
-                {block.category}
-              </h3>
-
-              <ul className="space-y-3 pt-2">
-                {block.items.map((item, itemIdx) => (
-                  <li
-                    key={itemIdx}
-                    className="flex items-start gap-3 font-mono text-xs leading-relaxed text-white/75"
-                  >
-                    <span className="w-1.5 h-1.5 bg-mint-leaf shrink-0 mt-1.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">
-              <span>SYNC'26 ODYSSEY RULEBOOK</span>
+      <section
+        id="the-world"
+        className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 pt-14 sm:pt-24 flex justify-center pointer-events-none"
+      >
+        <div
+          className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}
+        >
+          {/* Section Header */}
+          <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+            <div className="relative">
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
+                RULES AND REGULATIONS — EXTENDED<span className="text-mint-leaf">.</span>
+              </h2>
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-      </section >
 
-  {/* =====================================================================
-          5. REDIRECT BUTTON TO REGISTRATION PAGE WITH INSPIRING TEXT
-      ===================================================================== */}
-    < section className = "relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 py-14 sm:py-28 flex justify-center pointer-events-none" >
-      <div
-        className={`odyssey-reveal relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-5 sm:p-14 md:p-20 overflow-hidden ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
-          }`}
-      >
-        {/* Corner Brackets */}
-        <div className="pointer-events-none absolute -top-px -left-px w-5 h-5 border-t-2 border-l-2 border-mint-leaf" />
-        <div className="pointer-events-none absolute -top-px -right-px w-5 h-5 border-t-2 border-r-2 border-mint-leaf" />
-        <div className="pointer-events-none absolute -bottom-px -left-px w-5 h-5 border-b-2 border-l-2 border-mint-leaf" />
-        <div className="pointer-events-none absolute -bottom-px -right-px w-5 h-5 border-b-2 border-r-2 border-mint-leaf" />
-
-        {/* Subtle Radial Glow */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(65,210,162,0.16)_0%,transparent_65%)]" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 sm:gap-10">
-          <div className="space-y-4 max-w-2xl">
-            <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight font-black uppercase text-white break-words">
-              FORGE YOUR LEGACY BEYOND THE HORIZON<span className="text-mint-leaf">.</span>
-            </h2>
-            <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
-              Every great breakthrough begins with a single step into the unknown. Assemble your squad, calibrate your resolve, and claim your place among the pioneers of SYNC'26 Odyssey.
+          {/* Introductory Note */}
+          <div className="px-4 sm:px-10 py-5 sm:py-6 border-b border-white/20 bg-evergreen/20 flex flex-wrap items-center justify-between gap-4">
+            <p className="font-mono text-xs sm:text-sm text-white/85 max-w-3xl leading-relaxed">
+              [PLACEHOLDER] All participating squads must adhere strictly to the extended Odyssey operational directives below. Violation of any protocol clause may result in penalty or disqualification.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-4 shrink-0 w-full lg:w-auto">
-            <button
-              type="button"
-              onClick={handleGoToRegistration}
-              className="group relative min-h-[48px] w-full sm:w-auto bg-mint-leaf hover:bg-white text-black font-ethnocentric text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.18em] uppercase px-6 sm:px-10 py-4 sm:py-5 transition-all duration-300 cursor-pointer shadow-[0_0_35px_rgba(65,210,162,0.35)] hover:shadow-[0_0_45px_rgba(255,255,255,0.5)] flex items-center justify-center gap-3"
-              style={{
-                clipPath:
-                  'polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)',
-              }}
-            >
-              <ShuffleText text="REGISTER FOR ODYSSEY" />
-              <span className="font-mono text-base transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
-            </button>
+          {/* Rules Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/20">
+            {EXTENDED_RULES.map((block, idx) => (
+              <div
+                key={block.code}
+                className={`p-5 sm:p-10 flex flex-col justify-between gap-6 ${idx >= 2 ? 'md:border-t md:border-white/20' : ''
+                  }`}
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between border-b border-white/15 pb-3">
+                    <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase">
+                      {block.code}
+                    </span>
+                  </div>
+
+                  <h3 className="font-ethnocentric text-sm sm:text-lg text-white uppercase leading-snug break-words">
+                    {block.category}
+                  </h3>
+
+                  <ul className="space-y-3 pt-2">
+                    {block.items.map((item, itemIdx) => (
+                      <li
+                        key={itemIdx}
+                        className="flex items-start gap-3 font-mono text-xs leading-relaxed text-white/75"
+                      >
+                        <span className="w-1.5 h-1.5 bg-mint-leaf shrink-0 mt-1.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">
+                  <span>SYNC'26 ODYSSEY RULEBOOK</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-      </section >
-    </div >
+      </section>
+
+      {/* =====================================================================
+          5. REDIRECT BUTTON TO REGISTRATION PAGE WITH INSPIRING TEXT
+      ===================================================================== */}
+      <section className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 py-14 sm:py-28 flex justify-center pointer-events-none">
+        <div
+          className={`odyssey-reveal relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-5 sm:p-14 md:p-20 overflow-hidden ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}
+        >
+          {/* Corner Brackets */}
+          <div className="pointer-events-none absolute -top-px -left-px w-5 h-5 border-t-2 border-l-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -top-px -right-px w-5 h-5 border-t-2 border-r-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -bottom-px -left-px w-5 h-5 border-b-2 border-l-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -bottom-px -right-px w-5 h-5 border-b-2 border-r-2 border-mint-leaf" />
+
+          {/* Subtle Radial Glow */}
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(65,210,162,0.16)_0%,transparent_65%)]" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 sm:gap-10">
+            <div className="space-y-4 max-w-2xl">
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight font-black uppercase text-white break-words">
+                FORGE YOUR LEGACY BEYOND THE HORIZON<span className="text-mint-leaf">.</span>
+              </h2>
+              <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
+                Every great breakthrough begins with a single step into the unknown. Assemble your squad, calibrate your resolve, and claim your place among the pioneers of SYNC'26 Odyssey.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-4 shrink-0 w-full lg:w-auto">
+              <button
+                type="button"
+                onClick={handleGoToRegistration}
+                className="group relative min-h-[48px] w-full sm:w-auto bg-mint-leaf hover:bg-white text-black font-ethnocentric text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.18em] uppercase px-6 sm:px-10 py-4 sm:py-5 transition-all duration-300 cursor-pointer shadow-[0_0_35px_rgba(65,210,162,0.35)] hover:shadow-[0_0_45px_rgba(255,255,255,0.5)] flex items-center justify-center gap-3"
+                style={{
+                  clipPath:
+                    'polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)',
+                }}
+              >
+                <ShuffleText text="REGISTER FOR ODYSSEY" />
+                <span className="font-mono text-base transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
