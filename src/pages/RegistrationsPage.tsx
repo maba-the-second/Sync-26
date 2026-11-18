@@ -662,6 +662,19 @@ function CustomSelect({
 export function RegistrationsPage() {
   const isHolding = useAppStore((state) => state.isHolding);
 
+  // Responsive viewport mode (< 1024px shows shrunk crystal + foreground-arc orbit)
+  const [isCompactOrbit, setIsCompactOrbit] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < 1024
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)');
+    const update = () => setIsCompactOrbit(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
   // Modals state
   const [detailComp, setDetailComp] = useState<CompetitionItem | null>(null);
   const [isRegOpen, setIsRegOpen] = useState(false);
@@ -972,14 +985,14 @@ export function RegistrationsPage() {
   }
 
   return (
-    <div className="relative w-full min-h-screen min-h-[100dvh] lg:h-[100dvh] flex flex-col items-center justify-start lg:justify-center pt-16 pb-20 pl-16 pr-3.5 sm:pl-20 sm:pr-6 lg:pt-12 lg:pb-0 lg:pl-[calc(3.5rem+4rem)] lg:pr-16 lg:overflow-hidden pointer-events-none">
-      {/* Desktop Top Action Bar inside Registrations Arena */}
-      <div className="hidden lg:flex absolute top-16 mt-4 right-10 z-30 flex-wrap items-center gap-2.5 pointer-events-auto font-mono">
+    <div className="relative w-full h-screen h-[100dvh] flex flex-col items-center justify-center pt-14 pb-12 pl-14 pr-2.5 sm:pl-16 sm:pr-6 lg:pt-12 lg:pb-0 lg:pl-[calc(3.5rem+4rem)] lg:pr-16 overflow-hidden pointer-events-none">
+      {/* Top Action Bar inside Registrations Arena */}
+      <div className="absolute top-[66px] sm:top-16 sm:mt-4 right-4 sm:right-10 z-30 flex flex-wrap items-center gap-2.5 pointer-events-auto font-mono">
         <a
           href="./pdf/Sync Competition Rulebook.pdf"
           download="Sync Competition Rulebook.pdf"
           aria-label="Download Rule Book"
-          className="group inline-flex items-center justify-center px-2.5 py-2.5 hover:px-3.5 rounded-lg bg-mint-leaf text-black font-bold hover:bg-white shadow-[0_0_20px_rgba(65,210,162,0.4)] transition-all duration-300 ease-out overflow-hidden cursor-pointer"
+          className="group min-h-[40px] lg:min-h-0 inline-flex items-center justify-center px-3 py-2 lg:px-2.5 lg:py-2.5 lg:hover:px-3.5 rounded-lg bg-mint-leaf text-black font-bold hover:bg-white shadow-[0_0_20px_rgba(65,210,162,0.4)] transition-all duration-300 ease-out overflow-hidden cursor-pointer"
         >
           <svg
             className="w-4 h-4 shrink-0 transition-transform duration-300 ease-out"
@@ -995,8 +1008,9 @@ export function RegistrationsPage() {
               d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"
             />
           </svg>
-          <span className="max-w-0 opacity-0 ml-0 translate-x-2 group-hover:max-w-[180px] group-hover:opacity-100 group-hover:ml-2 group-hover:translate-x-0 overflow-hidden whitespace-nowrap text-[10px] tracking-[0.16em] uppercase transition-all duration-300 ease-out">
-            Download Rule Book
+          <span className="ml-2 text-[10px] tracking-[0.14em] whitespace-nowrap uppercase lg:max-w-0 lg:opacity-0 lg:ml-0 lg:translate-x-2 lg:group-hover:max-w-[180px] lg:group-hover:opacity-100 lg:group-hover:ml-2 lg:group-hover:translate-x-0 overflow-hidden lg:tracking-[0.16em] transition-all duration-300 ease-out">
+            <span className="lg:hidden">Rule Book</span>
+            <span className="hidden lg:inline">Download Rule Book</span>
           </span>
         </a>
       </div>
@@ -1018,126 +1032,69 @@ export function RegistrationsPage() {
         />
       </a>
 
-      {/* Mobile & Tablet Competition Arena (Scrollable Card Grid over 3D Crystal Backdrop) */}
-      <div className="lg:hidden w-full max-w-3xl pointer-events-auto space-y-4 pt-3">
-        <div className="border border-white/15 bg-black/65 backdrop-blur-md p-4 sm:p-5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <span className="font-mono text-[10px] tracking-[0.22em] text-mint-leaf uppercase block">
-              SYNC&apos;26 // 08 TRACKS
-            </span>
-            <h1 className="font-ethnocentric text-base sm:text-xl text-white uppercase tracking-wide mt-1">
-              COMPETITIONS &amp; REGISTRATION
-            </h1>
+      {/* 8 Competition Cards Orbiting the 3D Crystal (Compact Front-Arc on Mobile/Tablet, Full Ellipse on Desktop) */}
+      {isCompactOrbit ? (
+        <div className="w-full max-w-[440px] md:max-w-[540px] pointer-events-auto flex flex-col items-center mt-8 sm:mt-6">
+          <OrbitImages
+            key="crystal-orbit-cards-mobile"
+            images={COMPETITIONS.map((c) => ({
+              ...c,
+              eligibility: c.shortEligibility,
+            }))}
+            shape="ellipse"
+            baseWidth={480}
+            radiusX={112}
+            radiusY={122}
+            rotation={-5}
+            duration={34}
+            paused={!!detailComp || isRegOpen}
+            speedMultiplier={isHolding ? 4.2 : 1}
+            itemSize={160}
+            itemWidth={228}
+            itemHeight={164}
+            itemRadius={10}
+            depth={0.75}
+            frontArcOnly
+            showPath
+            pathColor="rgba(65, 210, 162, 0.35)"
+            pathWidth={1.5}
+            clickToFront
+            onItemClick={(idx, _src, rect) => openDetailsModal(idx, rect)}
+            onRegister={(idx, rect) => openDetailsModal(idx, rect)}
+          />
+          <div className="mt-2 px-3 py-1 rounded-full border border-white/15 bg-black/60 backdrop-blur-sm font-mono text-[9px] tracking-[0.2em] text-white/60 uppercase">
+            SWIPE TO ORBIT <span className="text-mint-leaf">//</span> TAP CARD TO INSPECT
           </div>
-          <a
-            href="./pdf/Sync Competition Rulebook.pdf"
-            download="Sync Competition Rulebook.pdf"
-            className="min-h-[42px] inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[10px] tracking-[0.16em] uppercase transition-colors shrink-0"
-          >
-            <svg
-              className="w-4 h-4 shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.4}
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"
-              />
-            </svg>
-            <span>RULE BOOK PDF</span>
-          </a>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          {COMPETITIONS.map((comp, idx) => (
-            <div
-              key={comp.id}
-              className="relative rounded-xl border bg-black/75 backdrop-blur-md p-4 flex flex-col justify-between gap-3.5 transition-colors"
-              style={{
-                borderColor: `rgba(${comp.accentRgb}, 0.45)`,
-                boxShadow: `0 6px 24px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(${comp.accentRgb}, 0.18)`,
-              }}
-            >
-              <div className="space-y-2">
-                <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-[9px] tracking-[0.16em] uppercase">
-                  <span
-                    className="px-2 py-0.5 rounded-full border font-semibold"
-                    style={{
-                      color: comp.accentColor,
-                      borderColor: `rgba(${comp.accentRgb}, 0.45)`,
-                      backgroundColor: `rgba(${comp.accentRgb}, 0.12)`,
-                    }}
-                  >
-                    {comp.badge}
-                  </span>
-                  <span className="text-white/60">{comp.shortEligibility}</span>
-                </div>
-                <h2 className="font-ethnocentric text-sm sm:text-base text-white uppercase tracking-wide">
-                  {comp.title}
-                </h2>
-                <p className="font-mono text-[11px] leading-relaxed text-white/75">
-                  {comp.shortDesc}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/10 font-mono">
-                <button
-                  type="button"
-                  onClick={(e) =>
-                    openDetailsModal(idx, e.currentTarget.getBoundingClientRect())
-                  }
-                  className="min-h-[42px] px-3 py-2 rounded-lg bg-white/5 border border-white/20 text-white hover:border-white/50 text-[10px] font-bold tracking-[0.12em] uppercase transition-colors cursor-pointer"
-                >
-                  DETAILS
-                </button>
-                <button
-                  type="button"
-                  onClick={() => openRegistrationModal(comp.id)}
-                  className="min-h-[42px] px-3 py-2 rounded-lg text-black text-[10px] font-bold tracking-[0.12em] uppercase transition-opacity hover:opacity-90 cursor-pointer"
-                  style={{
-                    backgroundColor: comp.accentColor,
-                  }}
-                >
-                  REGISTER &rarr;
-                </button>
-              </div>
-            </div>
-          ))}
+      ) : (
+        <div className="w-full max-w-5xl pointer-events-auto">
+          <OrbitImages
+            key="crystal-orbit-cards-v2"
+            images={COMPETITIONS.map((c) => ({
+              ...c,
+              eligibility: c.shortEligibility,
+            }))}
+            shape="ellipse"
+            radiusX={450}
+            radiusY={125}
+            rotation={-8}
+            duration={34}
+            paused={!!detailComp || isRegOpen}
+            speedMultiplier={isHolding ? 4.2 : 1}
+            itemSize={150}
+            itemWidth={176}
+            itemHeight={122}
+            itemRadius={10}
+            depth={0.65}
+            showPath
+            pathColor="rgba(65, 210, 162, 0.35)"
+            pathWidth={1.5}
+            clickToFront
+            onItemClick={(idx, _src, rect) => openDetailsModal(idx, rect)}
+            onRegister={(idx, rect) => openDetailsModal(idx, rect)}
+          />
         </div>
-      </div>
-
-      {/* Desktop: 8 Rainbow Competition Cards Orbiting the 3D Crystal */}
-      <div className="hidden lg:block w-full max-w-5xl pointer-events-auto">
-        <OrbitImages
-          key="crystal-orbit-cards-v2"
-          images={COMPETITIONS.map((c) => ({
-            ...c,
-            eligibility: c.shortEligibility,
-          }))}
-          shape="ellipse"
-          radiusX={450}
-          radiusY={125}
-          rotation={-8}
-          duration={34}
-          paused={!!detailComp || isRegOpen}
-          speedMultiplier={isHolding ? 4.2 : 1}
-          itemSize={150}
-          itemWidth={176}
-          itemHeight={122}
-          itemRadius={10}
-          depth={0.65}
-          showPath
-          pathColor="rgba(65, 210, 162, 0.35)"
-          pathWidth={1.5}
-          clickToFront
-          onItemClick={(idx, _src, rect) => openDetailsModal(idx, rect)}
-          onRegister={(idx, rect) => openDetailsModal(idx, rect)}
-        />
-      </div>
+      )}
 
       {/* =====================================================================
           COMPETITION DETAILS MODAL (Ported from Sync_2026)

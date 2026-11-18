@@ -89,6 +89,7 @@ export interface OrbitImagesProps {
   alignToPath?: boolean;
   intro?: boolean;
   speedMultiplier?: number;
+  frontArcOnly?: boolean;
   centerContent?: ReactNode;
 }
 
@@ -116,6 +117,7 @@ interface EngineConfig {
   alignToPath: boolean;
   intro: boolean;
   speedMultiplier: number;
+  frontArcOnly: boolean;
   sources: string[];
 }
 
@@ -523,6 +525,14 @@ const createEngine = (
         const occlusionFactor = 1 - backWeight * (1 - centerVisibility);
         opacity *= occlusionFactor;
         scale *= 0.72 + 0.28 * occlusionFactor;
+      }
+
+      // On compact/mobile viewports, only show ~3 foreground cards and smoothly fade out side/back cards
+      if (cfg.frontArcOnly) {
+        const arcT = clamp((d - 0.18) / (0.62 - 0.18), 0, 1);
+        const arcMask = arcT * arcT * (3 - 2 * arcT);
+        opacity *= arcMask;
+        scale *= 0.78 + 0.22 * arcMask;
       }
 
       if (introRunning) {
@@ -944,6 +954,7 @@ export default function OrbitImages({
   alignToPath = false,
   intro = true,
   speedMultiplier = 1,
+  frontArcOnly = false,
   centerContent,
 }: OrbitImagesProps) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -1031,6 +1042,7 @@ export default function OrbitImages({
     alignToPath,
     intro,
     speedMultiplier,
+    frontArcOnly,
     sources: items.map((item) => item.src || item.title || ''),
   };
 
