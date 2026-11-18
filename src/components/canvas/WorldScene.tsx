@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { useAppStore } from '../../store/useAppStore';
 import { PortalMask } from './PortalMask';
 import { createPrismaticCrystalGeometry } from './rhombicBipyramid';
-import { clampedDelta, damp, LAMBDA } from './frameUtils';
+import { clampedDelta, damp, isCoarseDevice, LAMBDA } from './frameUtils';
 
 interface OrbitConfig {
   radius: number;
@@ -100,6 +100,9 @@ export function WorldScene() {
     const { scrollProgress: scroll, isHolding: storeHolding, activePage } = useAppStore.getState();
     const isHolding = activePage !== 'home' && storeHolding;
     const t = state.clock.elapsedTime;
+    const pointerWeight = isCoarseDevice() ? 0 : 1;
+    const px = state.pointer.x * pointerWeight;
+    const py = state.pointer.y * pointerWeight;
 
     // Smoothly accelerate the larger crystal spin when entering decrypt mode
     const targetOuterSpeed = isHolding ? 1.8 : 0.22;
@@ -114,13 +117,13 @@ export function WorldScene() {
       crystalRef.current.position.y = Math.sin(t * 1.4) * 0.08;
       crystalRef.current.rotation.y = damp(
         crystalRef.current.rotation.y,
-        state.pointer.x * 0.4 - scroll * Math.PI * 0.75 + outerSpinAngleRef.current,
+        px * 0.4 - scroll * Math.PI * 0.75 + outerSpinAngleRef.current,
         LAMBDA.snappy,
         delta
       );
       crystalRef.current.rotation.x = damp(
         crystalRef.current.rotation.x,
-        -state.pointer.y * 0.22 + scroll * 0.35,
+        -py * 0.22 + scroll * 0.35,
         LAMBDA.medium,
         delta
       );
@@ -139,13 +142,13 @@ export function WorldScene() {
       orbitGroupRef.current.position.y = Math.sin(t * 1.4) * 0.05;
       orbitGroupRef.current.rotation.y = damp(
         orbitGroupRef.current.rotation.y,
-        state.pointer.x * 0.25 - scroll * Math.PI * 0.35,
+        px * 0.25 - scroll * Math.PI * 0.35,
         LAMBDA.smooth,
         delta
       );
       orbitGroupRef.current.rotation.x = damp(
         orbitGroupRef.current.rotation.x,
-        -state.pointer.y * 0.15 + scroll * 0.2,
+        -py * 0.15 + scroll * 0.2,
         LAMBDA.smooth,
         delta
       );

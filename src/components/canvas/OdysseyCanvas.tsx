@@ -10,6 +10,7 @@ import {
   ODESSY_POS_DATA,
 } from '../../data/odessyParticleData';
 import { useAppStore } from '../../store/useAppStore';
+import { isCoarseDevice, isMobileViewport } from './frameUtils';
 
 extend({ UnrealBloomPass, ShaderPass });
 
@@ -54,19 +55,20 @@ function seeded(n: number): number {
 /**
  * Populates fallback ambient targets until the PNG pixel map resolves.
  */
-function createInitialTargets(count: number): LogoTargetBuffers {
+function createInitialTargets(count: number, stride: number): LogoTargetBuffers {
   const logoPositions = new Float32Array(count * 3);
   const logoColors = new Float32Array(count * 3);
   const staggerDelays = new Float32Array(count);
 
   for (let i = 0; i < count; i++) {
     const idx = i * 3;
-    logoPositions[idx] = ODESSY_POS_DATA[idx];
-    logoPositions[idx + 1] = ODESSY_POS_DATA[idx + 1];
-    logoPositions[idx + 2] = ODESSY_POS_DATA[idx + 2];
-    logoColors[idx] = ODESSY_COL_DATA[idx] / 255;
-    logoColors[idx + 1] = ODESSY_COL_DATA[idx + 1] / 255;
-    logoColors[idx + 2] = ODESSY_COL_DATA[idx + 2] / 255;
+    const srcIdx = Math.min(ODESSY_PARTICLE_COUNT - 1, i * stride) * 3;
+    logoPositions[idx] = ODESSY_POS_DATA[srcIdx];
+    logoPositions[idx + 1] = ODESSY_POS_DATA[srcIdx + 1];
+    logoPositions[idx + 2] = ODESSY_POS_DATA[srcIdx + 2];
+    logoColors[idx] = ODESSY_COL_DATA[srcIdx] / 255;
+    logoColors[idx + 1] = ODESSY_COL_DATA[srcIdx + 1] / 255;
+    logoColors[idx + 2] = ODESSY_COL_DATA[srcIdx + 2] / 255;
     staggerDelays[i] = seeded(i + 17) * 1.4;
   }
 
@@ -77,7 +79,12 @@ function createInitialTargets(count: number): LogoTargetBuffers {
  * Samples RGBA pixels from ./images/odessy-logo.png into normalized 3D particle coordinates
  * and exact metallic logo colors while keeping ambient dust particles cohesive.
  */
-function buildTargetsFromImage(img: HTMLImageElement, count: number): LogoTargetBuffers {
+function buildTargetsFromImage(
+  img: HTMLImageElement,
+  count: number,
+  stride: number,
+  glyphCount: number
+): LogoTargetBuffers {
   const logoPositions = new Float32Array(count * 3);
   const logoColors = new Float32Array(count * 3);
   const staggerDelays = new Float32Array(count);
@@ -91,7 +98,7 @@ function buildTargetsFromImage(img: HTMLImageElement, count: number): LogoTarget
   const ctx = canvas.getContext('2d');
 
   if (!ctx) {
-    return createInitialTargets(count);
+    return createInitialTargets(count, stride);
   }
 
   ctx.clearRect(0, 0, width, height);
@@ -133,7 +140,7 @@ function buildTargetsFromImage(img: HTMLImageElement, count: number): LogoTarget
   }
 
   if (sampledPixels.length === 0) {
-    return createInitialTargets(count);
+    return createInitialTargets(count, stride);
   }
 
   const spanX = Math.max(1, maxPx - minPx);
@@ -152,7 +159,7 @@ function buildTargetsFromImage(img: HTMLImageElement, count: number): LogoTarget
 
   for (let i = 0; i < count; i++) {
     const idx = i * 3;
-    if (i < LOGO_GLYPH_COUNT) {
+    if (i < glyphCount) {
       const sample = sampledPixels[i % sampledPixels.length];
       const normX = (sample.px - minPx) / spanX - 0.5;
       const normY = 0.5 - (sample.py - minPy) / spanY;
@@ -213,17 +220,23 @@ interface ParticleSwarmProps {
   onRevealComplete: () => void;
   userInteractedRef: React.MutableRefObject<boolean>;
   controlsRef: React.RefObject<OrbitControlsImpl | null>;
+  skipRequestedRef: React.MutableRefObject<boolean>;
+  isMobile: boolean;
 }
 
 function ParticleSwarm({
   onRevealComplete,
   userInteractedRef,
   controlsRef,
+  skipRequestedRef,
+  isMobile,
 }: ParticleSwarmProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const { camera } = useThree();
 
-  const count = ODESSY_PARTICLE_COUNT;
+  const stride = isMobile ? 2 : 1;
+  const count = Math.floor(ODESSY_PARTICLE_COUNT / stride);
+  const glyphCount = Math.floor(LOGO_GLYPH_COUNT / stride);
 
   // Pre-allocated scratch helpers (zero per-frame GC inside useFrame)
   const dummy = useMemo(() => new THREE.Object3D(), []);
@@ -236,25 +249,46 @@ function ParticleSwarm({
   const dirVec = useMemo(() => new THREE.Vector3(), []);
 
   const currentPositions = useMemo(() => new Float32Array(count * 3), [count]);
-  const logoTargetsRef = useRef<LogoTargetBuffers>(createInitialTargets(count));
+  const logoTargetsRef = useRef<LogoTargetBuffers>(createInitialTargets(count, stride));
   const pointerNdcRef = useRef(new THREE.Vector2(9999, 9999));
 
-  // Track mouse pointer globally on window so particles always repel at the cursor
+  // Track pointer globally on window so particles repel at cursor or active touch
   useEffect(() => {
-    const handlePointerMove = (e: PointerEvent) => {
+    const updateNdc = (e: PointerEvent) => {
       pointerNdcRef.current.set(
         (e.clientX / window.innerWidth) * 2 - 1,
         -(e.clientY / window.innerHeight) * 2 + 1
       );
     };
+    const handlePointerMove = (e: PointerEvent) => {
+      if (e.pointerType === 'touch' && isCoarseDevice()) {
+        updateNdc(e);
+        return;
+      }
+      updateNdc(e);
+    };
+    const handlePointerDown = (e: PointerEvent) => {
+      updateNdc(e);
+    };
+    const handlePointerUpOrCancel = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') {
+        pointerNdcRef.current.set(9999, 9999);
+      }
+    };
     const handlePointerLeave = () => {
       pointerNdcRef.current.set(9999, 9999);
     };
 
+    window.addEventListener('pointerdown', handlePointerDown, { passive: true });
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('pointerup', handlePointerUpOrCancel, { passive: true });
+    window.addEventListener('pointercancel', handlePointerUpOrCancel, { passive: true });
     window.addEventListener('pointerleave', handlePointerLeave);
     return () => {
+      window.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUpOrCancel);
+      window.removeEventListener('pointercancel', handlePointerUpOrCancel);
       window.removeEventListener('pointerleave', handlePointerLeave);
     };
   }, []);
@@ -266,21 +300,21 @@ function ParticleSwarm({
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       if (!active) return;
-      logoTargetsRef.current = buildTargetsFromImage(img, count);
+      logoTargetsRef.current = buildTargetsFromImage(img, count, stride, glyphCount);
     };
     img.src = LOGO_SRC;
 
     return () => {
       active = false;
     };
-  }, [count]);
+  }, [count, stride, glyphCount]);
 
   const material = useMemo(() => {
     return new THREE.MeshBasicMaterial({ color: 0xffffff });
   }, []);
 
   const geometry = useMemo(() => {
-    const geo = new THREE.TetrahedronGeometry(0.25).clone();
+    const geo = new THREE.TetrahedronGeometry(isMobile ? 0.34 : 0.25).clone();
     const w = Math.ceil(Math.sqrt(count));
     const h = w;
     const references = new Float32Array(count * 2);
@@ -290,7 +324,7 @@ function ParticleSwarm({
     }
     geo.setAttribute('reference', new THREE.InstancedBufferAttribute(references, 2));
     return geo;
-  }, [count]);
+  }, [count, isMobile]);
 
   useEffect(() => {
     return () => {
@@ -330,6 +364,11 @@ function ParticleSwarm({
     const { isHolding } = useAppStore.getState();
     const speedMultiplier = isHolding ? 2.2 : 1.0;
 
+    if (skipRequestedRef.current && elapsedRef.current < ZOOM_DURATION) {
+      elapsedRef.current = ZOOM_DURATION;
+      skipRequestedRef.current = false;
+    }
+
     const dt = Math.min(delta, 0.05) * speedMultiplier;
     elapsedRef.current += dt;
     const elapsed = elapsedRef.current;
@@ -337,7 +376,7 @@ function ParticleSwarm({
     const zoomProgress = clamp01(elapsed / ZOOM_DURATION);
     const revealElapsed = Math.max(0, elapsed - ZOOM_DURATION);
 
-    // Trigger Stage 2 right after the 6-second zoom completes
+    // Trigger Stage 2 right after the 6-second zoom completes (or on tap skip)
     if (elapsed >= ZOOM_DURATION && !revealedTriggeredRef.current) {
       revealedTriggeredRef.current = true;
       onRevealComplete();
@@ -351,13 +390,20 @@ function ParticleSwarm({
       rotRamp * (Math.cos(elapsed * 0.31) * 0.16 + Math.sin(elapsed * 0.16) * 0.06);
     mesh.updateMatrixWorld();
 
+    // Scale camera distance cleanly on portrait aspect ratios so the 76-unit emblem fits uncropped
+    const aspect = camera instanceof THREE.PerspectiveCamera ? camera.aspect : 1;
+    const portraitScale = aspect < 1.15 ? Math.min(2.35, 1.15 / Math.max(aspect, 0.42)) : 1;
+    const targetZ = 68 * portraitScale;
+    const startZ = 250 * (aspect < 1.15 ? Math.min(1.65, portraitScale * 0.78) : 1);
+    const swayScale = 1 / Math.max(1, portraitScale * 0.85);
+
     // Smooth 6-second zoom-in + seamless post-reveal XZ cinematic camera loop
     if (!userInteractedRef.current) {
       if (elapsed <= ZOOM_DURATION) {
         const eased = easeInOutCubic(zoomProgress);
-        const camZ = THREE.MathUtils.lerp(250, 68, eased);
+        const camZ = THREE.MathUtils.lerp(startZ, targetZ, eased);
         const camY = THREE.MathUtils.lerp(8, 0, eased);
-        const camX = Math.sin(zoomProgress * Math.PI) * 14;
+        const camX = Math.sin(zoomProgress * Math.PI) * 14 * swayScale;
         camera.position.set(camX, camY, camZ);
         camera.lookAt(0, 0, 0);
         if (controlsRef.current) {
@@ -365,9 +411,9 @@ function ParticleSwarm({
         }
       } else {
         const loopT = elapsed - ZOOM_DURATION;
-        const camX = Math.sin(loopT * 0.35) * 18;
+        const camX = Math.sin(loopT * 0.35) * 18 * swayScale;
         const camY = Math.sin(loopT * 0.25) * 5;
-        const camZ = 68 - (1 - Math.cos(loopT * 0.35)) * 7;
+        const camZ = targetZ - (1 - Math.cos(loopT * 0.35)) * 7;
         camera.position.set(camX, camY, camZ);
         camera.lookAt(0, 0, 0);
         if (controlsRef.current) {
@@ -395,13 +441,14 @@ function ParticleSwarm({
 
     for (let i = 0; i < count; i++) {
       const idx = i * 3;
-      const sx = ODESSY_POS_DATA[idx];
-      const sy = ODESSY_POS_DATA[idx + 1];
-      const sz = ODESSY_POS_DATA[idx + 2];
+      const srcIdx = Math.min(ODESSY_PARTICLE_COUNT - 1, i * stride) * 3;
+      const sx = ODESSY_POS_DATA[srcIdx];
+      const sy = ODESSY_POS_DATA[srcIdx + 1];
+      const sz = ODESSY_POS_DATA[srcIdx + 2];
 
-      const sr = ODESSY_COL_DATA[idx] / 255;
-      const sg = ODESSY_COL_DATA[idx + 1] / 255;
-      const sb = ODESSY_COL_DATA[idx + 2] / 255;
+      const sr = ODESSY_COL_DATA[srcIdx] / 255;
+      const sg = ODESSY_COL_DATA[srcIdx + 1] / 255;
+      const sb = ODESSY_COL_DATA[srcIdx + 2] / 255;
 
       const zoomWaveZ = Math.sin(elapsed * 1.4 + i * 0.015) * (1 - zoomProgress * 0.5) * 0.6;
       targetVec.set(sx, sy, sz + zoomWaveZ);
@@ -473,33 +520,36 @@ function ParticleSwarm({
 
 export function OdysseyCanvas() {
   const setOdysseyStage2 = useAppStore((state) => state.setOdysseyStage2);
+  const odysseyStage2 = useAppStore((state) => state.odysseyStage2);
+  const setIsHolding = useAppStore((state) => state.setIsHolding);
   const [contextLost, setContextLost] = useState(false);
   const [isSoftwareGl, setIsSoftwareGl] = useState(false);
 
+  const isMobile = useMemo(() => isMobileViewport(), []);
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const userInteractedRef = useRef(false);
-  const bloomResolution = useMemo(
-    () =>
-      new THREE.Vector2(
-        typeof window !== 'undefined' ? window.innerWidth : 1280,
-        typeof window !== 'undefined' ? window.innerHeight : 720
-      ),
-    []
-  );
+  const skipRequestedRef = useRef(false);
+  const bloomResolution = useMemo(() => {
+    const scale = isMobile ? 0.5 : 1;
+    const w = typeof window !== 'undefined' ? Math.round(window.innerWidth * scale) : 1280;
+    const h = typeof window !== 'undefined' ? Math.round(window.innerHeight * scale) : 720;
+    return new THREE.Vector2(w, h);
+  }, [isMobile]);
 
   useEffect(() => {
     setOdysseyStage2(false);
   }, [setOdysseyStage2]);
 
   const handleRevealComplete = useCallback(() => {
+    setIsHolding(false);
     setOdysseyStage2(true);
-  }, [setOdysseyStage2]);
+  }, [setIsHolding, setOdysseyStage2]);
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-black text-white font-mono select-none">
       <Canvas
         camera={{ position: [0, 8, 250], fov: 60, near: 0.1, far: 1500 }}
-        dpr={[1, 2]}
+        dpr={isMobile ? [1, 1.25] : [1, 1.5]}
         onCreated={({ gl }) => {
           try {
             const rawGl = gl.getContext();
@@ -529,6 +579,8 @@ export function OdysseyCanvas() {
           onRevealComplete={handleRevealComplete}
           userInteractedRef={userInteractedRef}
           controlsRef={controlsRef}
+          skipRequestedRef={skipRequestedRef}
+          isMobile={isMobile}
         />
         <OrbitControls
           ref={controlsRef}
@@ -538,7 +590,7 @@ export function OdysseyCanvas() {
           enableDamping
           dampingFactor={0.05}
           minDistance={22}
-          maxDistance={320}
+          maxDistance={460}
           onStart={() => {
             userInteractedRef.current = true;
           }}
@@ -555,6 +607,40 @@ export function OdysseyCanvas() {
           </Effects>
         )}
       </Canvas>
+
+      {/* Stage 1 Intro Controls (accessible on touch & mobile while scroll is locked) */}
+      {!odysseyStage2 && !contextLost && (
+        <div
+          className="absolute inset-x-0 bottom-6 sm:bottom-8 z-20 flex flex-wrap items-center justify-center gap-3 px-4 pointer-events-none"
+          style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        >
+          <button
+            type="button"
+            onPointerDown={(e) => {
+              e.currentTarget.setPointerCapture?.(e.pointerId);
+              setIsHolding(true);
+            }}
+            onPointerUp={() => setIsHolding(false)}
+            onPointerCancel={() => setIsHolding(false)}
+            onLostPointerCapture={() => setIsHolding(false)}
+            onContextMenu={(e) => e.preventDefault()}
+            className="pointer-events-auto min-h-[42px] px-4 py-2 border border-white/25 hover:border-mint-leaf bg-black/75 backdrop-blur-md text-[10px] tracking-[0.2em] uppercase text-white/85 hover:text-mint-leaf touch-none select-none transition-colors cursor-pointer"
+          >
+            HOLD TO ACCELERATE
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              skipRequestedRef.current = true;
+              setIsHolding(false);
+              setOdysseyStage2(true);
+            }}
+            className="pointer-events-auto min-h-[42px] px-4 py-2 border border-mint-leaf/50 bg-mint-leaf/15 hover:bg-mint-leaf hover:text-black text-[10px] tracking-[0.2em] uppercase text-mint-leaf transition-colors cursor-pointer"
+          >
+            ENTER ODYSSEY &rarr;
+          </button>
+        </div>
+      )}
 
       {contextLost && (
         <div className="absolute inset-0 z-30 flex items-center justify-center bg-black text-center p-8">

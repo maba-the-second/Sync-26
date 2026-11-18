@@ -667,7 +667,8 @@ const FlexCarousel = ({
     const metrics = (s: Settings): Metrics => {
       const cardH = Math.max(24, s.cardHeight * height);
       const fixed = FIT_ASPECT[s.fit];
-      const widths = slots.map(slot => (fixed || slot.aspect) * cardH);
+      const maxCardW = width < 640 ? width * 0.84 : Infinity;
+      const widths = slots.map(slot => Math.min((fixed || slot.aspect) * cardH, maxCardW));
       const centers: number[] = [];
       let cursor = 0;
       for (let i = 0; i < widths.length; i++) {
@@ -817,7 +818,8 @@ const FlexCarousel = ({
     const applyResize = () => {
       width = Math.max(1, container.clientWidth);
       height = Math.max(1, container.clientHeight);
-      renderer.dpr = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(PIXEL_BUDGET / (width * height)));
+      const maxDpr = width < 640 ? 1.5 : 2;
+      renderer.dpr = Math.min(window.devicePixelRatio || 1, maxDpr, Math.sqrt(PIXEL_BUDGET / (width * height)));
       renderer.setSize(width, height);
       target.setSize(Math.max(2, Math.round(width * renderer.dpr)), Math.max(2, Math.round(height * renderer.dpr)));
       lensUniforms.tScene.value = target.texture;

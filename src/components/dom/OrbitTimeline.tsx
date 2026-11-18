@@ -52,15 +52,15 @@ export function OrbitTimeline({
     return list;
   }, [data]);
 
-  // Close clicked roster entry when clicking outside
+  // Close clicked roster entry when clicking/tapping outside
   useEffect(() => {
-    const handlePointerDown = (e: MouseEvent) => {
+    const handlePointerDown = (e: PointerEvent) => {
       if (stageRef.current && !stageRef.current.contains(e.target as Node)) {
         setSelectedKey(null);
       }
     };
-    window.addEventListener('mousedown', handlePointerDown);
-    return () => window.removeEventListener('mousedown', handlePointerDown);
+    window.addEventListener('pointerdown', handlePointerDown);
+    return () => window.removeEventListener('pointerdown', handlePointerDown);
   }, []);
 
   return (
@@ -83,47 +83,54 @@ export function OrbitTimeline({
         <div className="divide-y divide-white/10 flex-1 flex flex-col justify-between">
           {flatNodes.map((item) => {
             const isActive = activeKey === item.key;
+            const isSelected = selectedKey === item.key;
             return (
-              <button
-                key={item.key}
-                type="button"
-                onMouseEnter={() => setHoveredKey(item.key)}
-                onMouseLeave={() => setHoveredKey(null)}
-                onClick={() =>
-                  setSelectedKey((prev) =>
-                    prev === item.key ? null : item.key
-                  )
-                }
-                className={`w-full px-4 py-2.5 text-left transition-colors flex items-center gap-3 cursor-pointer ${
-                  isActive
-                    ? 'bg-mint-leaf/15 text-white'
-                    : 'hover:bg-white/5 text-white/75'
-                }`}
-              >
-                {showDates && (
-                  <span
-                    className={`font-mono text-[9px] px-1.5 py-0.5 border tracking-wider uppercase shrink-0 ${
-                      isActive
-                        ? 'bg-mint-leaf text-black border-mint-leaf font-bold'
-                        : 'border-mint-leaf/35 text-mint-leaf/85 bg-evergreen/40'
-                    }`}
-                  >
-                    {item.groupDate}
-                  </span>
-                )}
-
-                <div className="min-w-0 flex-1">
-                  <p className="font-mono text-[11px] uppercase tracking-wider truncate text-white">
-                    {item.event.title}
-                  </p>
-                </div>
-
-                <span
-                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                    isActive ? 'bg-mint-leaf shadow-[0_0_8px_#41D2A2]' : 'bg-white/20'
+              <div key={item.key}>
+                <button
+                  type="button"
+                  onMouseEnter={() => setHoveredKey(item.key)}
+                  onMouseLeave={() => setHoveredKey(null)}
+                  onClick={() =>
+                    setSelectedKey((prev) =>
+                      prev === item.key ? null : item.key
+                    )
+                  }
+                  className={`w-full min-h-[44px] sm:min-h-0 px-3 sm:px-4 py-2.5 text-left transition-colors flex items-center gap-2.5 sm:gap-3 cursor-pointer ${
+                    isActive
+                      ? 'bg-mint-leaf/15 text-white'
+                      : 'hover:bg-white/5 text-white/75'
                   }`}
-                />
-              </button>
+                >
+                  {showDates && (
+                    <span
+                      className={`font-mono text-[9px] px-1.5 py-0.5 border tracking-wider uppercase shrink-0 ${
+                        isActive
+                          ? 'bg-mint-leaf text-black border-mint-leaf font-bold'
+                          : 'border-mint-leaf/35 text-mint-leaf/85 bg-evergreen/40'
+                      }`}
+                    >
+                      {item.groupDate}
+                    </span>
+                  )}
+
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-[11px] uppercase tracking-wider whitespace-normal sm:truncate text-white">
+                      {item.event.title}
+                    </p>
+                  </div>
+
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                      isActive ? 'bg-mint-leaf shadow-[0_0_8px_#41D2A2]' : 'bg-white/20'
+                    }`}
+                  />
+                </button>
+                {isSelected && (
+                  <div className="px-4 py-2.5 bg-mint-leaf/5 border-t border-mint-leaf/20 font-mono text-[11px] leading-relaxed text-white/80">
+                    {item.event.description}
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>

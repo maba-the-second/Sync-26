@@ -31,6 +31,12 @@ export function AspectPage() {
   const tiltRafRef = useRef<number | null>(null);
 
   const handleCardMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(hover: none), (pointer: coarse)').matches
+    ) {
+      return;
+    }
     const target = e.currentTarget;
     const clientX = e.clientX;
     const clientY = e.clientY;
@@ -64,8 +70,8 @@ export function AspectPage() {
   }, []);
 
   useEffect(() => {
+    const mm = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      const isDesktop = window.innerWidth > 768;
       const aboutSection = rootRef.current?.querySelector('.about-section');
 
       SECTION_ANCHORS.forEach((selector, idx) => {
@@ -78,77 +84,107 @@ export function AspectPage() {
         });
       });
 
-      if (heroCardBodyRef.current) {
-        const heroToCardTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: '.hero-section',
-            start: 'top top',
-            endTrigger: aboutSection || '.about-section',
-            end: 'top top',
-            scrub: 0.65,
-          },
-        });
-
-        heroToCardTl.fromTo(
-          heroCardBodyRef.current,
-          {
-            width: '100vw',
-            height: '100vh',
-            x: '0vw',
-            y: '0vh',
-            rotateY: 0,
-            rotateX: 0,
-            rotateZ: 0,
-            z: 0,
-            borderRadius: '0px',
-          },
-          {
-            width: isDesktop ? '27vw' : '84vw',
-            height: isDesktop ? '66vh' : '46vh',
-            x: isDesktop ? '32.5vw' : '0vw',
-            y: isDesktop ? '4vh' : '18vh',
-            rotateY: 360,
-            keyframes: {
-              rotateX: [0, 22, -14, 0],
-              rotateZ: [0, -9, 6, 0],
-              z: [0, -180, 60, 0],
-            },
-            borderRadius: '14px',
-            ease: 'power2.inOut',
-          },
-          0
-        );
-
-        if (heroCardGlareRef.current) {
-          heroToCardTl.fromTo(
-            heroCardGlareRef.current,
-            { xPercent: -120, opacity: 0 },
-            {
-              keyframes: {
-                xPercent: [-120, 0, 120],
-                opacity: [0, 0.65, 0],
+      mm.add(
+        {
+          isDesktop: '(min-width: 769px)',
+          isMobile: '(max-width: 768px)',
+        },
+        (mc) => {
+          const isDesktop = Boolean(mc.conditions?.isDesktop);
+          if (heroCardBodyRef.current) {
+            const heroToCardTl = gsap.timeline({
+              scrollTrigger: {
+                trigger: '.hero-section',
+                start: 'top top',
+                endTrigger: aboutSection || '.about-section',
+                end: 'top top',
+                scrub: 0.65,
               },
-              ease: 'none',
-            },
-            0
-          );
-        }
+            });
 
-        gsap.to(heroCardBodyRef.current, {
-          scale: 0,
-          rotateY: 540,
-          rotateX: -28,
-          rotateZ: 12,
-          opacity: 0,
-          ease: 'power2.inOut',
-          scrollTrigger: {
-            trigger: '.section3',
-            start: 'top 75%',
-            end: 'top 15%',
-            scrub: 0.6,
-          },
-        });
-      }
+            heroToCardTl.fromTo(
+              heroCardBodyRef.current,
+              {
+                width: '100vw',
+                height: '100vh',
+                x: '0vw',
+                y: '0vh',
+                rotateY: 0,
+                rotateX: 0,
+                rotateZ: 0,
+                z: 0,
+                borderRadius: '0px',
+              },
+              {
+                width: isDesktop ? '27vw' : '74vw',
+                height: isDesktop ? '66vh' : '38vh',
+                x: isDesktop ? '32.5vw' : '22px',
+                y: isDesktop ? '4vh' : '16vh',
+                rotateY: 360,
+                keyframes: {
+                  rotateX: [0, 22, -14, 0],
+                  rotateZ: [0, -9, 6, 0],
+                  z: [0, -180, 60, 0],
+                },
+                borderRadius: '14px',
+                ease: 'power2.inOut',
+              },
+              0
+            );
+
+            if (heroCardGlareRef.current) {
+              heroToCardTl.fromTo(
+                heroCardGlareRef.current,
+                { xPercent: -120, opacity: 0 },
+                {
+                  keyframes: {
+                    xPercent: [-120, 0, 120],
+                    opacity: [0, 0.65, 0],
+                  },
+                  ease: 'none',
+                },
+                0
+              );
+            }
+
+            gsap.to(heroCardBodyRef.current, {
+              scale: 0,
+              rotateY: 540,
+              rotateX: -28,
+              rotateZ: 12,
+              opacity: 0,
+              ease: 'power2.inOut',
+              scrollTrigger: {
+                trigger: '.section3',
+                start: 'top 75%',
+                end: 'top 15%',
+                scrub: 0.6,
+              },
+            });
+          }
+
+          gsap.fromTo(
+            '.s3image',
+            {
+              scale: 0,
+              y: isDesktop ? 0 : -80,
+              transformOrigin: 'center',
+            },
+            {
+              scale: isDesktop ? 1.08 : 1.02,
+              y: 0,
+              ease: 'power3.inOut',
+              scrollTrigger: {
+                trigger: '.section3',
+                start: 'top 45%',
+                end: 'top -20%',
+                scrub: true,
+              },
+            }
+          );
+        },
+        rootRef
+      );
 
       gsap.to('.hero-section-content', {
         opacity: 0,
@@ -173,26 +209,6 @@ export function AspectPage() {
           start: 'top 65%',
         },
       });
-
-      gsap.fromTo(
-        '.s3image',
-        {
-          scale: 0,
-          y: window.innerWidth < 768 ? -120 : 0,
-          transformOrigin: 'center',
-        },
-        {
-          scale: 1.08,
-          y: 0,
-          ease: 'power3.inOut',
-          scrollTrigger: {
-            trigger: '.section3',
-            start: 'top 45%',
-            end: 'top -20%',
-            scrub: true,
-          },
-        }
-      );
 
       gsap.to('.s3image', {
         scale: 0,
@@ -275,8 +291,11 @@ export function AspectPage() {
     }, rootRef);
 
     ScrollTrigger.refresh();
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      mm.revert();
+      ctx.revert();
+    };
+  }, [setActiveSection]);
 
   return (
     <div ref={rootRef} className="w-full text-white">
@@ -376,33 +395,33 @@ export function AspectPage() {
       ===================================================================== */}
       <section
         id="project"
-        className="hero-section relative min-h-screen w-full flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-6 sm:pr-10 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 z-30 pointer-events-none"
+        className="hero-section relative min-h-screen min-h-[100dvh] w-full flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-4 sm:pr-10 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 z-30 pointer-events-none"
       >
         <div className="hero-section-content flex flex-col justify-between flex-1">
-          <div className="max-w-[310px] sm:max-w-[340px]">
+          <div className="max-w-[300px] sm:max-w-[340px]">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
               ASPECT
             </span>
-            <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
+            <p className="font-ethnocentric text-[11px] sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
               Shift your perspective inside SYNC'26. Aspect celebrates visual direction, creative design systems, and immersive digital craft.
             </p>
           </div>
 
-          <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-10 sm:pt-14">
-            <div className="ml-[14%] sm:ml-[24%] md:ml-[29%] flex flex-col items-start">
-              <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
+          <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-8 sm:pt-14">
+            <div className="ml-[4%] sm:ml-[24%] md:ml-[29%] flex flex-col items-start">
+              <div className="font-ethnocentric text-[clamp(1.35rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                 VISION<span className="text-mint-leaf">.</span>
               </div>
             </div>
 
-            <div className="ml-[18%] sm:ml-[30%] md:ml-[37%] flex flex-col items-start mt-1 sm:mt-2">
-              <div className="font-ethnocentric text-[clamp(2.25rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
+            <div className="ml-[8%] sm:ml-[30%] md:ml-[37%] flex flex-col items-start mt-1 sm:mt-2">
+              <div className="font-ethnocentric text-[clamp(1.35rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                 DESIGN<span className="text-mint-leaf">.</span>
               </div>
             </div>
 
             <div className="ml-0 sm:ml-[2%] flex flex-col items-start mt-1 sm:mt-2">
-              <h1 className="font-ethnocentric text-[clamp(2.4rem,7.8vw,7.4rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
+              <h1 className="font-ethnocentric text-[clamp(1.4rem,7.8vw,7.4rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
                 ASPECT<span className="text-mint-leaf">.</span>
               </h1>
             </div>
@@ -415,23 +434,23 @@ export function AspectPage() {
       ===================================================================== */}
       <section
         id="about"
-        className="about-section min-h-screen w-full relative z-20 flex justify-center font-ethnocentric"
+        className="about-section min-h-screen min-h-[100dvh] w-full relative z-20 flex justify-center font-ethnocentric"
       >
-        <div className="h-full w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
-          <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
-            <div className="px-6 py-8 max-md:p-4 text-white border-b border-white/20">
+        <div className="h-full w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
+          <div className="relative flex flex-col max-md:w-full w-[62%] min-h-0 md:min-h-[86vh] justify-between">
+            <div className="px-4 py-6 sm:px-6 sm:py-8 text-white border-b border-white/20">
               <div className="relative">
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black tracking-tight pl-20 uppercase">
+                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black tracking-tight pl-0 sm:pl-12 md:pl-20 uppercase break-words">
                   EVERY DIMENSION...
                 </h3>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black tracking-tight mt-1 uppercase">
+                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black tracking-tight mt-1 uppercase break-words">
                   REIMAGINED IN LIGHT<span className="text-mint-leaf">.</span>
                 </h3>
               </div>
             </div>
 
-            <div className="p-8 flex flex-col justify-between gap-6 flex-1">
-              <div className="w-56 sm:w-64">
+            <div className="p-4 sm:p-6 md:p-8 flex flex-col justify-between gap-6 flex-1">
+              <div className="w-full max-w-[220px] sm:w-56 md:w-64">
                 <ImageTilt
                   src="./images/trailer-side-media.webp"
                   alt="Trailer Side Media"
@@ -450,14 +469,15 @@ export function AspectPage() {
             </div>
           </div>
 
-          <div className="w-[38%] min-h-[86vh] border-l border-white/20 p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
+          <div className="w-[38%] min-h-[42vh] md:min-h-[86vh] border-l border-white/20 p-4 sm:p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
             <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
               <span>DOCKING BAY - 05</span>
               <span className="text-mint-leaf">3D OBJECT LOCK</span>
             </div>
-            <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
+            <div className="w-full flex-1 flex items-center justify-center my-2 sm:my-4 border border-dashed border-white/10 rounded-2xl" />
             <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span>HOVER CARD TO TILT</span>
+              <span className="hidden md:inline">HOVER CARD TO TILT</span>
+              <span className="md:hidden">SCROLL TO EXPLORE</span>
               <span>SYNC'26 ARCHIVE</span>
             </div>
           </div>
@@ -475,27 +495,27 @@ export function AspectPage() {
           <img
             src="./images/section3-image.png"
             alt="Section 3 Backdrop"
-            className="s3image absolute object-cover w-[92vw] max-w-[1250px] h-[82vh] max-h-[900px] scale-0 rounded-xl opacity-45 border border-mint-leaf/30"
+            className="s3image absolute object-cover w-[78vw] md:w-[92vw] max-w-[1250px] h-[54vh] md:h-[82vh] max-h-[900px] ml-10 md:ml-0 scale-0 rounded-xl opacity-45 border border-mint-leaf/30"
           />
         </div>
 
-        <div className="h-full mt-[180px] w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] z-30 relative mx-auto">
-          <div className="relative min-h-[52vh] flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0">
+        <div className="h-full mt-16 md:mt-[180px] w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] z-30 relative mx-auto">
+          <div className="relative min-h-0 md:min-h-[52vh] flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
+            <div className="px-4 sm:px-6 py-6 sm:py-8 w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0 max-md:border-b">
               <div className="relative">
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black pl-20 max-sm:pl-12 uppercase">
+                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black pl-0 sm:pl-12 md:pl-20 uppercase break-words">
                   CRAFT INTERFACES AND WORLDS
                 </h3>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black mt-1 uppercase">
+                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black mt-1 uppercase break-words">
                   THAT RESHAPE HUMAN
                 </h3>
-                <h3 className="section-title text-3xl sm:text-4xl md:text-[44px] leading-none font-black mt-1 uppercase">
+                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black mt-1 uppercase break-words">
                   PERCEPTION<span className="text-mint-leaf">.</span>
                 </h3>
               </div>
             </div>
 
-            <div className="p-8 w-[30%] max-md:w-full font-mono text-[10px] leading-4 text-mint-leaf/80 space-y-0.5">
+            <div className="p-4 sm:p-8 w-[30%] max-md:w-full font-mono text-[10px] leading-4 text-mint-leaf/80 space-y-0.5">
               {TERMINAL_LINES.map((line, idx) => (
                 <p key={idx} className="min-h-[12px]">
                   {line}
@@ -504,10 +524,10 @@ export function AspectPage() {
             </div>
           </div>
 
-          <div className="relative min-h-[48vh] flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[70%] max-sm:w-[35%] border-r border-white/20" />
-            <div className="p-6 sm:p-8 overflow-hidden w-[30%] max-sm:w-[65%] flex flex-col justify-between gap-4">
-              <div className="w-full flex items-center justify-between font-mono text-[10px] text-mint-leaf">
+          <div className="relative min-h-0 sm:min-h-[48vh] flex flex-col sm:flex-row w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
+            <div className="hidden sm:block px-6 py-8 sm:w-[70%] border-r border-white/20" />
+            <div className="p-4 sm:p-6 md:p-8 overflow-hidden w-full sm:w-[30%] flex flex-col justify-between gap-4">
+              <div className="w-full flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] text-mint-leaf">
                 <div>
                   <p>N 35°27.37</p>
                   <p>E 139°38.57</p>
@@ -547,12 +567,12 @@ export function AspectPage() {
             </div>
           </div>
 
-          <div className="relative min-h-[45vh] flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
+          <div className="relative min-h-0 sm:min-h-[45vh] flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
             <div className="px-6 py-8 w-[30%] border-r border-white/20 relative overflow-hidden max-sm:hidden">
               <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_49.5%,rgba(65,210,162,0.35)_50%,transparent_50.5%)]" />
             </div>
 
-            <div className="px-6 py-8 w-[70%] max-sm:w-full">
+            <div className="px-4 sm:px-6 py-6 sm:py-8 w-[70%] max-sm:w-full">
               <div className="relative">
                 {[
                   'FORM MEETS FUNCTION IN',
@@ -562,8 +582,8 @@ export function AspectPage() {
                 ].map((item, idx) => (
                   <h3
                     key={idx}
-                    className={`section-title text-2xl sm:text-4xl md:text-[42px] leading-tight font-black uppercase ${
-                      idx === 0 ? 'pl-20 max-sm:pl-12' : ''
+                    className={`section-title text-lg sm:text-4xl md:text-[42px] leading-tight font-black uppercase break-words ${
+                      idx === 0 ? 'pl-0 sm:pl-12 md:pl-20' : ''
                     }`}
                   >
                     {item}
@@ -591,22 +611,22 @@ export function AspectPage() {
       ===================================================================== */}
       <section
         id="factions"
-        className="section4 mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-ethnocentric overflow-hidden"
+        className="section4 mt-16 md:mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-ethnocentric overflow-hidden"
       >
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block1 absolute w-[92vw] max-w-[1300px] h-[88vh] bg-evergreen/90 border border-turf-green scale-0 rounded-xl" />
+          <div className="bg-block1 absolute w-[88vw] md:w-[92vw] max-w-[1300px] h-[78vh] md:h-[88vh] bg-evergreen/90 border border-turf-green scale-0 rounded-xl" />
         </div>
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block2 absolute w-[94vw] max-w-[1320px] h-[90vh] bg-turf-green/80 border border-sea-green scale-0 rounded-xl" />
+          <div className="bg-block2 absolute w-[90vw] md:w-[94vw] max-w-[1320px] h-[80vh] md:h-[90vh] bg-turf-green/80 border border-sea-green scale-0 rounded-xl" />
         </div>
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block3 absolute w-[96vw] max-w-[1340px] h-[92vh] bg-black/90 border border-mint-leaf/40 scale-0 rounded-xl" />
+          <div className="bg-block3 absolute w-[92vw] md:w-[96vw] max-w-[1340px] h-[82vh] md:h-[92vh] bg-black/90 border border-mint-leaf/40 scale-0 rounded-xl" />
         </div>
 
-        <div className="w-[97vw] pl-[68px] pt-[70px] flex items-center z-30 relative max-md:flex-col max-md:pl-4">
-          <div className="flex items-center justify-center w-[22vw] max-md:w-full py-8">
-            <div className="-rotate-90 max-md:rotate-0 flex flex-col gap-2">
-              <h2 className="font-ethnocentric text-[10vw] max-md:text-[22vw] leading-none tracking-tighter font-black text-white">
+        <div className="w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] flex items-center z-30 relative max-md:flex-col">
+          <div className="flex items-center justify-center w-[22vw] max-md:w-full py-4 sm:py-8">
+            <div className="-rotate-90 max-md:rotate-0 flex flex-col gap-2 items-center md:items-start">
+              <h2 className="font-ethnocentric text-[10vw] max-md:text-[18vw] leading-none tracking-tighter font-black text-white">
                 05A
               </h2>
               <span className="font-mono text-[11px] uppercase tracking-widest text-mint-leaf flex items-center gap-2">
@@ -615,8 +635,8 @@ export function AspectPage() {
             </div>
           </div>
 
-          <div className="w-[48vw] max-md:w-full h-full flex items-center justify-center relative py-8 border-x border-white/20 max-md:border-x-0">
-            <div className="s4-center-portrait w-full max-w-md px-6">
+          <div className="w-[48vw] max-md:w-full h-full flex items-center justify-center relative py-4 sm:py-8 border-x border-white/20 max-md:border-x-0">
+            <div className="s4-center-portrait w-full max-w-[260px] sm:max-w-md px-3 sm:px-6">
               <ImageTilt
                 src="./images/section4-image.png"
                 alt="Aspect Portrait"
@@ -627,14 +647,14 @@ export function AspectPage() {
           </div>
 
           <div className="w-[30vw] max-md:w-full h-full flex flex-col justify-center">
-            <div className="p-6 border-b border-white/20">
+            <div className="p-4 sm:p-6 border-b border-white/20 max-w-[280px] sm:max-w-none mx-auto w-full">
               <ImageTilt
                 src="./images/face-traits.webp"
                 alt="Face Traits Upper"
                 tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
               />
             </div>
-            <div className="p-6">
+            <div className="p-4 sm:p-6 max-w-[280px] sm:max-w-none mx-auto w-full">
               <ImageTilt
                 src="./images/face-traits.webp"
                 alt="Face Traits Lower"
@@ -650,21 +670,21 @@ export function AspectPage() {
       ===================================================================== */}
       <section
         id="collectibles"
-        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-ethnocentric flex flex-col justify-between gap-12 max-md:pl-4"
+        className="section5 relative z-30 w-[97vw] max-md:w-full mx-auto min-h-screen pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] overflow-x-hidden font-ethnocentric flex flex-col justify-between gap-8 md:gap-12"
       >
         <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
-          <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
+          <div className="w-1/2 max-md:w-full p-4 sm:p-6 border-r border-white/20 max-md:border-r-0 max-md:border-b">
             <div className="relative">
-              <h3 className="text-3xl sm:text-4xl md:text-[42px] leading-none font-black pl-20 uppercase">
+              <h3 className="text-lg sm:text-4xl md:text-[42px] leading-tight md:leading-none font-black pl-0 sm:pl-12 md:pl-20 uppercase break-words">
                 VISUAL EXHIBITION &amp;
               </h3>
-              <h3 className="text-3xl sm:text-4xl md:text-[42px] leading-none font-black mt-1 uppercase">
+              <h3 className="text-lg sm:text-4xl md:text-[42px] leading-tight md:leading-none font-black mt-1 uppercase break-words">
                 GALLERY<span className="text-mint-leaf">.</span>
               </h3>
             </div>
           </div>
 
-          <div className="w-1/2 max-md:w-full p-6 flex items-center">
+          <div className="w-1/2 max-md:w-full p-4 sm:p-6 flex items-center">
             <div className="relative">
               <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf uppercase block mb-2">
                 Creative Direction
@@ -676,21 +696,21 @@ export function AspectPage() {
           </div>
         </div>
 
-        <PerspectiveCardGallery className="my-auto py-8" />
+        <PerspectiveCardGallery className="my-auto py-4 sm:py-8" />
       </section>
 
       {/* =====================================================================
           SECTION 7: FOOTER CALLOUT
       ===================================================================== */}
       <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-ethnocentric bg-black/85 border-t border-white/20">
-        <div className="h-full w-[97vw] max-md:w-full pt-[70px] pl-[68px] max-md:pl-4 flex flex-col justify-between z-30 relative overflow-hidden">
-          <div className="min-h-[42vh] w-full border-b border-white/20 p-8 flex items-end justify-center s7-fade-up">
-            <h2 className="font-ethnocentric text-[11vw] leading-none font-black tracking-tight text-white uppercase">
+        <div className="h-full w-[97vw] max-md:w-full pt-16 md:pt-[70px] pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 flex flex-col justify-between z-30 relative overflow-hidden">
+          <div className="min-h-[22vh] sm:min-h-[34vh] md:min-h-[42vh] w-full border-b border-white/20 p-4 sm:p-8 flex items-end justify-center s7-fade-up">
+            <h2 className="font-ethnocentric text-[clamp(2rem,10.5vw,9.5rem)] leading-none font-black tracking-tight text-white uppercase">
               ASPECT<span className="text-mint-leaf">.</span>
             </h2>
           </div>
 
-          <div className="min-h-[42vh] w-full flex flex-col justify-between py-8 px-12 max-sm:px-4">
+          <div className="min-h-0 md:min-h-[42vh] w-full flex flex-col justify-between gap-4 py-6 sm:py-8 px-4 sm:px-8 md:px-12">
             <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
               ASPECT - SYNC'26
             </span>
@@ -699,7 +719,7 @@ export function AspectPage() {
             </span>
           </div>
 
-          <div className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 sm:w-96 max-sm:static max-sm:translate-x-0 max-sm:translate-y-0 max-sm:mx-auto max-sm:pb-8">
+          <div className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-52 sm:w-72 md:w-96 max-md:static max-md:translate-x-0 max-md:translate-y-0 max-md:mx-auto max-md:pb-8">
             <ImageTilt
               src="./images/section4-image.png"
               alt="Aspect"

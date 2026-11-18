@@ -33,6 +33,12 @@ export function ImageTilt({
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!cardRef.current) return;
+      if (
+        typeof window !== 'undefined' &&
+        window.matchMedia?.('(hover: none), (pointer: coarse)').matches
+      ) {
+        return;
+      }
       const clientX = e.clientX;
       const clientY = e.clientY;
 

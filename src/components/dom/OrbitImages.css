@@ -91,17 +91,26 @@
   pointer-events: none;
 }
 
-.orbit-item:hover .orbit-item-inner,
+@media (hover: hover) and (pointer: fine) {
+  .orbit-item:hover .orbit-item-inner,
+  .orbit-item:focus-visible .orbit-item-inner {
+    transform: scale(var(--orbit-hover-scale, 1));
+    box-shadow:
+      0 14px 34px rgba(0, 0, 0, 0.82),
+      0 0 30px rgba(var(--card-rgb, 65, 210, 162), 0.7);
+  }
+
+  .orbit-item:hover .orbit-item-inner::before,
+  .orbit-item:focus-visible .orbit-item-inner::before {
+    animation-duration: 4.5s;
+  }
+}
+
 .orbit-item:focus-visible .orbit-item-inner {
   transform: scale(var(--orbit-hover-scale, 1));
   box-shadow:
     0 14px 34px rgba(0, 0, 0, 0.82),
     0 0 30px rgba(var(--card-rgb, 65, 210, 162), 0.7);
-}
-
-.orbit-item:hover .orbit-item-inner::before,
-.orbit-item:focus-visible .orbit-item-inner::before {
-  animation-duration: 4.5s;
 }
 
 .orbit-item:focus-visible {
@@ -260,6 +269,11 @@
 @media (prefers-reduced-motion: reduce) {
   .orbit-item-inner {
     transition: none;
+  }
+
+  .orbit-item-inner::before,
+  .sync-modal-frame::before {
+    animation: none;
   }
 }
 

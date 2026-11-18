@@ -27,6 +27,12 @@ export function HomePage() {
   const tiltRafRef = useRef<number | null>(null);
 
   const handleCardMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(hover: none), (pointer: coarse)').matches
+    ) {
+      return;
+    }
     const target = e.currentTarget;
     const clientX = e.clientX;
     const clientY = e.clientY;
@@ -60,8 +66,8 @@ export function HomePage() {
   }, []);
 
   useEffect(() => {
+    const mm = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      const isDesktop = window.innerWidth > 768;
       const aboutSection = rootRef.current?.querySelector('.about-section');
 
       SECTION_ANCHORS.forEach((selector, idx) => {
@@ -77,163 +83,173 @@ export function HomePage() {
       // =========================================================================
       // 1. 3D HERO BACKGROUND -> ABOUT CARD ROTATION & MORPH TIMELINE
       // =========================================================================
-      if (heroCardBodyRef.current) {
-        const heroToCardTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: '.hero-section',
-            start: 'top top',
-            endTrigger: aboutSection || '.about-section',
-            end: 'top top',
-            scrub: 0.65,
-          },
-        });
+      mm.add(
+        {
+          isDesktop: '(min-width: 769px)',
+          isMobile: '(max-width: 768px)',
+        },
+        (mc) => {
+          const isDesktop = Boolean(mc.conditions?.isDesktop);
+          if (!heroCardBodyRef.current) return;
 
-        heroToCardTl.fromTo(
-          heroCardBodyRef.current,
-          {
-            width: '100vw',
-            height: '100vh',
-            x: '0vw',
-            y: '0vh',
-            rotateY: 0,
-            rotateX: 0,
-            rotateZ: 0,
-            z: 0,
-            borderRadius: '0px',
-          },
-          {
-            width: isDesktop ? '27vw' : '84vw',
-            height: isDesktop ? '66vh' : '46vh',
-            x: isDesktop ? '32.5vw' : '0vw',
-            y: isDesktop ? '4vh' : '18vh',
-            rotateY: 360,
-            keyframes: {
-              rotateX: [0, 22, -14, 0],
-              rotateZ: [0, -9, 6, 0],
-              z: [0, -180, 60, 0],
+          const heroToCardTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: '.hero-section',
+              start: 'top top',
+              endTrigger: aboutSection || '.about-section',
+              end: 'top top',
+              scrub: 0.65,
             },
-            borderRadius: '14px',
-            ease: 'power2.inOut',
-          },
-          0
-        );
+          });
 
-        if (heroCardGlareRef.current) {
           heroToCardTl.fromTo(
-            heroCardGlareRef.current,
-            { xPercent: -120, opacity: 0 },
+            heroCardBodyRef.current,
             {
+              width: '100vw',
+              height: '100vh',
+              x: '0vw',
+              y: '0vh',
+              rotateY: 0,
+              rotateX: 0,
+              rotateZ: 0,
+              z: 0,
+              borderRadius: '0px',
+            },
+            {
+              width: isDesktop ? '27vw' : '74vw',
+              height: isDesktop ? '66vh' : '38vh',
+              x: isDesktop ? '32.5vw' : '22px',
+              y: isDesktop ? '4vh' : '16vh',
+              rotateY: 360,
               keyframes: {
-                xPercent: [-120, 0, 120],
-                opacity: [0, 0.65, 0],
+                rotateX: [0, 22, -14, 0],
+                rotateZ: [0, -9, 6, 0],
+                z: [0, -180, 60, 0],
               },
-              ease: 'none',
+              borderRadius: '14px',
+              ease: 'power2.inOut',
             },
             0
           );
-        }
 
-        // 2. AFTER CARD LOCK: ROTATE & SCALE UP TO REVEAL SECTION 3 IMAGE
-        const cardToSection3Tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: '.section3',
-            start: 'top 80%',
-            end: 'top -15%',
-            scrub: 0.65,
-          },
-        });
+          if (heroCardGlareRef.current) {
+            heroToCardTl.fromTo(
+              heroCardGlareRef.current,
+              { xPercent: -120, opacity: 0 },
+              {
+                keyframes: {
+                  xPercent: [-120, 0, 120],
+                  opacity: [0, 0.65, 0],
+                },
+                ease: 'none',
+              },
+              0
+            );
+          }
 
-        cardToSection3Tl.fromTo(
-          heroCardBodyRef.current,
-          {
-            width: isDesktop ? '27vw' : '84vw',
-            height: isDesktop ? '66vh' : '46vh',
-            x: isDesktop ? '32.5vw' : '0vw',
-            y: isDesktop ? '4vh' : '18vh',
-            rotateY: 360,
-            rotateX: 0,
-            rotateZ: 0,
-            z: 0,
-            scale: 1,
-            borderRadius: '14px',
-          },
-          {
-            width: '92vw',
-            height: '82vh',
-            x: '0vw',
-            y: '0vh',
-
-            rotateY: 180,
-            rotateX: 0,
-            rotateZ: 0,
-            scale: 1.08,
-            keyframes: {
-              rotateX: [0, -18, 0],
-              rotateZ: [0, 8, 0],
-              z: [0, -140, 0],
+          // 2. AFTER CARD LOCK: ROTATE & SCALE UP TO REVEAL SECTION 3 IMAGE
+          const cardToSection3Tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: '.section3',
+              start: 'top 80%',
+              end: 'top -15%',
+              scrub: 0.65,
             },
-            borderRadius: '12px',
-            duration: 0.75,
-            ease: 'power2.inOut',
-            immediateRender: false,
-          },
-          0
-        );
+          });
 
-        if (s3RevealLayerRef.current) {
           cardToSection3Tl.fromTo(
-            s3RevealLayerRef.current,
-            { opacity: 0 },
+            heroCardBodyRef.current,
             {
-              opacity: 1,
-              duration: 0.25,
-              ease: 'none',
+              width: isDesktop ? '27vw' : '74vw',
+              height: isDesktop ? '66vh' : '38vh',
+              x: isDesktop ? '32.5vw' : '22px',
+              y: isDesktop ? '4vh' : '16vh',
+              rotateY: 360,
+              rotateX: 0,
+              rotateZ: 0,
+              z: 0,
+              scale: 1,
+              borderRadius: '14px',
+            },
+            {
+              width: isDesktop ? '92vw' : '78vw',
+              height: isDesktop ? '82vh' : '54vh',
+              x: isDesktop ? '0vw' : '22px',
+              y: '0vh',
+
+              rotateY: 180,
+              rotateX: 0,
+              rotateZ: 0,
+              scale: isDesktop ? 1.08 : 1.02,
+              keyframes: {
+                rotateX: [0, -18, 0],
+                rotateZ: [0, 8, 0],
+                z: [0, -140, 0],
+              },
+              borderRadius: '12px',
+              duration: 0.75,
+              ease: 'power2.inOut',
               immediateRender: false,
             },
             0
           );
-        }
 
-        // Fade in the face marking image after the 3D card finishes rotating
-        cardToSection3Tl.fromTo(
-          '.s3-face-marking',
-          { opacity: 0, scale: 1.3 },
-          {
-            opacity: 1,
-            scale: 1.48,
-            duration: 0.25,
-            ease: 'power2.out',
-          },
-          0.75
-        );
-
-        // 3. SCALE DOWN REVEALED SECTION 3 IMAGE AS SECTION 4 ENTERS
-        gsap.fromTo(
-          heroCardBodyRef.current,
-          {
-            rotateY: 180,
-            rotateX: 0,
-            rotateZ: 0,
-            scale: 1.08,
-            opacity: 1,
-          },
-          {
-            rotateY: 180,
-            rotateX: 0,
-            rotateZ: 0,
-            scale: 0,
-            opacity: 0,
-            ease: 'power3.inOut',
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: '.section4',
-              start: 'top 35%',
-              end: 'center center',
-              scrub: true,
-            },
+          if (s3RevealLayerRef.current) {
+            cardToSection3Tl.fromTo(
+              s3RevealLayerRef.current,
+              { opacity: 0 },
+              {
+                opacity: 1,
+                duration: 0.25,
+                ease: 'none',
+                immediateRender: false,
+              },
+              0
+            );
           }
-        );
-      }
+
+          // Fade in the face marking image after the 3D card finishes rotating
+          cardToSection3Tl.fromTo(
+            '.s3-face-marking',
+            { opacity: 0, scale: 1.3 },
+            {
+              opacity: 1,
+              scale: 1.48,
+              duration: 0.25,
+              ease: 'power2.out',
+            },
+            0.75
+          );
+
+          // 3. SCALE DOWN REVEALED SECTION 3 IMAGE AS SECTION 4 ENTERS
+          gsap.fromTo(
+            heroCardBodyRef.current,
+            {
+              rotateY: 180,
+              rotateX: 0,
+              rotateZ: 0,
+              scale: isDesktop ? 1.08 : 1.02,
+              opacity: 1,
+            },
+            {
+              rotateY: 180,
+              rotateX: 0,
+              rotateZ: 0,
+              scale: 0,
+              opacity: 0,
+              ease: 'power3.inOut',
+              immediateRender: false,
+              scrollTrigger: {
+                trigger: '.section4',
+                start: 'top 35%',
+                end: 'center center',
+                scrub: true,
+              },
+            }
+          );
+        },
+        rootRef
+      );
 
       gsap.to('.hero-section-content', {
         opacity: 0,
@@ -332,8 +348,11 @@ export function HomePage() {
     }, rootRef);
 
     ScrollTrigger.refresh();
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      mm.revert();
+      ctx.revert();
+    };
+  }, [setActiveSection]);
 
   return (
     <div ref={rootRef} className="w-full text-white">
@@ -451,23 +470,23 @@ export function HomePage() {
       ===================================================================== */}
       <section
         id="project"
-        className="hero-section relative min-h-screen w-full flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-6 sm:pr-10 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 z-30 pointer-events-none"
+        className="hero-section relative min-h-screen min-h-[100dvh] w-full flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-4 sm:pr-10 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 z-30 pointer-events-none"
       >
         <div className="hero-section-content flex flex-col justify-between flex-1">
-          <div className="max-w-[340px] sm:max-w-[380px]">
-            <span className="font-mono text-[13px] tracking-[0.25em] text-mint-leaf block mb-2">
+          <div className="max-w-[300px] sm:max-w-[380px]">
+            <span className="font-mono text-[11px] sm:text-[13px] tracking-[0.2em] sm:tracking-[0.25em] text-mint-leaf block mb-2">
               DHARMARAJA COLLEGE ICT SOCIETY PRESENTS
             </span>
-            <p className="font-ethnocentric text-xs sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
+            <p className="font-ethnocentric text-[11px] sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
               A futuristic ICT competition experience bringing together innovation, creativity, coding, digital design, and technological thinking.
             </p>
           </div>
 
-          <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-10 sm:pt-14">
-            <div className="ml-[14%] sm:ml-[24%] md:ml-[29%]">
+          <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-8 sm:pt-14">
+            <div className="ml-[4%] sm:ml-[24%] md:ml-[29%]">
               <div className="font-ethnocentric text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                 <section
-                  className="techtext-test-canvas-wrap text-[clamp(2rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight"
+                  className="techtext-test-canvas-wrap text-[clamp(1.35rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight"
                   aria-label="TechText demo area"
                 >
                   <div className="techtext-word inline-flex items-baseline">
@@ -488,13 +507,13 @@ export function HomePage() {
                 </section>
               </div>
             </div>
-            <div className="ml-[18%] sm:ml-[30%] md:ml-[37%] mt-1 sm:mt-2">
-              <div className="font-ethnocentric text-[clamp(2rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
+            <div className="ml-[8%] sm:ml-[30%] md:ml-[37%] mt-1 sm:mt-2">
+              <div className="font-ethnocentric text-[clamp(1.35rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                 DESIGN<span className="text-mint-leaf">.</span>
               </div>
             </div>
             <div className="ml-0 sm:ml-[2%] mt-1 sm:mt-2">
-              <h1 className="font-ethnocentric text-[clamp(2rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
+              <h1 className="font-ethnocentric text-[clamp(1.35rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
                 SYNC'26<span className="text-mint-leaf">.</span>
               </h1>
             </div>
@@ -509,23 +528,23 @@ export function HomePage() {
       ===================================================================== */}
       <section
         id="about"
-        className="about-section min-h-screen w-full relative z-20 flex justify-center font-ethnocentric"
+        className="about-section min-h-screen min-h-[100dvh] w-full relative z-20 flex justify-center font-ethnocentric"
       >
-        <div className="h-full w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
-          <div className="relative flex flex-col max-md:w-full w-[62%] min-h-[86vh] justify-between">
-            <div className="px-6 py-8 max-md:p-4 text-white border-b border-white/20">
+        <div className="h-full w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
+          <div className="relative flex flex-col max-md:w-full w-[62%] min-h-0 md:min-h-[86vh] justify-between">
+            <div className="px-4 py-6 sm:px-6 sm:py-8 text-white border-b border-white/20">
               <div className="relative">
-                <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black tracking-tight pl-20 uppercase">
+                <h3 className="section-title text-lg sm:text-3xl md:text-[38px] leading-tight md:leading-none font-black tracking-tight pl-0 sm:pl-12 md:pl-20 uppercase break-words">
                   WHERE CREATIVE INTELLECT...
                 </h3>
-                <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black tracking-tight mt-1.5 uppercase">
+                <h3 className="section-title text-lg sm:text-3xl md:text-[38px] leading-tight md:leading-none font-black tracking-tight mt-1.5 uppercase break-words">
                   MEETS COMPUTATIONAL MASTERY<span className="text-mint-leaf">.</span>
                 </h3>
               </div>
             </div>
 
-            <div className="p-8 flex flex-col justify-between gap-6 flex-1">
-              <div className="w-56 sm:w-64">
+            <div className="p-4 sm:p-6 md:p-8 flex flex-col justify-between gap-6 flex-1">
+              <div className="w-full max-w-[220px] sm:w-56 md:w-64">
                 <ImageTilt
                   src="./images/trailer-side-media.webp"
                   alt="Dharmaraja ICT Society Arena"
@@ -534,15 +553,15 @@ export function HomePage() {
                 />
               </div>
 
-              <h6 className="block max-w-md font-mono text-[15px] leading-[18px] text-white/80 section-title">
+              <h6 className="block max-w-md font-mono text-[13px] sm:text-[15px] leading-[18px] text-white/80 section-title">
                 The Information and Communication Technology Society of Dharmaraja College creates an arena celebrating innovation, analytical thinking, cutting-edge software development, and boundary-pushing multimedia design.
               </h6>
             </div>
           </div>
 
-          <div className="w-[38%] min-h-[86vh] border-l border-white/20 p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
-            <div className="w-full flex-1 flex items-center justify-center my-4 border border-dashed border-white/10 rounded-2xl" />
-            <div className="w-full flex items-center justify-end font-mono text-[12px] text-white/40 uppercase tracking-widest">
+          <div className="w-[38%] min-h-[42vh] md:min-h-[86vh] border-l border-white/20 p-4 sm:p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
+            <div className="w-full flex-1 flex items-center justify-center my-2 sm:my-4 border border-dashed border-white/10 rounded-2xl" />
+            <div className="w-full flex items-center justify-end font-mono text-[11px] sm:text-[12px] text-white/40 uppercase tracking-widest">
               <span>SYNC'26 ARCHIVE</span>
             </div>
           </div>
@@ -556,16 +575,16 @@ export function HomePage() {
         id="the-keep"
         className="section3 min-h-screen w-full relative z-30 flex flex-col justify-center font-ethnocentric pointer-events-none"
       >
-        <div className="h-full mt-[180px] w-[97vw] max-md:w-full max-md:pl-4 pl-[68px] pt-[70px] z-30 relative mx-auto pointer-events-auto">
+        <div className="h-full mt-16 md:mt-[180px] w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] z-30 relative mx-auto pointer-events-auto">
           <div className="relative flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
             {/* Left 70% Column: Title Header + Integrated Orbital Radar Grid */}
             <div className="w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0 flex flex-col justify-between">
-              <div className="px-6 py-7 border-b border-white/20 flex items-end justify-between gap-4">
+              <div className="px-4 py-6 sm:px-6 sm:py-7 border-b border-white/20 flex items-end justify-between gap-4">
                 <div className="relative">
-                  <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black pl-20 max-sm:pl-12 uppercase">
+                  <h3 className="section-title text-lg sm:text-3xl md:text-[38px] leading-tight md:leading-none font-black pl-0 sm:pl-12 md:pl-20 uppercase break-words">
                     THE COMPETITION EXPERIENCE:
                   </h3>
-                  <h3 className="section-title text-2xl sm:text-3xl md:text-[38px] leading-none font-black mt-1.5 uppercase">
+                  <h3 className="section-title text-lg sm:text-3xl md:text-[38px] leading-tight md:leading-none font-black mt-1.5 uppercase break-words">
                     THE GRAND STAGE<span className="text-mint-leaf">.</span>
                   </h3>
                 </div>
@@ -578,19 +597,19 @@ export function HomePage() {
             </div>
 
             {/* Right 30% Column: Face Marking Image (Top) + Topographic Radar (Bottom) */}
-            <div className="w-[30%] max-md:w-full flex flex-col justify-between">
-              <div className="relative p-4 flex-1 min-h-[280px] border-b border-white/20 overflow-hidden flex items-center justify-center">
+            <div className="w-[30%] max-md:w-full flex flex-col justify-between border-t md:border-t-0 border-white/20">
+              <div className="relative p-4 flex-1 min-h-[210px] md:min-h-[280px] border-b border-white/20 overflow-hidden flex items-center justify-center">
                 <img
                   src="./images/face_marking.png"
                   alt="SYNC '26 Face Marking"
-                  className="s3-face-marking opacity-0 w-full h-full max-h-[340px] object-contain scale-[1.48] select-none pointer-events-none"
+                  className="s3-face-marking opacity-0 w-full h-full max-h-[260px] md:max-h-[340px] object-contain scale-[1.48] select-none pointer-events-none"
                   draggable={false}
                 />
               </div>
 
-              <div className="p-6 sm:p-8 overflow-hidden flex flex-col justify-between gap-4">
+              <div className="p-4 sm:p-6 md:p-8 overflow-hidden flex flex-col justify-between gap-4">
 
-                <div className="relative border border-mint-leaf/30 rounded overflow-hidden bg-evergreen/40 h-44 flex items-center justify-center">
+                <div className="relative border border-mint-leaf/30 rounded overflow-hidden bg-evergreen/40 h-40 sm:h-44 flex items-center justify-center">
                   <img
                     src="./images/protocol-bg.jpg"
                     alt="Topographic Sector Map"
@@ -657,7 +676,7 @@ export function HomePage() {
               <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_49.5%,rgba(65,210,162,0.35)_50%,transparent_50.5%)] pointer-events-none" />
             </div>
 
-            <div className="px-6 py-10 w-[70%] max-sm:w-full">
+            <div className="px-4 sm:px-6 py-6 sm:py-10 w-[70%] max-sm:w-full">
               <div className="relative">
                 {[
                   "WHY PARTICIPATE IN SYNC'26?",
@@ -667,8 +686,8 @@ export function HomePage() {
                 ].map((item, idx) => (
                   <h3
                     key={idx}
-                    className={`section-title text-xl sm:text-3xl md:text-[36px] leading-tight font-black uppercase ${
-                      idx === 0 ? 'pl-20 max-sm:pl-12' : ''
+                    className={`section-title text-base sm:text-3xl md:text-[36px] leading-tight font-black uppercase break-words ${
+                      idx === 0 ? 'pl-0 sm:pl-12 md:pl-20' : ''
                     }`}
                   >
                     {item}
@@ -678,20 +697,20 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="relative max-sm:hidden flex w-full text-white border-b border-white/20 bg-black/50">
-            <div className="p-8 w-[30%] border-r border-white/20 flex flex-col justify-between font-mono text-[10px] text-white/45 uppercase">
-              <span> DIVISION_SCOPE</span>
+          <div className="relative flex flex-col sm:flex-row w-full text-white border-b border-white/20 bg-black/50">
+            <div className="p-4 sm:p-8 w-full sm:w-[30%] border-b sm:border-b-0 sm:border-r border-white/20 flex flex-col justify-between gap-2 font-mono text-[10px] text-white/45 uppercase">
+              <span>DIVISION_SCOPE</span>
               <p className="text-mint-leaf/80 leading-relaxed">
                 INTRA-SCHOOL &amp; INTER-SCHOOL TRACKS  GRADES 06–13
               </p>
             </div>
-            <div className="p-8 w-[35%] border-r border-white/20 flex items-center justify-between gap-4">
+            <div className="p-4 sm:p-8 w-full sm:w-[35%] border-b sm:border-b-0 sm:border-r border-white/20 flex items-center justify-between gap-4">
               <p className="text-[10px] leading-4 uppercase font-mono text-mint-leaf">
                 DHARMARAJA COLLEGE <br /> ICT SOCIETY  OVER A DECADE OF EXCELLENCE
               </p>
-              <img src="./images/logo.png" alt="Symbol" className="w-14 opacity-75 shrink-0" />
+              <img src="./images/logo.png" alt="Symbol" className="w-11 sm:w-14 opacity-75 shrink-0" />
             </div>
-            <div className="p-8 w-[35%] flex flex-col justify-end font-mono text-[10px] text-white/45 uppercase">
+            <div className="p-4 sm:p-8 w-full sm:w-[35%] flex flex-col justify-end font-mono text-[10px] text-white/45 uppercase">
               <p className="text-mint-leaf/80 leading-relaxed">
                 ONLINE QUALIFIERS &amp; PHYSICAL FINALE AT AUDITORIUM
               </p>
@@ -705,29 +724,29 @@ export function HomePage() {
       ===================================================================== */}
       <section
         id="factions"
-        className="section4 mt-[120px] min-h-screen w-full relative z-30 flex justify-center font-ethnocentric overflow-hidden"
+        className="section4 mt-16 md:mt-[120px] min-h-screen w-full relative z-30 flex justify-center font-ethnocentric overflow-hidden"
       >
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block1 absolute w-[92vw] max-w-[1300px] h-[88vh] bg-evergreen/90 border border-turf-green scale-0 rounded-xl" />
+          <div className="bg-block1 absolute w-[88vw] md:w-[92vw] max-w-[1300px] h-[78vh] md:h-[88vh] bg-evergreen/90 border border-turf-green scale-0 rounded-xl" />
         </div>
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block2 absolute w-[94vw] max-w-[1320px] h-[90vh] bg-turf-green/80 border border-sea-green scale-0 rounded-xl" />
+          <div className="bg-block2 absolute w-[90vw] md:w-[94vw] max-w-[1320px] h-[80vh] md:h-[90vh] bg-turf-green/80 border border-sea-green scale-0 rounded-xl" />
         </div>
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block3 absolute w-[96vw] max-w-[1340px] h-[92vh] bg-black/90 border border-mint-leaf/40 scale-0 rounded-xl" />
+          <div className="bg-block3 absolute w-[92vw] md:w-[96vw] max-w-[1340px] h-[82vh] md:h-[92vh] bg-black/90 border border-mint-leaf/40 scale-0 rounded-xl" />
         </div>
 
-        <div className="w-[97vw] pl-[68px] pt-[70px] flex items-center z-30 relative max-md:flex-col max-md:pl-4">
-          <div className="flex items-center justify-center w-[22vw] max-md:w-full py-8">
+        <div className="w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] flex items-center z-30 relative max-md:flex-col">
+          <div className="flex items-center justify-center w-[22vw] max-md:w-full py-4 sm:py-8">
             <div className="-rotate-90 max-md:rotate-0 flex flex-col gap-2">
-              <h2 className="font-ethnocentric text-[10vw] max-md:text-[22vw] leading-none tracking-tighter font-black text-white">
+              <h2 className="font-ethnocentric text-[10vw] max-md:text-[20vw] leading-none tracking-tighter font-black text-white">
                 08
               </h2>
             </div>
           </div>
 
-          <div className="w-[48vw] max-md:w-full h-full flex items-center justify-center relative py-8 border-x border-white/20 max-md:border-x-0">
-            <div className="s4-center-portrait w-full max-w-md px-6">
+          <div className="w-[48vw] max-md:w-full h-full flex items-center justify-center relative py-4 sm:py-8 border-x border-white/20 max-md:border-x-0">
+            <div className="s4-center-portrait w-full max-w-[260px] sm:max-w-md px-3 sm:px-6">
               <ImageTilt
                 src="./images/section4-image.png"
                 alt="08 Competition Tracks Portrait"
@@ -738,14 +757,14 @@ export function HomePage() {
           </div>
 
           <div className="w-[30vw] max-md:w-full h-full flex flex-col justify-center">
-            <div className="p-6 border-b border-white/20">
+            <div className="p-4 sm:p-6 border-b border-white/20 max-w-[280px] sm:max-w-none mx-auto w-full">
               <ImageTilt
                 src="./images/face-traits.webp"
                 alt="Competition Arena Upper"
                 tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
               />
             </div>
-            <div className="p-6">
+            <div className="p-4 sm:p-6 max-w-[280px] sm:max-w-none mx-auto w-full">
               <ImageTilt
                 src="./images/face-traits.webp"
                 alt="Competition Arena Lower"
@@ -761,23 +780,23 @@ export function HomePage() {
       ===================================================================== */}
       <section
         id="collectibles"
-        className="section5 relative z-30 w-[97vw] mx-auto min-h-screen pl-[68px] pt-[70px] overflow-x-hidden font-ethnocentric flex flex-col justify-between gap-12 max-md:pl-4"
+        className="section5 relative z-30 w-[97vw] max-md:w-full mx-auto min-h-screen pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] overflow-x-hidden font-ethnocentric flex flex-col justify-between gap-8 md:gap-12"
       >
         <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
-          <div className="w-1/2 max-md:w-full p-6 border-r border-white/20 max-md:border-r-0">
+          <div className="w-1/2 max-md:w-full p-4 sm:p-6 border-r border-white/20 max-md:border-r-0 max-md:border-b">
             <div className="relative">
-              <h3 className="text-2xl sm:text-3xl md:text-[38px] leading-none font-black pl-20 uppercase">
+              <h3 className="text-lg sm:text-3xl md:text-[38px] leading-tight md:leading-none font-black pl-0 sm:pl-12 md:pl-20 uppercase break-words">
                 08 PREMIER COMPETITION
               </h3>
-              <h3 className="text-2xl sm:text-3xl md:text-[38px] leading-none font-black mt-1.5 uppercase">
+              <h3 className="text-lg sm:text-3xl md:text-[38px] leading-tight md:leading-none font-black mt-1.5 uppercase break-words">
                 CATEGORIES<span className="text-mint-leaf">.</span>
               </h3>
             </div>
           </div>
 
-          <div className="w-1/2 max-md:w-full p-6 flex items-center">
+          <div className="w-1/2 max-md:w-full p-4 sm:p-6 flex items-center">
             <div className="relative space-y-4">
-              <p className="font-mono text-[15px] leading-[18px] text-white/80 max-w-md">
+              <p className="font-mono text-[13px] sm:text-[15px] leading-[19px] sm:leading-[18px] text-white/80 max-w-md">
                 Compete across 7 core disciplines plus ASPECT Gaming: Logo Designing, Poster Designing, Game Designing, Web Designing, Algorithm (HackerRank), Video Editing, Odyssey Inter-School ICT Quiz, and Call of Duty 3 Esports.
               </p>
               <button
@@ -786,7 +805,7 @@ export function HomePage() {
                   setActivePage('registrations');
                   window.scrollTo({ top: 0, behavior: 'instant' });
                 }}
-                className="pointer-events-auto inline-flex items-center gap-2 px-5 py-2.5 bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[10px] tracking-[0.2em] uppercase transition-colors cursor-pointer"
+                className="pointer-events-auto inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[11px] sm:text-[10px] tracking-[0.2em] uppercase transition-colors cursor-pointer"
               >
                 <span>EXPLORE &amp; REGISTER &rarr;</span>
               </button>
@@ -794,26 +813,26 @@ export function HomePage() {
           </div>
         </div>
 
-        <PerspectiveCardGallery className="my-auto py-8" />
+        <PerspectiveCardGallery className="my-auto py-4 sm:py-8" />
       </section>
 
       {/* =====================================================================
           SECTION 7: FINAL CTA & COORDINATOR CONTACT MATRIX
       ===================================================================== */}
       <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-ethnocentric bg-black/85 border-t border-white/20">
-        <div className="h-full w-[97vw] max-md:w-full pt-[70px] pl-[68px] max-md:pl-4 flex flex-col justify-between z-30 relative overflow-hidden">
-          <div className="min-h-[42vh] w-full border-b border-white/20 p-8 flex items-end justify-center s7-fade-up">
-            <h2 className="font-ethnocentric text-[11vw] leading-none font-black tracking-tight text-white uppercase">
+        <div className="h-full w-[97vw] max-md:w-full pt-16 md:pt-[70px] pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 flex flex-col justify-between z-30 relative overflow-hidden">
+          <div className="min-h-[22vh] sm:min-h-[34vh] md:min-h-[42vh] w-full border-b border-white/20 p-4 sm:p-8 flex items-end justify-center s7-fade-up">
+            <h2 className="font-ethnocentric text-[clamp(2rem,10.5vw,9.5rem)] leading-none font-black tracking-tight text-white uppercase">
               SYNC'26<span className="text-mint-leaf">.</span>
             </h2>
           </div>
 
-          <div className="min-h-[42vh] w-full flex max-md:flex-col justify-between items-start md:items-end py-8 px-12 max-sm:px-4 gap-8">
+          <div className="min-h-0 md:min-h-[42vh] w-full flex max-md:flex-col justify-between items-start md:items-end py-6 sm:py-8 px-4 sm:px-8 md:px-12 gap-6 sm:gap-8">
             <div className="flex flex-col justify-between space-y-4 s7-fade-up max-w-sm pointer-events-auto">
-              <span className="font-mono text-[12px] tracking-[0.25em] text-mint-leaf">
-                YOUR NEXT BREAKTHROUGH STARTS HERE  SYNC'26
+              <span className="font-mono text-[11px] sm:text-[12px] tracking-[0.2em] sm:tracking-[0.25em] text-mint-leaf">
+                YOUR NEXT BREAKTHROUGH STARTS HERE // SYNC'26
               </span>
-              <span className="font-mono font-normal text-[14px] leading-5 block text-white/80">
+              <span className="font-mono font-normal text-[13px] sm:text-[14px] leading-5 block text-white/80">
                 Step into the futuristic dimension. Submit your entry or contact the Dharmaraja College ICT Society organizing committee.
               </span>
               <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -823,7 +842,7 @@ export function HomePage() {
                     setActivePage('registrations');
                     window.scrollTo({ top: 0, behavior: 'instant' });
                   }}
-                  className="px-4 py-2 bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[13px] tracking-[0.18em] uppercase transition-colors cursor-pointer"
+                  className="min-h-[44px] inline-flex items-center justify-center px-4 py-2 bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[12px] sm:text-[13px] tracking-[0.18em] uppercase transition-colors cursor-pointer"
                 >
                   REGISTER NOW &rarr;
                 </button>
@@ -831,35 +850,35 @@ export function HomePage() {
                   href="https://chat.whatsapp.com/IaBJyTRhZcACMFKUOrYndg"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 border border-mint-leaf/40 bg-black/60 hover:bg-mint-leaf hover:text-black text-mint-leaf font-mono text-[13px] tracking-[0.18em] uppercase transition-colors"
+                  className="min-h-[44px] inline-flex items-center justify-center px-4 py-2 border border-mint-leaf/40 bg-black/60 hover:bg-mint-leaf hover:text-black text-mint-leaf font-mono text-[12px] sm:text-[13px] tracking-[0.18em] uppercase transition-colors"
                 >
                   WHATSAPP COMMUNITY
                 </a>
               </div>
             </div>
 
-            <div className="flex flex-col space-y-2.5 font-mono text-[13px] s7-fade-up pointer-events-auto md:text-right">
-              <span className="text-[14px] tracking-[0.25em] text-mint-leaf uppercase">
+            <div className="flex flex-col space-y-2.5 font-mono text-[12px] sm:text-[13px] s7-fade-up pointer-events-auto md:text-right break-words max-w-full">
+              <span className="text-[13px] sm:text-[14px] tracking-[0.25em] text-mint-leaf uppercase">
                 GET IN TOUCH
               </span>
               <div className="text-white/85">
-                <span className="text-white/50 text-[12px] mr-2">COORDINATOR:</span>
+                <span className="text-white/50 text-[11px] sm:text-[12px] mr-2">COORDINATOR:</span>
                 <span>MUDITHA KORALEGEDARA — </span>
-                <a href="tel:+94702645851" className="text-mint-leaf hover:underline">
+                <a href="tel:+94702645851" className="text-mint-leaf hover:underline inline-block py-0.5">
                   +94 70 264 5851
                 </a>
               </div>
               <div className="text-white/85">
-                <span className="text-white/50 text-[12px] mr-2">CHIEF EDITOR &amp; TECH LEAD:</span>
+                <span className="text-white/50 text-[11px] sm:text-[12px] mr-2">CHIEF EDITOR &amp; TECH LEAD:</span>
                 <span>NETHUN THE EDITOR — </span>
-                <a href="tel:+94714906145" className="text-mint-leaf hover:underline">
+                <a href="tel:+94714906145" className="text-mint-leaf hover:underline inline-block py-0.5">
                   +94 71 490 6145
                 </a>
               </div>
               <div className="flex flex-wrap md:justify-end items-center gap-4 pt-1 text-[12px]">
                 <a
                   href="mailto:drck.ictsociety@gmail.com"
-                  className="text-white/75 hover:text-mint-leaf transition-colors"
+                  className="text-white/75 hover:text-mint-leaf transition-colors break-all py-1"
                 >
                   drck.ictsociety@gmail.com
                 </a>
@@ -867,7 +886,7 @@ export function HomePage() {
                   href="https://wa.link/05138r"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-mint-leaf hover:underline"
+                  className="text-mint-leaf hover:underline py-1"
                 >
                   CHAT ON WHATSAPP &rarr; 
                 </a>
@@ -875,7 +894,7 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 sm:w-96 max-sm:static max-sm:translate-x-0 max-sm:translate-y-0 max-sm:mx-auto max-sm:pb-8">
+          <div className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-52 sm:w-72 md:w-96 max-md:static max-md:translate-x-0 max-md:translate-y-0 max-md:mx-auto max-md:pb-8">
             <ImageTilt
               src="./images/section4-image.png"
               alt="SYNC 26 Arena"

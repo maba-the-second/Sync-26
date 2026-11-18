@@ -507,9 +507,9 @@ function CustomSelect({
         onClick={toggleOpen}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className={`w-full flex items-center justify-between gap-2 text-left transition-all cursor-pointer ${
+        className={`w-full min-h-[44px] sm:min-h-0 flex items-center justify-between gap-2 text-left transition-all cursor-pointer ${
           compact ? 'px-3 py-2 rounded-lg' : 'px-3.5 py-2.5 rounded-xl'
-        } bg-black/85 border text-xs focus:outline-none`}
+        } bg-black/85 border text-sm sm:text-xs focus:outline-none`}
         style={{
           borderColor: isOpen
             ? accentColor
@@ -601,7 +601,7 @@ function CustomSelect({
                     onChange(opt.value);
                     setIsOpen(false);
                   }}
-                  className="w-full px-3.5 py-2.5 text-left flex items-center justify-between gap-2 transition-colors cursor-pointer"
+                  className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 text-left flex items-center justify-between gap-2 transition-colors cursor-pointer"
                   style={{
                     backgroundColor: isSelected
                       ? `rgba(${itemRgb}, 0.22)`
@@ -972,9 +972,9 @@ export function RegistrationsPage() {
   }
 
   return (
-    <div className="relative w-full h-screen flex flex-col items-center justify-center pt-12 pl-[calc(2.75rem+3rem)] sm:pl-[calc(3rem+4rem)] md:pl-[calc(3.5rem+4rem)] pr-12 sm:pr-16 overflow-hidden pointer-events-none">
-      {/* Top Action Bar inside Registrations Arena */}
-      <div className="absolute top-16 mt-4 right-6 sm:right-10 z-30 flex flex-wrap items-center gap-2.5 pointer-events-auto font-mono">
+    <div className="relative w-full min-h-screen min-h-[100dvh] lg:h-[100dvh] flex flex-col items-center justify-start lg:justify-center pt-16 pb-20 pl-16 pr-3.5 sm:pl-20 sm:pr-6 lg:pt-12 lg:pb-0 lg:pl-[calc(3.5rem+4rem)] lg:pr-16 lg:overflow-hidden pointer-events-none">
+      {/* Desktop Top Action Bar inside Registrations Arena */}
+      <div className="hidden lg:flex absolute top-16 mt-4 right-10 z-30 flex-wrap items-center gap-2.5 pointer-events-auto font-mono">
         <a
           href="./pdf/Sync Competition Rulebook.pdf"
           download="Sync Competition Rulebook.pdf"
@@ -1008,18 +1008,110 @@ export function RegistrationsPage() {
         rel="noopener noreferrer"
         aria-label="Join WhatsApp Community"
         title="Join WhatsApp Community"
-        className="fixed bottom-6 right-6 sm:bottom-8 sm:right-10 z-30 pointer-events-auto flex items-center justify-center w-12 h-12 rounded-full bg-black/80 backdrop-blur-md border border-mint-leaf/50 hover:border-mint-leaf hover:scale-110 shadow-[0_0_20px_rgba(65,210,162,0.35)] transition-all duration-300"
+        className="fixed bottom-5 right-5 sm:bottom-8 sm:right-10 z-30 pointer-events-auto flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/80 backdrop-blur-md border border-mint-leaf/50 hover:border-mint-leaf hover:scale-110 shadow-[0_0_20px_rgba(65,210,162,0.35)] transition-all duration-300"
       >
         <img
           src="./images/whatsapp.png"
           alt="Join WhatsApp Community"
-          className="w-9 h-9 object-contain"
+          className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
           draggable={false}
         />
       </a>
 
-      {/* 8 Rainbow Competition Cards Orbiting the 3D Crystal */}
-      <div className="w-full max-w-5xl pointer-events-auto">
+      {/* Mobile & Tablet Competition Arena (Scrollable Card Grid over 3D Crystal Backdrop) */}
+      <div className="lg:hidden w-full max-w-3xl pointer-events-auto space-y-4 pt-3">
+        <div className="border border-white/15 bg-black/65 backdrop-blur-md p-4 sm:p-5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span className="font-mono text-[10px] tracking-[0.22em] text-mint-leaf uppercase block">
+              SYNC&apos;26 // 08 TRACKS
+            </span>
+            <h1 className="font-ethnocentric text-base sm:text-xl text-white uppercase tracking-wide mt-1">
+              COMPETITIONS &amp; REGISTRATION
+            </h1>
+          </div>
+          <a
+            href="./pdf/Sync Competition Rulebook.pdf"
+            download="Sync Competition Rulebook.pdf"
+            className="min-h-[42px] inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-mint-leaf hover:bg-white text-black font-mono font-bold text-[10px] tracking-[0.16em] uppercase transition-colors shrink-0"
+          >
+            <svg
+              className="w-4 h-4 shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.4}
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"
+              />
+            </svg>
+            <span>RULE BOOK PDF</span>
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          {COMPETITIONS.map((comp, idx) => (
+            <div
+              key={comp.id}
+              className="relative rounded-xl border bg-black/75 backdrop-blur-md p-4 flex flex-col justify-between gap-3.5 transition-colors"
+              style={{
+                borderColor: `rgba(${comp.accentRgb}, 0.45)`,
+                boxShadow: `0 6px 24px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(${comp.accentRgb}, 0.18)`,
+              }}
+            >
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-[9px] tracking-[0.16em] uppercase">
+                  <span
+                    className="px-2 py-0.5 rounded-full border font-semibold"
+                    style={{
+                      color: comp.accentColor,
+                      borderColor: `rgba(${comp.accentRgb}, 0.45)`,
+                      backgroundColor: `rgba(${comp.accentRgb}, 0.12)`,
+                    }}
+                  >
+                    {comp.badge}
+                  </span>
+                  <span className="text-white/60">{comp.shortEligibility}</span>
+                </div>
+                <h2 className="font-ethnocentric text-sm sm:text-base text-white uppercase tracking-wide">
+                  {comp.title}
+                </h2>
+                <p className="font-mono text-[11px] leading-relaxed text-white/75">
+                  {comp.shortDesc}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/10 font-mono">
+                <button
+                  type="button"
+                  onClick={(e) =>
+                    openDetailsModal(idx, e.currentTarget.getBoundingClientRect())
+                  }
+                  className="min-h-[42px] px-3 py-2 rounded-lg bg-white/5 border border-white/20 text-white hover:border-white/50 text-[10px] font-bold tracking-[0.12em] uppercase transition-colors cursor-pointer"
+                >
+                  DETAILS
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openRegistrationModal(comp.id)}
+                  className="min-h-[42px] px-3 py-2 rounded-lg text-black text-[10px] font-bold tracking-[0.12em] uppercase transition-opacity hover:opacity-90 cursor-pointer"
+                  style={{
+                    backgroundColor: comp.accentColor,
+                  }}
+                >
+                  REGISTER &rarr;
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop: 8 Rainbow Competition Cards Orbiting the 3D Crystal */}
+      <div className="hidden lg:block w-full max-w-5xl pointer-events-auto">
         <OrbitImages
           key="crystal-orbit-cards-v2"
           images={COMPETITIONS.map((c) => ({
@@ -1053,14 +1145,14 @@ export function RegistrationsPage() {
       {detailComp && (
         <div
           ref={detailBackdropRef}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md pointer-events-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md pointer-events-auto"
           onClick={(e) => {
             if (e.target === e.currentTarget) closeDetailsModal();
           }}
         >
           <div
             ref={detailModalRef}
-            className="sync-modal-frame w-full max-w-3xl max-h-[86vh] flex flex-col rounded-2xl shadow-2xl origin-center will-change-transform"
+            className="sync-modal-frame w-full max-w-3xl max-h-[88dvh] flex flex-col rounded-2xl shadow-2xl origin-center will-change-transform"
             style={
               {
                 '--card-accent': detailComp.accentColor,
@@ -1069,16 +1161,16 @@ export function RegistrationsPage() {
               } as CSSProperties
             }
           >
-            <div className="sync-modal-inner max-h-[calc(86vh-3px)]">
+            <div className="sync-modal-inner max-h-[calc(88dvh-3px)]">
             {/* Modal Header */}
             <div
-              className="p-5 sm:p-6 border-b border-white/10 flex items-start justify-between gap-4"
+              className="p-4 sm:p-6 border-b border-white/10 flex items-start justify-between gap-3 sm:gap-4"
               style={{
                 background: `linear-gradient(135deg, rgba(${detailComp.accentRgb}, 0.22) 0%, rgba(6, 12, 10, 0.95) 70%)`,
               }}
             >
-              <div>
-                <div className="flex flex-wrap items-center gap-2 mb-1.5 font-mono text-[10px] tracking-[0.2em] uppercase">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2 mb-1.5 font-mono text-[10px] tracking-[0.18em] sm:tracking-[0.2em] uppercase">
                   <span
                     className="px-2.5 py-0.5 rounded-full border font-semibold"
                     style={{
@@ -1091,7 +1183,7 @@ export function RegistrationsPage() {
                   </span>
                   <span className="text-white/60">• {detailComp.eligibility}</span>
                 </div>
-                <h3 className="font-ethnocentric text-lg sm:text-2xl text-white tracking-wider uppercase">
+                <h3 className="font-ethnocentric text-base sm:text-2xl text-white tracking-wider uppercase break-words">
                   {detailComp.title}
                 </h3>
               </div>
@@ -1099,7 +1191,7 @@ export function RegistrationsPage() {
               <button
                 type="button"
                 onClick={() => closeDetailsModal()}
-                className="p-2 rounded-lg bg-white/5 border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors cursor-pointer"
+                className="min-w-[40px] min-h-[40px] flex items-center justify-center p-2 rounded-lg bg-white/5 border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors cursor-pointer shrink-0"
                 aria-label="Close modal"
               >
                 ✕
@@ -1107,7 +1199,7 @@ export function RegistrationsPage() {
             </div>
 
             {/* Modal Scrollable Body */}
-            <div data-lenis-prevent className="p-5 sm:p-6 overflow-y-auto flex-1 min-h-0 space-y-5 font-mono text-xs text-white/85">
+            <div data-lenis-prevent className="p-4 sm:p-6 overflow-y-auto overscroll-contain flex-1 min-h-0 space-y-5 font-mono text-xs text-white/85">
               <p className="text-white/90 text-xs sm:text-sm leading-relaxed border-l-2 pl-3" style={{ borderColor: detailComp.accentColor }}>
                 {detailComp.shortDesc}
               </p>
@@ -1310,12 +1402,12 @@ export function RegistrationsPage() {
             </div>
 
             {/* Modal Footer CTAs */}
-            <div className="p-4 sm:p-5 border-t border-white/10 bg-black/80 flex flex-wrap items-center justify-between gap-3 font-mono">
+            <div className="p-4 sm:p-5 border-t border-white/10 bg-black/80 flex flex-col-reverse sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 font-mono">
               <a
                 href={WHATSAPP_DIRECT_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white hover:border-mint-leaf hover:text-mint-leaf text-xs uppercase tracking-wider transition-all"
+                className="min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white hover:border-mint-leaf hover:text-mint-leaf text-xs uppercase tracking-wider transition-all"
               >
                 <span>Ask via WhatsApp</span>
               </a>
@@ -1326,7 +1418,7 @@ export function RegistrationsPage() {
                   const id = detailComp.id;
                   closeDetailsModal(() => openRegistrationModal(id));
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all cursor-pointer"
+                className="min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all cursor-pointer"
                 style={{
                   backgroundColor: detailComp.accentColor,
                   boxShadow: `0 0 20px rgba(${detailComp.accentRgb}, 0.45)`,
@@ -1345,13 +1437,13 @@ export function RegistrationsPage() {
       ===================================================================== */}
       {isRegOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md pointer-events-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md pointer-events-auto"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsRegOpen(false);
           }}
         >
           <div
-            className="sync-modal-frame w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl shadow-2xl"
+            className="sync-modal-frame w-full max-w-2xl max-h-[90dvh] flex flex-col rounded-2xl shadow-2xl"
             style={
               {
                 '--card-accent': activeComp.accentColor,
@@ -1360,29 +1452,29 @@ export function RegistrationsPage() {
               } as CSSProperties
             }
           >
-            <div className="sync-modal-inner max-h-[calc(90vh-3px)]">
+            <div className="sync-modal-inner max-h-[calc(90dvh-3px)]">
             {/* Header */}
             <div
-              className="p-5 sm:p-6 border-b border-white/10 flex items-center justify-between"
+              className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between gap-3"
               style={{
                 background: `linear-gradient(135deg, rgba(${activeComp.accentRgb}, 0.22) 0%, rgba(6, 12, 10, 0.95) 70%)`,
               }}
             >
-              <div>
+              <div className="min-w-0">
                 <span
-                  className="text-[10px] font-mono uppercase tracking-[0.22em] block mb-1"
+                  className="text-[10px] font-mono uppercase tracking-[0.2em] sm:tracking-[0.22em] block mb-1"
                   style={{ color: activeComp.accentColor }}
                 >
                   OFFICIAL APPLICATION // {activeComp.code}
                 </span>
-                <h3 className="font-ethnocentric text-base sm:text-xl text-white uppercase tracking-wider">
+                <h3 className="font-ethnocentric text-sm sm:text-xl text-white uppercase tracking-wider break-words">
                   REGISTER FOR {activeComp.title}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsRegOpen(false)}
-                className="p-2 rounded-lg bg-white/5 border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors cursor-pointer"
+                className="min-w-[40px] min-h-[40px] flex items-center justify-center p-2 rounded-lg bg-white/5 border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors cursor-pointer shrink-0"
                 aria-label="Close registration modal"
               >
                 ✕
@@ -1394,7 +1486,7 @@ export function RegistrationsPage() {
               <form
                 onSubmit={handleFormSubmit}
                 data-lenis-prevent
-                className="p-5 sm:p-6 overflow-y-auto flex-1 min-h-0 space-y-4 font-mono text-xs"
+                className="p-4 sm:p-6 overflow-y-auto overscroll-contain flex-1 min-h-0 space-y-4 font-mono text-xs"
               >
                 {/* Competition Selector (Only the 8 Sync-26 Competitions) */}
                 <div>
@@ -1458,7 +1550,7 @@ export function RegistrationsPage() {
                       readOnly={partType === 'intra'}
                       onChange={(e) => setSchoolName(e.target.value)}
                       placeholder="Enter your school name"
-                      className={`w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf ${
+                      className={`w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf ${
                         partType === 'intra' ? 'opacity-75 cursor-not-allowed' : ''
                       }`}
                     />
@@ -1481,7 +1573,7 @@ export function RegistrationsPage() {
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
                           placeholder="e.g. Mihin Rukshan"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
+                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
                         />
                         {errors.fullName && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.fullName}</p>
@@ -1522,7 +1614,7 @@ export function RegistrationsPage() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="participant@example.com"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
+                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
                         />
                         {errors.email && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.email}</p>
@@ -1539,7 +1631,7 @@ export function RegistrationsPage() {
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="0714906145 or +94 71 490 6145"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
+                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
                         />
                         {errors.phone && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.phone}</p>
@@ -1591,7 +1683,7 @@ export function RegistrationsPage() {
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
                           placeholder="Captain's Full Name"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
+                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
                         />
                         {errors.fullName && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.fullName}</p>
@@ -1631,7 +1723,7 @@ export function RegistrationsPage() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="captain@school.lk"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
+                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
                         />
                         {errors.email && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.email}</p>
@@ -1648,7 +1740,7 @@ export function RegistrationsPage() {
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="0714906145"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
+                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
                         />
                         {errors.phone && (
                           <p className="text-[11px] text-red-400 mt-1">{errors.phone}</p>
@@ -1658,7 +1750,7 @@ export function RegistrationsPage() {
 
                     {/* Additional Team Members */}
                     <div className="pt-3 border-t border-white/10 space-y-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
                         <span
                           className="text-[11px] font-bold uppercase tracking-wider"
                           style={{ color: activeComp.accentColor }}
@@ -1669,14 +1761,14 @@ export function RegistrationsPage() {
                           <button
                             type="button"
                             onClick={handleAddMember}
-                            className="px-2.5 py-1 rounded bg-white/5 border border-white/20 text-white hover:border-mint-leaf hover:text-mint-leaf text-[10px] cursor-pointer"
+                            className="min-h-[36px] sm:min-h-0 px-3 py-1.5 sm:px-2.5 sm:py-1 rounded bg-white/5 border border-white/20 text-white hover:border-mint-leaf hover:text-mint-leaf text-[10px] cursor-pointer"
                           >
                             + Add Member
                           </button>
                           <button
                             type="button"
                             onClick={handleRemoveMember}
-                            className="px-2.5 py-1 rounded bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white text-[10px] cursor-pointer"
+                            className="min-h-[36px] sm:min-h-0 px-3 py-1.5 sm:px-2.5 sm:py-1 rounded bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white text-[10px] cursor-pointer"
                           >
                             - Remove
                           </button>
@@ -1699,7 +1791,7 @@ export function RegistrationsPage() {
                                 handleMemberChange(idx, 'name', e.target.value)
                               }
                               placeholder={`Member #${idx + 1} Name`}
-                              className="w-full px-3 py-2 rounded-lg bg-black/80 border border-white/15 text-white text-xs focus:outline-none focus:border-mint-leaf"
+                              className="w-full min-h-[44px] sm:min-h-0 px-3 py-2 rounded-lg bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
                             />
                             {errors[`member_${idx}_name`] && (
                               <p className="text-[10px] text-red-400 mt-0.5">
@@ -1738,17 +1830,17 @@ export function RegistrationsPage() {
                 )}
 
                 {/* Form Actions */}
-                <div className="pt-4 border-t border-white/10 flex items-center justify-end gap-3">
+                <div className="pt-4 border-t border-white/10 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3">
                   <button
                     type="button"
                     onClick={() => setIsRegOpen(false)}
-                    className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white/75 hover:text-white text-xs uppercase cursor-pointer"
+                    className="min-h-[44px] sm:min-h-0 px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white/75 hover:text-white text-xs uppercase cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all cursor-pointer"
+                    className="min-h-[44px] sm:min-h-0 px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all cursor-pointer"
                     style={{
                       backgroundColor: activeComp.accentColor,
                       boxShadow: `0 0 20px rgba(${activeComp.accentRgb}, 0.45)`,
@@ -1778,7 +1870,7 @@ export function RegistrationsPage() {
 
             {/* Success State */}
             {submitState === 'success' && (
-              <div className="p-8 sm:p-10 text-center space-y-5 font-mono">
+              <div className="p-6 sm:p-10 overflow-y-auto overscroll-contain flex-1 min-h-0 text-center space-y-5 font-mono">
                 <div
                   className="w-14 h-14 mx-auto rounded-full border-2 flex items-center justify-center text-xl font-bold"
                   style={{
@@ -1791,7 +1883,7 @@ export function RegistrationsPage() {
                 </div>
                 <div>
                   <h3
-                    className="font-ethnocentric text-lg sm:text-2xl uppercase tracking-wider mb-2"
+                    className="font-ethnocentric text-base sm:text-2xl uppercase tracking-wider mb-2"
                     style={{ color: activeComp.accentColor }}
                   >
                     REGISTRATION SUCCESSFUL
@@ -1805,12 +1897,12 @@ export function RegistrationsPage() {
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-black/70 border border-white/15 inline-block">
+                <div className="p-4 rounded-xl bg-black/70 border border-white/15 inline-block max-w-full">
                   <div className="text-[10px] text-white/50 uppercase tracking-widest mb-1">
                     OFFICIAL CONFIRMATION ID
                   </div>
                   <div
-                    className="font-bold text-base sm:text-lg tracking-wider"
+                    className="font-bold text-base sm:text-lg tracking-wider break-all"
                     style={{ color: activeComp.accentColor }}
                   >
                     {confirmationId}
@@ -1826,7 +1918,7 @@ export function RegistrationsPage() {
                       href={WHATSAPP_GROUP_LINK}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all"
+                      className="min-h-[44px] inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all"
                       style={{
                         backgroundColor: activeComp.accentColor,
                         boxShadow: `0 0 20px rgba(${activeComp.accentRgb}, 0.45)`,
@@ -1837,7 +1929,7 @@ export function RegistrationsPage() {
                     <button
                       type="button"
                       onClick={() => setIsRegOpen(false)}
-                      className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white hover:border-white/40 text-xs uppercase cursor-pointer"
+                      className="min-h-[44px] inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white hover:border-white/40 text-xs uppercase cursor-pointer"
                     >
                       CLOSE
                     </button>
@@ -1848,16 +1940,16 @@ export function RegistrationsPage() {
 
             {/* Error State */}
             {submitState === 'error' && (
-              <div className="p-8 sm:p-10 text-center space-y-4 font-mono">
-                <h4 className="font-ethnocentric text-lg text-red-400 uppercase">
+              <div className="p-6 sm:p-10 overflow-y-auto overscroll-contain flex-1 min-h-0 text-center space-y-4 font-mono">
+                <h4 className="font-ethnocentric text-base sm:text-lg text-red-400 uppercase">
                   TRANSMISSION ANOMALY
                 </h4>
                 <p className="text-xs text-white/75 max-w-md mx-auto">{errorMessage}</p>
-                <div className="flex items-center justify-center gap-3 pt-2">
+                <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
                   <button
                     type="button"
                     onClick={() => setSubmitState('form')}
-                    className="px-4 py-2 rounded-xl bg-mint-leaf text-black font-bold text-xs uppercase cursor-pointer"
+                    className="min-h-[44px] inline-flex items-center justify-center px-4 py-2 rounded-xl bg-mint-leaf text-black font-bold text-xs uppercase cursor-pointer"
                   >
                     RETRY SUBMISSION
                   </button>
@@ -1865,7 +1957,7 @@ export function RegistrationsPage() {
                     href={WHATSAPP_DIRECT_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-xl bg-white/5 border border-white/15 text-white text-xs uppercase"
+                    className="min-h-[44px] inline-flex items-center justify-center px-4 py-2 rounded-xl bg-white/5 border border-white/15 text-white text-xs uppercase"
                   >
                     CONTACT COORDINATOR
                   </a>

@@ -692,7 +692,8 @@ const TechText = ({
         sizeDirty = false;
         width = Math.max(1, container.clientWidth);
         height = Math.max(1, container.clientHeight);
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const maxDpr = window.innerWidth < 768 ? 1.5 : 2;
+        dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
         const pixelWidth = Math.round(width * dpr);
         const pixelHeight = Math.round(height * dpr);
         if (canvas.width !== pixelWidth) canvas.width = pixelWidth;
@@ -922,7 +923,7 @@ const TechText = ({
       press.y = pointer.y;
       press.time = performance.now();
       press.index = index;
-      if (s?.draggable && index >= 0) {
+      if (s?.draggable && index >= 0 && e.pointerType !== 'touch') {
         dragging = index;
         grab.x = pointer.x - glyphs[index].offset.x;
         grab.y = pointer.y - glyphs[index].offset.y;

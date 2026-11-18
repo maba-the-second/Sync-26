@@ -16,8 +16,9 @@
 }
 
 .techtext-test-canvas-wrap {
-  font-size: clamp(2rem, 7.2vw, 6.8rem);
+  font-size: clamp(1.35rem, 7.2vw, 6.8rem);
   line-height: 0.88;
+  max-width: 100%;
 }
 
 .techtext-word {
