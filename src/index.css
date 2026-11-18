@@ -76,19 +76,24 @@ canvas {
   max-width: 100%;
 }
 
-/* HUD frame padding that respects iPhone notches / home indicator (viewport-fit=cover) */
+/* Edge-to-edge HUD on mobile (safe-area insets only); framed inset on md+ */
 .hud-safe {
-  --hud-pad: 0.625rem;
+  --hud-pad: 0px;
   padding-top: max(var(--hud-pad), env(safe-area-inset-top));
   padding-right: max(var(--hud-pad), env(safe-area-inset-right));
   padding-bottom: max(var(--hud-pad), env(safe-area-inset-bottom));
   padding-left: max(var(--hud-pad), env(safe-area-inset-left));
 }
-@media (min-width: 640px) {
-  .hud-safe { --hud-pad: 0.875rem; }
-}
 @media (min-width: 768px) {
   .hud-safe { --hud-pad: 1rem; }
+}
+
+/* Hide lower mobile HUD strip on ultra-short viewports so it never crowds center orbit */
+.hud-tall-only {
+  display: none;
+}
+@media (min-height: 660px) {
+  .hud-tall-only { display: flex; }
 }
 
 /* Reduce motion for users who ask for it */

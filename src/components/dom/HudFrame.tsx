@@ -33,6 +33,7 @@ export function HudFrame() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const progressTextRef = useRef<HTMLSpanElement>(null);
+  const mobileProgressTextRef = useRef<HTMLSpanElement>(null);
 
   // Detect touch-first devices (no hover, coarse pointer) to swap keyboard hints for touch controls
   useEffect(() => {
@@ -61,6 +62,9 @@ export function HudFrame() {
       }
       if (progressTextRef.current) {
         progressTextRef.current.textContent = `SYS.LOC // ${pct}`;
+      }
+      if (mobileProgressTextRef.current) {
+        mobileProgressTextRef.current.textContent = `${state.activePage.toUpperCase()} // ${pct}`;
       }
     });
   }, []);
@@ -133,7 +137,7 @@ export function HudFrame() {
       }`}
     >
       {/* Main 1px KPRverse Outer Grid Frame */}
-      <div className="relative w-full h-full border border-white/20 rounded-lg overflow-hidden flex">
+      <div className="relative w-full h-full border border-white/20 rounded-none md:rounded-lg overflow-hidden flex">
         {/* Tap-outside scrim to close the drawer (mobile/tablet friendly) */}
         <div
           aria-hidden="true"
@@ -147,11 +151,11 @@ export function HudFrame() {
         <div
           className={`${
             isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
-          } absolute top-0 bottom-0 left-0 z-50 max-w-full bg-black/95 backdrop-blur-xl border-r border-white/20 transition-transform duration-500 ease-in-out flex ${
+          } absolute top-0 bottom-0 left-0 z-50 w-full sm:w-auto max-w-full bg-black/95 backdrop-blur-xl border-r border-white/20 transition-transform duration-500 ease-in-out flex ${
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
-          <div className="w-[calc(100vw-5.25rem)] max-w-[320px] sm:max-w-none sm:w-[520px] md:w-[600px] h-full flex flex-col justify-between pt-6 sm:pt-8 overflow-y-auto overscroll-contain">
+          <div className="flex-1 min-w-0 sm:flex-none sm:w-[520px] md:w-[600px] h-full flex flex-col justify-between pt-6 sm:pt-8 overflow-y-auto overscroll-contain">
             <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-10 px-4 sm:px-6">
               <span className="text-[11px] text-mint-leaf shrink-0 pt-2">
                 <ShuffleText text="DISCOVER" />
@@ -248,16 +252,48 @@ export function HudFrame() {
             onClick={() => setIsSidebarOpen(true)}
             className={`${
               isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
-            } w-full h-12 border-b border-white/20 flex flex-col items-center justify-center gap-1.5 hover:bg-white/5 transition-colors cursor-pointer group`}
+            } w-full h-12 border-b border-white/20 flex flex-col items-center justify-center gap-1.5 hover:bg-white/5 transition-colors cursor-pointer group shrink-0`}
             aria-label="Open Menu"
           >
             <span className="w-5 h-[1.5px] bg-white group-hover:bg-mint-leaf transition-colors" />
             <span className="w-4 h-[1.5px] bg-white group-hover:bg-mint-leaf transition-colors -ml-1" />
           </button>
 
+          {/* Mobile Vertical Upper Telemetry Rail */}
+          <div
+            aria-hidden="true"
+            className="md:hidden flex-1 w-full flex flex-col items-center justify-between py-3 pointer-events-none"
+          >
+            <span className="w-2 h-px bg-white/25" />
+            <span className="w-px flex-1 bg-gradient-to-b from-white/20 via-white/10 to-mint-leaf/35 my-2" />
+            <span className="-rotate-90 whitespace-nowrap text-[7px] tracking-[0.22em] text-white/45 my-4">
+              SYNC // 26
+            </span>
+            <span className="w-px flex-1 bg-gradient-to-b from-mint-leaf/35 via-white/10 to-white/20 my-2" />
+            <span className="w-2 h-px bg-white/25" />
+          </div>
+
           {/* Center-Left Vertical KPR/SYNC Geometric Emblem */}
-          <div className="flex flex-col items-center justify-center my-auto px-2">
-            <img src="./images/logo.png" alt="KPR Emblem" className="w-7 opacity-90" />
+          <div className="flex flex-col items-center justify-center my-auto px-2 shrink-0">
+            <img src="./images/logo.png" alt="KPR Emblem" className="w-6 sm:w-7 opacity-90" />
+          </div>
+
+          {/* Mobile Vertical Lower Telemetry Rail */}
+          <div
+            aria-hidden="true"
+            className="md:hidden flex-1 w-full flex flex-col items-center justify-between py-3 pointer-events-none"
+          >
+            <span className="w-2 h-px bg-white/25" />
+            <span className="w-px flex-1 bg-gradient-to-b from-white/20 via-white/10 to-white/20 my-2" />
+            <span className="-rotate-90 whitespace-nowrap text-[7px] tracking-[0.22em] text-mint-leaf/70 my-4">
+              {activePage === 'registrations' ? 'ARENA' : activePage.toUpperCase()}
+            </span>
+            <span className="w-px flex-1 bg-gradient-to-b from-white/20 via-white/10 to-white/20 my-2" />
+            <div className="flex flex-col items-center gap-1">
+              <span className="w-1.5 h-px bg-white/25" />
+              <span className="w-2.5 h-px bg-mint-leaf/55" />
+              <span className="w-1.5 h-px bg-white/25" />
+            </div>
           </div>
 
           {/* Bottom-Left Sound Equalizer Button (/audio/bgm.mp3) */}
@@ -266,7 +302,7 @@ export function HudFrame() {
             onClick={handleAudioToggle}
             className={`${
               isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
-            } w-full h-12 border-t border-white/20 flex items-center justify-center gap-[2px] hover:bg-white/5 transition-colors cursor-pointer group`}
+            } w-full h-12 border-t border-white/20 flex items-center justify-center gap-[2px] hover:bg-white/5 transition-colors cursor-pointer group shrink-0`}
             title={audioMuted ? 'Play BGM' : 'Pause BGM'}
           >
             <span
@@ -298,9 +334,37 @@ export function HudFrame() {
         </aside>
 
         {/* MAIN INNER HUD CANVAS OVERLAY */}
-        <div className="relative flex-1 h-full flex flex-col justify-between">
+        <div className="relative flex-1 h-full flex flex-col justify-between min-w-0">
+          {/* Mobile HUD Corner Brackets & Edge Reticle */}
+          <div
+            aria-hidden="true"
+            className="md:hidden pointer-events-none absolute top-[54px] left-1.5 w-2.5 h-2.5 border-t border-l border-mint-leaf/45"
+          />
+          <div
+            aria-hidden="true"
+            className="md:hidden pointer-events-none absolute top-[54px] right-1.5 w-2.5 h-2.5 border-t border-r border-mint-leaf/45"
+          />
+          <div
+            aria-hidden="true"
+            className="md:hidden pointer-events-none absolute bottom-[52px] left-1.5 w-2.5 h-2.5 border-b border-l border-mint-leaf/45"
+          />
+          <div
+            aria-hidden="true"
+            className="md:hidden pointer-events-none absolute bottom-[52px] right-1.5 w-2.5 h-2.5 border-b border-r border-mint-leaf/45"
+          />
+          <div
+            aria-hidden="true"
+            className="md:hidden pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 flex flex-col items-end gap-1.5 opacity-45"
+          >
+            <span className="w-1.5 h-px bg-white/40" />
+            <span className="w-1 h-px bg-white/30" />
+            <span className="w-2.5 h-px bg-mint-leaf" />
+            <span className="w-1 h-px bg-white/30" />
+            <span className="w-1.5 h-px bg-white/40" />
+          </div>
+
           {/* Top Navigation Bar with Scroll Progress Fill */}
-          <header className="relative w-full h-12 border-b border-white/20 flex items-center justify-between bg-black/25 backdrop-blur-[2px] overflow-hidden">
+          <header className="relative w-full h-12 border-b border-white/20 flex items-center justify-between bg-black/25 backdrop-blur-[2px] overflow-hidden shrink-0">
             {/* Scroll Progress Fill Bar */}
             <div
               ref={progressBarRef}
@@ -318,24 +382,39 @@ export function HudFrame() {
 
             {/* Center Top Navigation Links or Logo on Registrations */}
             {activePage === 'registrations' ? (
-              <div className="relative z-10 pointer-events-auto mx-auto flex items-center justify-center">
-                <img
-                  src="./images/Sync logo 2.png"
-                  alt="SYNC'26 Logo"
-                  className="h-8 sm:h-9 w-auto object-contain opacity-95"
-                  draggable={false}
-                />
+              <div className="relative z-10 w-full h-full flex items-center justify-between md:justify-center px-2.5 md:px-0">
+                <div className="md:hidden min-w-[68px] flex items-center gap-1.5 text-[8px] tracking-[0.15em] text-white/60 shrink-0">
+                  <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
+                  <span>ARENA</span>
+                </div>
+                <div className="pointer-events-auto flex items-center justify-center">
+                  <img
+                    src="./images/Sync logo 2.png"
+                    alt="SYNC'26 Logo"
+                    className="h-7 sm:h-8 md:h-9 w-auto object-contain opacity-95"
+                    draggable={false}
+                  />
+                </div>
+                <div className="md:hidden min-w-[68px] flex items-center justify-end text-[8px] tracking-[0.15em] text-mint-leaf/80 shrink-0">
+                  <span>08 TRACKS</span>
+                </div>
               </div>
             ) : (
               <>
-              {/* Compact brand mark on phones, where the section nav is hidden */}
-              <div className="md:hidden relative z-10 pl-3 flex items-center">
+              {/* Compact brand mark & live telemetry on phones, where desktop section nav is hidden */}
+              <div className="md:hidden relative z-10 pl-2.5 flex items-center shrink-0">
                 <img
                   src="./images/Sync logo 2.png"
                   alt="SYNC'26 Logo"
-                  className="h-7 w-auto object-contain opacity-95"
+                  className="h-6 sm:h-7 w-auto object-contain opacity-95"
                   draggable={false}
                 />
+              </div>
+              <div className="md:hidden relative z-10 flex-1 flex items-center justify-center gap-1.5 px-2 min-w-0 text-[8px] tracking-[0.14em] text-white/60">
+                <span className="w-1.5 h-1.5 bg-mint-leaf shrink-0 inline-block" />
+                <span ref={mobileProgressTextRef} className="truncate">
+                  {activePage.toUpperCase()} // 0.0%
+                </span>
               </div>
               <nav
                 className={`relative z-10 ${
@@ -366,7 +445,7 @@ export function HudFrame() {
 
             {/* Top-Right Chamfered White "REGISTER NOW" Button (Hidden on Registrations Page) */}
             {activePage !== 'registrations' && (
-              <div className="relative z-10 h-full flex items-center ml-auto md:ml-0">
+              <div className="relative z-10 h-full flex items-center ml-auto md:ml-0 shrink-0">
                 <button
                   type="button"
                   onClick={() => {
@@ -376,7 +455,7 @@ export function HudFrame() {
                   }}
                   className={`${
                     isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
-                  } h-full bg-white hover:bg-mint-leaf text-black font-mono font-bold text-[11px] sm:text-[13px] tracking-[0.16em] sm:tracking-[0.22em] pl-6 pr-4 sm:px-7 transition-colors cursor-pointer whitespace-nowrap`}
+                  } h-full bg-white hover:bg-mint-leaf text-black font-mono font-bold text-[10px] sm:text-[13px] tracking-[0.14em] sm:tracking-[0.22em] pl-5 pr-3.5 sm:px-7 transition-colors cursor-pointer whitespace-nowrap`}
                   style={{
                     clipPath:
                       'polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px))',
@@ -395,48 +474,52 @@ export function HudFrame() {
 
           {/* Bottom Bar: Hold Status & "SCROLL ⌄" Indicator */}
           <footer className="w-full flex items-end justify-between gap-3 px-3 sm:px-8 pb-3 sm:pb-5">
-            {/* Spacebar-Hold Decrypt Telemetry (Disabled on Home Page) */}
+            {/* Spacebar-Hold Decrypt Telemetry (Mobile fallback status on Home) */}
             <div className="flex items-center gap-4 min-w-0">
-              {activePage !== 'home' &&
-                (isTouch ? (
-                  /* Touch devices have no space bar: press-and-hold this control instead */
-                  <button
-                    type="button"
-                    onPointerDown={(e) => {
-                      e.currentTarget.setPointerCapture?.(e.pointerId);
-                      setIsHolding(true);
-                    }}
-                    onPointerUp={() => setIsHolding(false)}
-                    onPointerCancel={() => setIsHolding(false)}
-                    onLostPointerCapture={() => setIsHolding(false)}
-                    onContextMenu={(e) => e.preventDefault()}
-                    className={`${
-                      isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
-                    } relative min-h-[40px] px-3 py-2 border bg-black/70 backdrop-blur-md text-[9px] tracking-[0.18em] select-none touch-none overflow-hidden transition-colors ${
-                      isHolding ? 'border-mint-leaf text-mint-leaf' : 'border-white/25 text-white/80'
+              {activePage === 'home' ? (
+                <div className="md:hidden flex items-center gap-1.5 text-[8px] tracking-[0.18em] text-white/55">
+                  <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
+                  <span>SYS // SYNC&apos;26</span>
+                </div>
+              ) : isTouch ? (
+                /* Touch devices have no space bar: press-and-hold this control instead */
+                <button
+                  type="button"
+                  onPointerDown={(e) => {
+                    e.currentTarget.setPointerCapture?.(e.pointerId);
+                    setIsHolding(true);
+                  }}
+                  onPointerUp={() => setIsHolding(false)}
+                  onPointerCancel={() => setIsHolding(false)}
+                  onLostPointerCapture={() => setIsHolding(false)}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className={`${
+                    isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
+                  } relative min-h-[40px] px-3 py-2 border bg-black/70 backdrop-blur-md text-[9px] tracking-[0.18em] select-none touch-none overflow-hidden transition-colors ${
+                    isHolding ? 'border-mint-leaf text-mint-leaf' : 'border-white/25 text-white/80'
+                  }`}
+                  style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none' }}
+                  aria-label="Press and hold to accelerate"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`absolute inset-0 bg-mint-leaf/20 origin-left transition-transform duration-500 ${
+                      isHolding ? 'scale-x-100' : 'scale-x-0'
                     }`}
-                    style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none' }}
-                    aria-label="Press and hold to accelerate"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={`absolute inset-0 bg-mint-leaf/20 origin-left transition-transform duration-500 ${
-                        isHolding ? 'scale-x-100' : 'scale-x-0'
-                      }`}
-                    />
-                    <span className="relative">
-                      {isHolding ? 'BREACH ACTIVE' : 'HOLD TO ACCELERATE'}
-                    </span>
-                  </button>
-                ) : (
-                  <span className="inline-block text-[9px] text-white/50">
-                    {isHolding ? (
-                      <span className="text-mint-leaf">BREACH ACTIVE // REALITY PEELING</span>
-                    ) : (
-                      'PRESS AND HOLD SPACE BAR TO ACCELERATE'
-                    )}
+                  />
+                  <span className="relative">
+                    {isHolding ? 'BREACH ACTIVE' : 'HOLD TO ACCELERATE'}
                   </span>
-                ))}
+                </button>
+              ) : (
+                <span className="inline-block text-[9px] text-white/50">
+                  {isHolding ? (
+                    <span className="text-mint-leaf">BREACH ACTIVE // REALITY PEELING</span>
+                  ) : (
+                    'PRESS AND HOLD SPACE BAR TO ACCELERATE'
+                  )}
+                </span>
+              )}
             </div>
 
             {/* Bottom-Right SCROLL V Indicator (Hidden on Registrations Page or during Odyssey Stage 1) */}

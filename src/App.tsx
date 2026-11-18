@@ -147,7 +147,7 @@ export default function App() {
           <div
             className={`sticky top-0 left-0 w-full h-screen h-[100dvh] z-0 pointer-events-auto ${
               activePage === 'registrations'
-                ? 'pl-14 pt-14 pr-2.5 sm:pl-14 sm:pt-14 sm:pr-3.5 md:pl-14 md:pt-12 md:pr-0'
+                ? 'pl-11 pt-12 pr-0 sm:pl-12 sm:pt-12 sm:pr-0 md:pl-14 md:pt-12 md:pr-0'
                 : ''
             }`}
           >

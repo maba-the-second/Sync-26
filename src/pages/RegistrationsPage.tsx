@@ -985,9 +985,41 @@ export function RegistrationsPage() {
   }
 
   return (
-    <div className="relative w-full h-screen h-[100dvh] flex flex-col items-center justify-center pt-14 pb-12 pl-14 pr-2.5 sm:pl-16 sm:pr-6 lg:pt-12 lg:pb-0 lg:pl-[calc(3.5rem+4rem)] lg:pr-16 overflow-hidden pointer-events-none">
+    <div className="relative w-full h-screen h-[100dvh] flex flex-col items-center justify-center pt-12 pb-12 pl-11 pr-0 sm:pl-12 sm:pr-0 md:pt-14 md:pl-16 md:pr-6 lg:pt-12 lg:pb-0 lg:pl-[calc(3.5rem+4rem)] lg:pr-16 overflow-hidden pointer-events-none">
+      {/* Mobile HUD Sector Header & Lower Telemetry Strip (underneath z-50 modals) */}
+      <div
+        aria-hidden="true"
+        className="md:hidden pointer-events-none absolute top-[58px] left-14 sm:left-16 right-[124px] z-10 flex flex-col gap-1 font-mono uppercase tracking-[0.2em]"
+      >
+        <div className="flex items-center gap-1.5 text-[8px] tracking-[0.18em] text-mint-leaf">
+          <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
+          <span>SECTOR 02 // ARENA</span>
+        </div>
+        <div className="border-l-2 border-mint-leaf/60 pl-2">
+          <div className="font-ethnocentric text-[10px] sm:text-[11px] leading-tight text-white/90 tracking-wider">
+            COMPETITIONS
+          </div>
+          <div className="text-[8px] tracking-[0.14em] text-white/45 mt-0.5">
+            SELECT CARD TO REGISTER
+          </div>
+        </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        className="md:hidden hud-tall-only pointer-events-none absolute bottom-[64px] left-14 sm:left-16 right-3 z-10 items-center justify-between gap-2 px-2.5 py-1.5 border border-white/15 bg-black/45 backdrop-blur-[2px] font-mono uppercase text-[8px] tracking-[0.15em]"
+      >
+        <span className="text-white/65">
+          <span className="text-mint-leaf">GR 06–13</span> // INTER-SCHOOL
+        </span>
+        <span className="flex items-center gap-1.5 text-white/55 shrink-0">
+          <span>SYS: ONLINE</span>
+          <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
+        </span>
+      </div>
+
       {/* Top Action Bar inside Registrations Arena */}
-      <div className="absolute top-[66px] sm:top-16 sm:mt-4 right-4 sm:right-10 z-30 flex flex-wrap items-center gap-2.5 pointer-events-auto font-mono">
+      <div className="absolute top-[58px] md:top-16 md:mt-4 right-3 sm:right-4 md:right-10 z-30 flex flex-wrap items-center gap-2.5 pointer-events-auto font-mono">
         <a
           href="./pdf/Sync Competition Rulebook.pdf"
           download="Sync Competition Rulebook.pdf"
@@ -1022,7 +1054,7 @@ export function RegistrationsPage() {
         rel="noopener noreferrer"
         aria-label="Join WhatsApp Community"
         title="Join WhatsApp Community"
-        className="fixed bottom-5 right-5 sm:bottom-8 sm:right-10 z-30 pointer-events-auto flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/80 backdrop-blur-md border border-mint-leaf/50 hover:border-mint-leaf hover:scale-110 shadow-[0_0_20px_rgba(65,210,162,0.35)] transition-all duration-300"
+        className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 md:bottom-8 md:right-10 z-30 pointer-events-auto flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/80 backdrop-blur-md border border-mint-leaf/50 hover:border-mint-leaf hover:scale-110 shadow-[0_0_20px_rgba(65,210,162,0.35)] transition-all duration-300"
       >
         <img
           src="./images/whatsapp.png"
@@ -1034,26 +1066,29 @@ export function RegistrationsPage() {
 
       {/* 8 Competition Cards Orbiting the 3D Crystal (Compact Front-Arc on Mobile/Tablet, Full Ellipse on Desktop) */}
       {isCompactOrbit ? (
-        <div className="w-full max-w-[440px] md:max-w-[540px] pointer-events-auto flex flex-col items-center mt-8 sm:mt-6">
+        <div className="w-full max-w-[380px] sm:max-w-[420px] px-2.5 sm:px-3 pointer-events-auto flex flex-col items-center mt-6 sm:mt-4">
           <OrbitImages
             key="crystal-orbit-cards-mobile"
+            className="orbit-compact"
             images={COMPETITIONS.map((c) => ({
               ...c,
+              description: undefined,
               eligibility: c.shortEligibility,
             }))}
             shape="ellipse"
-            baseWidth={480}
-            radiusX={112}
-            radiusY={122}
+            baseWidth={420}
+            radiusX={124}
+            radiusY={98}
             rotation={-5}
             duration={34}
             paused={!!detailComp || isRegOpen}
             speedMultiplier={isHolding ? 4.2 : 1}
-            itemSize={160}
-            itemWidth={228}
-            itemHeight={164}
-            itemRadius={10}
-            depth={0.75}
+            itemSize={112}
+            itemWidth={136}
+            itemHeight={84}
+            itemRadius={8}
+            depth={0.52}
+            hoverScale={1.03}
             frontArcOnly
             showPath
             pathColor="rgba(65, 210, 162, 0.35)"
