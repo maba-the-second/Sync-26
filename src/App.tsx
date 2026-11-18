@@ -123,7 +123,7 @@ export default function App() {
 
   return (
     /* Step 1: Root .container */
-    <div className="container-root relative w-full min-h-screen bg-black text-white selection:bg-mint-leaf selection:text-black">
+    <div className="container-root relative w-full min-h-screen min-h-[100dvh] bg-black text-white selection:bg-mint-leaf selection:text-black">
       {/* Boot-Sequence Preloader */}
       <Preloader />
 
@@ -145,16 +145,18 @@ export default function App() {
         >
           {/* Sticky 3D WebGL Background inside the upper content curtain */}
           <div
-            className={`sticky top-0 left-0 w-full h-screen z-0 pointer-events-auto ${
-              activePage === 'registrations' ? 'pl-11 sm:pl-12 md:pl-14 pt-12' : ''
+            className={`sticky top-0 left-0 w-full h-screen h-[100dvh] z-0 pointer-events-auto ${
+              activePage === 'registrations'
+                ? 'pl-14 pt-14 pr-2.5 sm:pl-14 sm:pt-14 sm:pr-3.5 md:pl-14 md:pt-12 md:pr-0'
+                : ''
             }`}
           >
             {activePage === 'odyssey' ? <OdysseyCanvas /> : <SceneCanvas />}
           </div>
 
           {/* Active Directory Standalone View */}
-          <main className="relative z-10 -mt-[100vh] pointer-events-none">
-            <Suspense fallback={<div className="min-h-screen w-full" />}>
+          <main className="relative z-10 -mt-[100vh] -mt-[100dvh] pointer-events-none">
+            <Suspense fallback={<div className="min-h-screen min-h-[100dvh] w-full" />}>
               {renderActivePage()}
             </Suspense>
           </main>
@@ -163,7 +165,7 @@ export default function App() {
         {/* LOWER PART: Invisible Section (100dvh transparent window that reveals the footer underneath) */}
         {activePage !== 'registrations' && (
           <div
-            className="invisible-section w-full h-screen bg-transparent pointer-events-none"
+            className="invisible-section w-full h-screen h-[100dvh] bg-transparent pointer-events-none"
             aria-hidden="true"
           />
         )}

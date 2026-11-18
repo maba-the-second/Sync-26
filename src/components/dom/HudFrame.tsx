@@ -29,9 +29,29 @@ export function HudFrame() {
   const isOdysseyStage1 = activePage === 'odyssey' && !odysseyStage2;
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const progressTextRef = useRef<HTMLSpanElement>(null);
+
+  // Detect touch-first devices (no hover, coarse pointer) to swap keyboard hints for touch controls
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: none), (pointer: coarse)');
+    const update = () => setIsTouch(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  // Close the drawer with Escape
+  useEffect(() => {
+    if (!isSidebarOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsSidebarOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isSidebarOpen]);
 
   useEffect(() => {
     return useAppStore.subscribe((state) => {
@@ -40,7 +60,7 @@ export function HudFrame() {
         progressBarRef.current.style.width = pct;
       }
       if (progressTextRef.current) {
-        progressTextRef.current.textContent = `SYS.LOC - ${pct}`;
+        progressTextRef.current.textContent = `SYS.LOC // ${pct}`;
       }
     });
   }, []);
@@ -108,26 +128,35 @@ export function HudFrame() {
 
   return (
     <div
-      className={`fixed inset-0 z-40 pointer-events-none p-2.5 sm:p-3.5 md:p-4 font-mono text-[15px] tracking-[0.2em] uppercase select-none transition-opacity duration-1000 ${
+      className={`hud-safe fixed inset-0 z-40 pointer-events-none font-mono text-[13px] sm:text-[15px] tracking-[0.2em] uppercase select-none transition-opacity duration-1000 ${
         isOdysseyStage1 ? 'opacity-0' : 'opacity-100'
       }`}
     >
       {/* Main 1px KPRverse Outer Grid Frame */}
       <div className="relative w-full h-full border border-white/20 rounded-lg overflow-hidden flex">
+        {/* Tap-outside scrim to close the drawer (mobile/tablet friendly) */}
+        <div
+          aria-hidden="true"
+          onClick={() => setIsSidebarOpen(false)}
+          className={`absolute inset-0 z-40 bg-black/50 transition-opacity duration-500 ${
+            isSidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
+        />
+
         {/* SLIDE-OUT SIDEBAR DRAWER */}
         <div
           className={`${
             isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
-          } absolute top-0 bottom-0 left-0 z-50 bg-black/95 backdrop-blur-xl border-r border-white/20 transition-transform duration-500 ease-in-out flex ${
+          } absolute top-0 bottom-0 left-0 z-50 max-w-full bg-black/95 backdrop-blur-xl border-r border-white/20 transition-transform duration-500 ease-in-out flex ${
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
-          <div className="w-[320px] sm:w-[520px] md:w-[600px] h-full flex flex-col justify-between pt-8">
-            <div className="flex items-start gap-6 sm:gap-10 px-6">
+          <div className="w-[calc(100vw-5.25rem)] max-w-[320px] sm:max-w-none sm:w-[520px] md:w-[600px] h-full flex flex-col justify-between pt-6 sm:pt-8 overflow-y-auto overscroll-contain">
+            <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-10 px-4 sm:px-6">
               <span className="text-[11px] text-mint-leaf shrink-0 pt-2">
                 <ShuffleText text="DISCOVER" />
               </span>
-              <ul className="font-ethnocentric flex flex-col gap-3 text-base sm:text-xl md:text-2xl tracking-wider">
+              <ul className="font-ethnocentric flex flex-col gap-2 sm:gap-3 text-[15px] sm:text-xl md:text-2xl tracking-wider w-full">
                 {SIDEBAR_ITEMS.map((item) => {
                   const isCurrentPage = activePage === item.page;
                   return (
@@ -139,7 +168,7 @@ export function HudFrame() {
                           setActivePage(item.page);
                           window.scrollTo({ top: 0, behavior: 'instant' });
                         }}
-                        className={`px-3 py-1.5 text-left leading-tight transition-colors cursor-pointer ${
+                        className={`w-full max-w-full break-words min-h-[44px] sm:min-h-0 px-3 py-2 sm:py-1.5 text-left leading-tight transition-colors cursor-pointer ${
                           isCurrentPage
                             ? 'bg-mint-leaf text-black'
                             : 'text-white hover:bg-white hover:text-black'
@@ -158,14 +187,14 @@ export function HudFrame() {
             </div>
 
             <div className="w-full">
-              <div className="flex items-center gap-16 border-t border-white/20 p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-16 border-t border-white/20 p-4">
                 <span className="text-[9px] text-white/50">CONNECT</span>
-                <div className="flex flex-wrap gap-6 text-[10px]">
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-[10px]">
                   <a
                     href="https://chat.whatsapp.com/IaBJyTRhZcACMFKUOrYndg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white hover:text-mint-leaf cursor-pointer"
+                    className="min-h-[36px] sm:min-h-0 inline-flex items-center text-white hover:text-mint-leaf cursor-pointer"
                   >
                     <ShuffleText text="WHATSAPP" />
                   </a>
@@ -173,7 +202,7 @@ export function HudFrame() {
                     href="https://instagram.com/dharmaraja_ict_society"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white hover:text-mint-leaf cursor-pointer"
+                    className="min-h-[36px] sm:min-h-0 inline-flex items-center text-white hover:text-mint-leaf cursor-pointer"
                   >
                     <ShuffleText text="INSTAGRAM" />
                   </a>
@@ -181,13 +210,13 @@ export function HudFrame() {
                     href="https://facebook.com/dhamarajaicts"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white hover:text-mint-leaf cursor-pointer"
+                    className="min-h-[36px] sm:min-h-0 inline-flex items-center text-white hover:text-mint-leaf cursor-pointer"
                   >
                     <ShuffleText text="FACEBOOK" />
                   </a>
                 </div>
               </div>
-              <div className="flex items-center gap-16 border-t border-white/20 p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-16 border-t border-white/20 p-4">
                 <span className="text-[9px] text-white/50">SYSTEM</span>
                 <span className="text-[10px] text-mint-leaf">
                   DHARMARAJA ICT SOCIETY // SYNC'26
@@ -197,10 +226,11 @@ export function HudFrame() {
           </div>
 
           {/* Drawer Right Close Strip */}
-          <div className="w-14 h-full border-l border-white/20 flex flex-col justify-between items-center pb-6">
+          <div className="w-12 sm:w-14 h-full shrink-0 border-l border-white/20 flex flex-col justify-between items-center pb-6">
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
+              aria-label="Close Menu"
               className="w-full h-12 border-b border-white/20 flex items-center justify-center text-white hover:text-mint-leaf cursor-pointer"
             >
               ✕
@@ -297,10 +327,20 @@ export function HudFrame() {
                 />
               </div>
             ) : (
+              <>
+              {/* Compact brand mark on phones, where the section nav is hidden */}
+              <div className="md:hidden relative z-10 pl-3 flex items-center">
+                <img
+                  src="./images/Sync logo 2.png"
+                  alt="SYNC'26 Logo"
+                  className="h-7 w-auto object-contain opacity-95"
+                  draggable={false}
+                />
+              </div>
               <nav
                 className={`relative z-10 ${
                   isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
-                } flex items-center gap-5 sm:gap-8 md:gap-10 mx-auto`}
+                } hidden md:flex items-center gap-4 lg:gap-10 mx-auto`}
               >
                 {NAV_ITEMS.map((item, idx) => {
                   const isActive = activeSection === idx;
@@ -309,7 +349,7 @@ export function HudFrame() {
                       key={item.label}
                       type="button"
                       onClick={() => scrollToTarget(item.target)}
-                      className={`nav-hover-pill px-2 py-1 flex items-center gap-2 text-[13px] tracking-[0.22em] transition-colors cursor-pointer ${
+                      className={`nav-hover-pill px-2 py-1 flex items-center gap-2 text-[11px] lg:text-[13px] tracking-[0.18em] lg:tracking-[0.22em] transition-colors cursor-pointer ${
                         isActive ? 'text-white font-semibold' : 'text-white/65'
                       }`}
                     >
@@ -321,11 +361,12 @@ export function HudFrame() {
                   );
                 })}
               </nav>
+              </>
             )}
 
             {/* Top-Right Chamfered White "REGISTER NOW" Button (Hidden on Registrations Page) */}
             {activePage !== 'registrations' && (
-              <div className="relative z-10 h-full flex items-center">
+              <div className="relative z-10 h-full flex items-center ml-auto md:ml-0">
                 <button
                   type="button"
                   onClick={() => {
@@ -335,37 +376,73 @@ export function HudFrame() {
                   }}
                   className={`${
                     isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
-                  } h-full bg-white hover:bg-mint-leaf text-black font-mono font-bold text-[13px] tracking-[0.22em] px-6 sm:px-7 transition-colors cursor-pointer`}
+                  } h-full bg-white hover:bg-mint-leaf text-black font-mono font-bold text-[11px] sm:text-[13px] tracking-[0.16em] sm:tracking-[0.22em] pl-6 pr-4 sm:px-7 transition-colors cursor-pointer whitespace-nowrap`}
                   style={{
                     clipPath:
                       'polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px))',
                   }}
                 >
-                  <ShuffleText text="REGISTER NOW" />
+                  <span className="sm:hidden">
+                    <ShuffleText text="REGISTER" />
+                  </span>
+                  <span className="hidden sm:inline">
+                    <ShuffleText text="REGISTER NOW" />
+                  </span>
                 </button>
               </div>
             )}
           </header>
 
           {/* Bottom Bar: Hold Status & "SCROLL ⌄" Indicator */}
-          <footer className="w-full flex items-end justify-between px-5 sm:px-8 pb-4 sm:pb-5">
+          <footer className="w-full flex items-end justify-between gap-3 px-3 sm:px-8 pb-3 sm:pb-5">
             {/* Spacebar-Hold Decrypt Telemetry (Disabled on Home Page) */}
-            <div className="flex items-center gap-4">
-              {activePage !== 'home' && (
-                <span className="inline-block text-[9px] text-white/50">
-                  {isHolding ? (
-                    <span className="text-mint-leaf">BREACH ACTIVE // REALITY PEELING</span>
-                  ) : (
-                    'PRESS AND HOLD SPACE BAR TO ACCELERATE'
-                  )}
-                </span>
-              )}
+            <div className="flex items-center gap-4 min-w-0">
+              {activePage !== 'home' &&
+                (isTouch ? (
+                  /* Touch devices have no space bar: press-and-hold this control instead */
+                  <button
+                    type="button"
+                    onPointerDown={(e) => {
+                      e.currentTarget.setPointerCapture?.(e.pointerId);
+                      setIsHolding(true);
+                    }}
+                    onPointerUp={() => setIsHolding(false)}
+                    onPointerCancel={() => setIsHolding(false)}
+                    onLostPointerCapture={() => setIsHolding(false)}
+                    onContextMenu={(e) => e.preventDefault()}
+                    className={`${
+                      isOdysseyStage1 ? 'pointer-events-none' : 'pointer-events-auto'
+                    } relative min-h-[40px] px-3 py-2 border bg-black/70 backdrop-blur-md text-[9px] tracking-[0.18em] select-none touch-none overflow-hidden transition-colors ${
+                      isHolding ? 'border-mint-leaf text-mint-leaf' : 'border-white/25 text-white/80'
+                    }`}
+                    style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none' }}
+                    aria-label="Press and hold to accelerate"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`absolute inset-0 bg-mint-leaf/20 origin-left transition-transform duration-500 ${
+                        isHolding ? 'scale-x-100' : 'scale-x-0'
+                      }`}
+                    />
+                    <span className="relative">
+                      {isHolding ? 'BREACH ACTIVE' : 'HOLD TO ACCELERATE'}
+                    </span>
+                  </button>
+                ) : (
+                  <span className="inline-block text-[9px] text-white/50">
+                    {isHolding ? (
+                      <span className="text-mint-leaf">BREACH ACTIVE // REALITY PEELING</span>
+                    ) : (
+                      'PRESS AND HOLD SPACE BAR TO ACCELERATE'
+                    )}
+                  </span>
+                ))}
             </div>
 
             {/* Bottom-Right SCROLL V Indicator (Hidden on Registrations Page or during Odyssey Stage 1) */}
             {activePage !== 'registrations' && (
               <div
-                className={`flex items-center gap-2 text-[10px] tracking-[0.25em] text-white/80 transition-opacity duration-700 ${
+                className={`flex shrink-0 items-center gap-2 text-[10px] tracking-[0.25em] text-white/80 transition-opacity duration-700 ${
                   isOdysseyStage1 ? 'opacity-0' : 'opacity-100'
                 }`}
               >

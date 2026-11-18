@@ -34,19 +34,19 @@ export function Preloader() {
   return (
     <div
       className={cn(
-        'fixed inset-0 z-50 bg-black flex flex-col justify-between p-10 font-mono text-xs uppercase tracking-widest transition-opacity duration-700',
+        'fixed inset-0 z-50 h-screen h-[100dvh] bg-black flex flex-col justify-between p-5 sm:p-10 font-mono text-[10px] sm:text-xs uppercase tracking-widest transition-opacity duration-700',
         isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
       )}
     >
-      <div className="flex justify-between text-white/50">
-        <span>SYNC'26  ENGINE BOOT SEQUENCE</span>
-        <span>REV 26.04</span>
+      <div className="flex justify-between gap-3 text-white/50">
+        <span>SYNC'26 ENGINE BOOT SEQUENCE</span>
+        <span className="shrink-0">REV 26.04</span>
       </div>
 
       <div className="max-w-md w-full mx-auto space-y-3">
-        <div className="flex justify-between text-white">
-          <span>INITIALIZING DUAL-LAYER WEBGL STENCIL...</span>
-          <span className="text-mint-leaf">{progress}%</span>
+        <div className="flex justify-between gap-2 text-white">
+          <span className="truncate">INITIALIZING DUAL-LAYER WEBGL STENCIL...</span>
+          <span className="text-mint-leaf shrink-0">{progress}%</span>
         </div>
         <div className="h-1 w-full bg-white/10 overflow-hidden">
           <div

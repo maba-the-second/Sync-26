@@ -4,7 +4,7 @@ import { Mask, useMask, Sparkles, Edges } from '@react-three/drei';
 import * as THREE from 'three';
 import { useAppStore } from '../../store/useAppStore';
 import { createPrismaticCrystalGeometry } from './rhombicBipyramid';
-import { clampedDelta, damp, LAMBDA } from './frameUtils';
+import { clampedDelta, damp, isCoarseDevice, isMobileViewport, LAMBDA } from './frameUtils';
 
 const TARGET_VEC = new THREE.Vector3();
 
@@ -22,11 +22,16 @@ export function PortalMask() {
   const prismaticGeo = useMemo(() => createPrismaticCrystalGeometry(0.56, 1.65, 0.85), []);
   const innerCoreGeo = useMemo(() => createPrismaticCrystalGeometry(0.32, 1.15, 0.58), []);
 
+  const sparkleCount = useMemo(() => (isMobileViewport() ? 36 : 60), []);
+
   useFrame((state, frameDelta) => {
     const delta = clampedDelta(frameDelta);
     const { isHolding: storeHolding, activePage, scrollProgress: scroll } = useAppStore.getState();
     const isHolding = activePage !== 'home' && storeHolding;
     const t = state.clock.elapsedTime;
+    const pointerWeight = isCoarseDevice() ? 0 : 1;
+    const px = state.pointer.x * pointerWeight;
+    const py = state.pointer.y * pointerWeight;
 
     // Closed (0) when idle (no cursor window); full breach expansion when clicking & holding mouse
     const targetScale = isHolding ? 3.8 : 0;
@@ -66,13 +71,13 @@ export function PortalMask() {
         innerGroupRef.current.position.y = Math.sin(t * 1.4) * 0.08;
         innerGroupRef.current.rotation.y = damp(
           innerGroupRef.current.rotation.y,
-          state.pointer.x * 0.4 - scroll * Math.PI * 0.75 + outerSpinAngleRef.current,
+          px * 0.4 - scroll * Math.PI * 0.75 + outerSpinAngleRef.current,
           LAMBDA.snappy,
           delta
         );
         innerGroupRef.current.rotation.x = damp(
           innerGroupRef.current.rotation.x,
-          -state.pointer.y * 0.22 + scroll * 0.35,
+          -py * 0.22 + scroll * 0.35,
           LAMBDA.medium,
           delta
         );
@@ -133,7 +138,7 @@ export function PortalMask() {
       </group>
 
       <Sparkles
-        count={60}
+        count={sparkleCount}
         scale={5}
         size={2.0}
         speed={0.5}

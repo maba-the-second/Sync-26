@@ -20,3 +20,15 @@ export const LAMBDA = {
   snappy: 7.67,
   medium: 3.71,
 } as const;
+
+export function isCoarseDevice(): boolean {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
+  }
+  return window.matchMedia('(hover: none), (pointer: coarse)').matches;
+}
+
+export function isMobileViewport(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth < 768 || isCoarseDevice();
+}

@@ -61,7 +61,7 @@ export function KprFooter() {
   };
 
   return (
-    <footer className="fixed inset-0 z-0 bg-evergreen text-white flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-6 sm:pr-10 md:pr-14 pt-20 sm:pt-24 pb-16 sm:pb-20 select-none overflow-hidden">
+    <footer className="fixed inset-0 z-0 bg-evergreen text-white flex flex-col justify-between pl-16 pr-4 sm:pl-20 sm:pr-10 md:pl-24 md:pr-14 pt-16 sm:pt-24 pb-10 sm:pb-20 select-none overflow-y-auto md:overflow-hidden">
       {/* Subtle Radial Mint Glow & Grid Overlay in Footer Background */}
       <div
         className="pointer-events-none absolute inset-0 opacity-35"
@@ -80,25 +80,25 @@ export function KprFooter() {
       />
 
       {/* TOP TELEMETRY & DIRECTORY GRID */}
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-b border-white/15 py-8 font-mono text-xs uppercase tracking-widest">
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8 border-t border-b border-white/15 py-4 sm:py-8 font-mono text-xs uppercase tracking-widest">
         {/* Left Brand Brief */}
-        <div className="md:col-span-5 flex flex-col justify-between space-y-6 pr-6">
-          <p className="font-mono text-xs text-white/80 leading-relaxed tracking-normal normal-case max-w-sm text-[15px]">
+        <div className="md:col-span-5 flex flex-col justify-between space-y-3 sm:space-y-6 md:pr-6">
+          <p className="font-mono text-[12px] sm:text-[15px] text-white/80 leading-relaxed tracking-normal normal-case max-w-sm">
             Official competition and registration platform of the Dharmaraja College Information &amp; Communication Technology Society.
           </p>
-          <div ref={depthTextRef} className="text-[11px] text-white/40 tracking-[0.2em]">
+          <div ref={depthTextRef} className="text-[10px] sm:text-[11px] text-white/40 tracking-[0.16em] sm:tracking-[0.2em]">
             DEPTH LOCK // 0.0% — SECURE CONNECTION
           </div>
         </div>
 
         {/* Center/Right Directory Columns */}
-        <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6">
-          {FOOTER_LINKS.map((col) => (
-            <div key={col.heading} className="space-y-3">
-              <div className="text-[13px] text-mint-leaf tracking-[0.22em]">
+        <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+          {FOOTER_LINKS.map((col, colIdx) => (
+            <div key={col.heading} className={`space-y-2 sm:space-y-3 min-w-0 ${colIdx === 2 ? 'col-span-2 sm:col-span-1' : ''}`}>
+              <div className="text-[11px] sm:text-[13px] text-mint-leaf tracking-[0.18em] sm:tracking-[0.22em]">
                 {col.heading}
               </div>
-              <ul className="space-y-2">
+              <ul className="space-y-1 sm:space-y-2">
                 {col.items.map((item) => (
                   <li key={item.label}>
                     {item.href ? (
@@ -106,7 +106,7 @@ export function KprFooter() {
                         href={item.href}
                         target={item.href.startsWith('http') ? '_blank' : undefined}
                         rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="pointer-events-auto inline-flex items-center gap-1.5 text-[12px] text-white/70 hover:text-mint-leaf transition-colors"
+                        className="pointer-events-auto inline-flex items-center gap-1.5 min-h-[32px] sm:min-h-0 text-[11px] sm:text-[12px] text-white/70 hover:text-mint-leaf transition-colors break-all sm:break-normal"
                       >
                         <span>{item.label}</span>
                       </a>
@@ -117,7 +117,7 @@ export function KprFooter() {
                           e.preventDefault();
                           handleLinkClick(item.target);
                         }}
-                        className="pointer-events-auto inline-flex items-center gap-1.5 text-[12px] text-white/70 hover:text-mint-leaf transition-colors"
+                        className="pointer-events-auto inline-flex items-center gap-1.5 min-h-[32px] sm:min-h-0 text-[11px] sm:text-[12px] text-white/70 hover:text-mint-leaf transition-colors"
                       >
                         <span>{item.label}</span>
                       </a>
@@ -131,20 +131,20 @@ export function KprFooter() {
       </div>
 
       {/* MASSIVE KPR-STYLE FULL-BLEED BANNER AT THE BOTTOM */}
-      <div className="relative z-10 flex flex-col justify-end my-auto pt-6">
-        <div className="flex items-end justify-between mb-2 font-mono text-[13px] tracking-[0.25em] text-white/50 uppercase">
+      <div className="relative z-10 flex flex-col justify-end my-auto pt-4 sm:pt-6">
+        <div className="flex items-end justify-between mb-1.5 sm:mb-2 font-mono text-[10px] sm:text-[13px] tracking-[0.2em] sm:tracking-[0.25em] text-white/50 uppercase">
           <span>DHARMARAJA COLLEGE ICT SOCIETY</span>
         </div>
 
         {/* Giant Monumental SYNC'26 Banner */}
-        <div className="w-full overflow-hidden border-t border-white/15 pt-4">
-          <div className="font-ethnocentric text-[clamp(3.2rem,13.2vw,14rem)] leading-[0.82] tracking-tighter uppercase text-white select-none drop-shadow-[0_0_50px_rgba(65,210,162,0.3)]">
+        <div className="w-full overflow-hidden border-t border-white/15 pt-3 sm:pt-4">
+          <div className="font-ethnocentric text-[clamp(2.3rem,12vw,14rem)] leading-[0.82] tracking-tighter uppercase text-white select-none drop-shadow-[0_0_50px_rgba(65,210,162,0.3)]">
             SYNC'26<span className="text-mint-leaf">.</span>
           </div>
         </div>
 
         {/* Bottom Sub-bar */}
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-4 font-mono text-[12px] tracking-[0.2em] text-white/45 uppercase">
+        <div className="mt-3 sm:mt-4 flex flex-wrap items-center justify-between gap-2 sm:gap-4 font-mono text-[10px] sm:text-[12px] tracking-[0.14em] sm:tracking-[0.2em] text-white/45 uppercase">
           <span>© 2026 DHARMARAJA COLLEGE ICT SOCIETY. ALL RIGHTS RESERVED.</span>
           <span className="text-mint-leaf/80">THINK BEYOND. DESIGN BEYOND. COMPETE BEYOND.</span>
         </div>

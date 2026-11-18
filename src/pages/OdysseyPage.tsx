@@ -169,7 +169,7 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section
         id="project"
-        className="odyssey-hero relative min-h-[100vh] min-h-[100svh] w-full pointer-events-none"
+        className="odyssey-hero relative min-h-screen min-h-[100svh] w-full pointer-events-none"
       />
 
       {/* =====================================================================
@@ -177,16 +177,16 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section
         id="the-keep"
-        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center pointer-events-none"
+        className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 pt-14 sm:pt-24 flex justify-center pointer-events-none"
       >
         <div
           className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
             }`}
         >
           {/* Section Header */}
-          <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+          <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
-              <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
                 ARE YOU THE ODYSSEUS<span className="text-mint-leaf">.</span>
               </h2>
             </div>
@@ -195,8 +195,8 @@ export function OdysseyPage() {
           {/* Main Description Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12">
             {/* Left Narrative Column */}
-            <div className="lg:col-span-6 p-6 sm:p-10 border-b lg:border-b-0 lg:border-r border-white/20 flex flex-col justify-center">
-              <div className="space-y-5 font-mono text-xs sm:text-sm leading-relaxed text-white/85">
+            <div className="lg:col-span-6 p-4 sm:p-10 border-b lg:border-b-0 lg:border-r border-white/20 flex flex-col justify-center">
+              <div className="space-y-4 sm:space-y-5 font-mono text-xs sm:text-sm leading-relaxed text-white/85">
                 <p className="text-white font-medium text-sm sm:text-base">
                   Odyssey is the flagship inter-school IT quiz competition at SYNC26, built on over 20 years of heritage and reintroduced with a refreshed identity in 2023. It aims to challenge young technology enthusiasts beyond the boundaries of conventional classroom learning, providing a competitive platform to test their knowledge and skills.
                 </p>
@@ -210,7 +210,7 @@ export function OdysseyPage() {
             </div>
 
             {/* Right Phase Roadmap Column */}
-            <div className="lg:col-span-6 p-6 sm:p-10 flex flex-col justify-center bg-evergreen/15">
+            <div className="lg:col-span-6 p-4 sm:p-10 flex flex-col justify-center bg-evergreen/15">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {ABOUT_PILLARS.map((pillar) => {
                   const isFeatured = Boolean(pillar.featured);
@@ -275,23 +275,23 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section
         id="factions"
-        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center pointer-events-none"
+        className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 pt-14 sm:pt-24 flex justify-center pointer-events-none"
       >
         <div
           className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
             }`}
         >
           {/* Section Header */}
-          <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+          <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
-              <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
                 LEGACY IN MOTION<span className="text-mint-leaf">.</span>
               </h2>
             </div>
           </div>
 
           {/* Interactive Showreel Stage */}
-          <div className="relative w-full h-[400px] sm:h-[520px] md:h-[580px] bg-gradient-to-b from-evergreen/20 via-black/40 to-black/70 overflow-hidden">
+          <div className="relative w-full h-[320px] sm:h-[480px] md:h-[580px] bg-gradient-to-b from-evergreen/20 via-black/40 to-black/70 overflow-hidden">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(65,210,162,0.12)_0%,transparent_65%)]" />
 
             <FlexCarousel
@@ -310,8 +310,14 @@ export function OdysseyPage() {
           </div>
 
           {/* Footer Interaction Hint */}
+<<<<<<< HEAD
           <div className="px-6 sm:px-10 py-4 border-t border-white/15 flex items-center font-mono text-[9px] sm:text-[10px] tracking-[0.22em] text-white/50 uppercase">
             <span>DRAG TO SCRUB // CLICK TO FOCUS</span>
+=======
+          <div className="px-4 sm:px-10 py-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-2 sm:gap-4 font-mono text-[9px] sm:text-[10px] tracking-[0.16em] sm:tracking-[0.22em] text-white/50 uppercase">
+            <span>DRAG / SWIPE TO SCRUB // TAP TO FOCUS</span>
+            <span className="text-mint-leaf/80">SYNC&apos;26 ARCHIVES</span>
+>>>>>>> 51737609acd7b58c05d859c2ed4e590eb6270add
           </div>
         </div>
       </section>
@@ -321,23 +327,23 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section
         id="the-world"
-        className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 pt-16 sm:pt-24 flex justify-center pointer-events-none"
+        className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 pt-14 sm:pt-24 flex justify-center pointer-events-none"
       >
         <div
           className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
             }`}
         >
           {/* Section Header */}
-          <div className="px-6 sm:px-10 py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+          <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative">
-              <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-none font-black uppercase tracking-tight">
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
                 RULES AND REGULATIONS — EXTENDED<span className="text-mint-leaf">.</span>
               </h2>
             </div>
           </div>
 
           {/* Introductory Note */}
-          <div className="px-6 sm:px-10 py-6 border-b border-white/20 bg-evergreen/20 flex flex-wrap items-center justify-between gap-4">
+          <div className="px-4 sm:px-10 py-5 sm:py-6 border-b border-white/20 bg-evergreen/20 flex flex-wrap items-center justify-between gap-4">
             <p className="font-mono text-xs sm:text-sm text-white/85 max-w-3xl leading-relaxed">
               [PLACEHOLDER] All participating squads must adhere strictly to the extended Odyssey operational directives below. Violation of any protocol clause may result in penalty or disqualification.
             </p>
@@ -348,7 +354,7 @@ export function OdysseyPage() {
             {EXTENDED_RULES.map((block, idx) => (
               <div
                 key={block.code}
-                className={`p-6 sm:p-10 flex flex-col justify-between gap-6 ${idx >= 2 ? 'border-t border-white/20' : ''
+                className={`p-5 sm:p-10 flex flex-col justify-between gap-6 ${idx >= 2 ? 'md:border-t md:border-white/20' : ''
                   }`}
               >
                 <div className="space-y-4">
@@ -358,7 +364,7 @@ export function OdysseyPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-ethnocentric text-base sm:text-lg text-white uppercase leading-snug">
+                  <h3 className="font-ethnocentric text-sm sm:text-lg text-white uppercase leading-snug break-words">
                     {block.category}
                   </h3>
 
@@ -387,9 +393,9 @@ export function OdysseyPage() {
       {/* =====================================================================
           5. REDIRECT BUTTON TO REGISTRATION PAGE WITH INSPIRING TEXT
       ===================================================================== */}
-      <section className="relative z-20 w-full pl-14 sm:pl-16 md:pl-20 pr-4 sm:pr-8 py-16 sm:py-28 flex justify-center pointer-events-none">
+      <section className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 py-14 sm:py-28 flex justify-center pointer-events-none">
         <div
-          className={`odyssey-reveal relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-8 sm:p-14 md:p-20 overflow-hidden ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
+          className={`odyssey-reveal relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-5 sm:p-14 md:p-20 overflow-hidden ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
             }`}
         >
           {/* Corner Brackets */}
@@ -401,9 +407,9 @@ export function OdysseyPage() {
           {/* Subtle Radial Glow */}
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(65,210,162,0.16)_0%,transparent_65%)]" />
 
-          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 sm:gap-10">
             <div className="space-y-4 max-w-2xl">
-              <h2 className="font-ethnocentric text-2xl sm:text-4xl md:text-5xl leading-tight font-black uppercase text-white">
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight font-black uppercase text-white break-words">
                 FORGE YOUR LEGACY BEYOND THE HORIZON<span className="text-mint-leaf">.</span>
               </h2>
               <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
@@ -415,7 +421,7 @@ export function OdysseyPage() {
               <button
                 type="button"
                 onClick={handleGoToRegistration}
-                className="group relative bg-mint-leaf hover:bg-white text-black font-ethnocentric text-xs sm:text-sm tracking-[0.18em] uppercase px-8 sm:px-10 py-5 transition-all duration-300 cursor-pointer shadow-[0_0_35px_rgba(65,210,162,0.35)] hover:shadow-[0_0_45px_rgba(255,255,255,0.5)] flex items-center justify-center gap-3"
+                className="group relative min-h-[48px] w-full sm:w-auto bg-mint-leaf hover:bg-white text-black font-ethnocentric text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.18em] uppercase px-6 sm:px-10 py-4 sm:py-5 transition-all duration-300 cursor-pointer shadow-[0_0_35px_rgba(65,210,162,0.35)] hover:shadow-[0_0_45px_rgba(255,255,255,0.5)] flex items-center justify-center gap-3"
                 style={{
                   clipPath:
                     'polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)',
