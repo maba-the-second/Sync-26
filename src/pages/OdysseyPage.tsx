@@ -23,19 +23,19 @@ const ABOUT_PILLARS: AboutPillar[] = [
     code: 'PHASE // 01',
     title: 'ALGORITHMIC & LOGIC TRIALS',
     description:
-      '[PLACEHOLDER] Navigate high-pressure problem-solving checkpoints designed to test analytical speed, computational thinking, and precision.',
+      'Navigate high-pressure problem-solving checkpoints designed to test analytical speed, computational thinking, and precision.',
   },
   {
     code: 'PHASE // 02',
     title: 'STRATEGIC ADAPTABILITY',
     description:
-      '[PLACEHOLDER] Each stage introduces evolving constraints and real-world engineering scenarios where squads must pivot and innovate.',
+      'Each stage introduces evolving constraints and real-world engineering scenarios where squads must pivot and innovate.',
   },
   {
     code: 'PHASE // 03',
     title: 'THE FINAL BEACON',
     description:
-      '[PLACEHOLDER] Top-performing teams converge in the ultimate showdown to claim the Odyssey title at SYNC\u201926.',
+      'Top-performing teams converge in the ultimate showdown to claim the Odyssey title at SYNC\u201926.',
     featured: true,
     badge: 'GRAND FINALE',
   },
@@ -85,36 +85,36 @@ const EXTENDED_RULES = [
     code: '01',
     category: 'ELIGIBILITY & TEAM COMPOSITION',
     items: [
-      '[PLACEHOLDER] Open to students from Grades 6–13 representing recognized schools and institutions.',
-      '[PLACEHOLDER] Each squad must consist of [X–Y] registered members from the same institution.',
-      '[PLACEHOLDER] Participants may only register under a single squad for the duration of Odyssey.',
+      'Open to students from Grades 6–13 representing recognized schools and institutions.',
+      'Each squad must consist of [X–Y] registered members from the same institution.',
+      'Participants may only register under a single squad for the duration of Odyssey.',
     ],
   },
   {
     code: '02',
     category: 'COMPETITION FORMAT & STAGES',
     items: [
-      '[PLACEHOLDER] Odyssey consists of multiple sequential rounds: Preliminary Qualifier, Sector Gauntlet, and the Final Beacon.',
-      '[PLACEHOLDER] Checkpoints are time-bound; late submissions or incomplete telemetry packets will not be scored.',
-      '[PLACEHOLDER] Detailed briefs and environment credentials will be unlocked prior to each stage.',
+      'Odyssey consists of multiple sequential rounds: Preliminary Qualifier, Sector Gauntlet, and the Final Beacon.',
+      'Checkpoints are time-bound; late submissions or incomplete telemetry packets will not be scored.',
+      'Detailed briefs and environment credentials will be unlocked prior to each stage.',
     ],
   },
   {
     code: '03',
     category: 'TOOLS, RESOURCES & FAIR PLAY',
     items: [
-      '[PLACEHOLDER] All solutions and code artifacts must be produced originally by the squad during the designated window.',
-      '[PLACEHOLDER] Unauthorized external assistance, plagiarism, or sharing of checkpoint keys across teams leads to immediate disqualification.',
-      '[PLACEHOLDER] Permitted languages, frameworks, and reference materials will be specified in each round brief.',
+      'All solutions and code artifacts must be produced originally by the squad during the designated window.',
+      'Unauthorized external assistance, plagiarism, or sharing of checkpoint keys across teams leads to immediate disqualification.',
+      'Permitted languages, frameworks, and reference materials will be specified in each round brief.',
     ],
   },
   {
     code: '04',
     category: 'EVALUATION & ARBITRATION',
     items: [
-      '[PLACEHOLDER] Submissions are evaluated on accuracy, execution efficiency, architectural clarity, and time of completion.',
-      '[PLACEHOLDER] In the event of a tie, checkpoint timestamps and bonus challenge telemetry will determine ranking.',
-      '[PLACEHOLDER] The decisions of the Dharmaraja ICT Society judging panel are final and binding.',
+      'Submissions are evaluated on accuracy, execution efficiency, architectural clarity, and time of completion.',
+      'In the event of a tie, checkpoint timestamps and bonus challenge telemetry will determine ranking.',
+      'The decisions of the Dharmaraja ICT Society judging panel are final and binding.',
     ],
   },
 ];
@@ -340,7 +340,7 @@ export function OdysseyPage() {
           {/* Introductory Note */}
           <div className="px-4 sm:px-10 py-5 sm:py-6 border-b border-white/20 bg-evergreen/20 flex flex-wrap items-center justify-between gap-4">
             <p className="font-mono text-xs sm:text-sm text-white/85 max-w-3xl leading-relaxed">
-              [PLACEHOLDER] All participating squads must adhere strictly to the extended Odyssey operational directives below. Violation of any protocol clause may result in penalty or disqualification.
+              All participating squads must adhere strictly to the extended Odyssey operational directives below. Violation of any protocol clause may result in penalty or disqualification.
             </p>
           </div>
 
