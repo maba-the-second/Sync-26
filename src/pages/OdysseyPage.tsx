@@ -80,42 +80,51 @@ const SHOWREEL_ITEMS: FlexCarouselItem[] = [
   },
 ];
 
-const EXTENDED_RULES = [
+interface RuleItem {
+  label?: string;
+  text: string;
+}
+
+interface RuleCard {
+  code: string;
+  category: string;
+  colSpanClass: string;
+  description?: string;
+  items?: RuleItem[];
+}
+
+const RULES: RuleCard[] = [
   {
     code: '01',
-    category: 'ELIGIBILITY & TEAM COMPOSITION',
-    items: [
-      'Open to students from Grades 6–13 representing recognized schools and institutions.',
-      'Each squad must consist of [X–Y] registered members from the same institution.',
-      'Participants may only register under a single squad for the duration of Odyssey.',
-    ],
+    category: 'ELIGIBILITY',
+    colSpanClass: 'lg:col-span-3',
+    description: 'Inter-school teams only. Maximum of 4 participants per team.',
   },
   {
     code: '02',
-    category: 'COMPETITION FORMAT & STAGES',
+    category: 'STRUCTURE',
+    colSpanClass: 'lg:col-span-6',
     items: [
-      'Odyssey consists of multiple sequential rounds: Preliminary Qualifier, Sector Gauntlet, and the Final Beacon.',
-      'Checkpoints are time-bound; late submissions or incomplete telemetry packets will not be scored.',
-      'Detailed briefs and environment credentials will be unlocked prior to each stage.',
+      {
+        label: 'Round 1 (Online):',
+        text: 'General IT knowledge screening quiz (Timed multiple-choice format).',
+      },
+      {
+        label: 'Round 2 (Online):',
+        text: 'Advanced technical, computational, and history-of-computing online assessment.',
+      },
+      {
+        label: 'Final Round (Live):',
+        text: "Stage quiz hosted live during the ICT Day (sync'26) event.",
+      },
     ],
   },
   {
     code: '03',
-    category: 'TOOLS, RESOURCES & FAIR PLAY',
-    items: [
-      'All solutions and code artifacts must be produced originally by the squad during the designated window.',
-      'Unauthorized external assistance, plagiarism, or sharing of checkpoint keys across teams leads to immediate disqualification.',
-      'Permitted languages, frameworks, and reference materials will be specified in each round brief.',
-    ],
-  },
-  {
-    code: '04',
-    category: 'EVALUATION & ARBITRATION',
-    items: [
-      'Submissions are evaluated on accuracy, execution efficiency, architectural clarity, and time of completion.',
-      'In the event of a tie, checkpoint timestamps and bonus challenge telemetry will determine ranking.',
-      'The decisions of the Dharmaraja ICT Society judging panel are final and binding.',
-    ],
+    category: 'SCORING RUBRIC',
+    colSpanClass: 'lg:col-span-3',
+    description:
+      'Points awarded per correct response with penalty systems active during specific buzzer/rapid-fire stages in the finals.',
   },
 ];
 
@@ -318,7 +327,7 @@ export function OdysseyPage() {
       </section>
 
       {/* =====================================================================
-          4. DESCRIPTION: "RULES AND REGULATIONS - EXTENDED"
+          4. DESCRIPTION: "RULES AND REGULATIONS"
       ===================================================================== */}
       <section
         id="the-world"
@@ -329,58 +338,94 @@ export function OdysseyPage() {
             }`}
         >
           {/* Section Header */}
-          <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
-            <div className="relative">
+          <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex items-center justify-between gap-3 sm:gap-4">
+            <div className="relative min-w-0">
               <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
-                RULES AND REGULATIONS — EXTENDED<span className="text-mint-leaf">.</span>
+                RULES AND REGULATIONS<span className="text-mint-leaf">.</span>
               </h2>
             </div>
+
+            <a
+              href="./pdf/Sync Competition Rulebook.pdf"
+              download="Sync Competition Rulebook.pdf"
+              aria-label="Download Rulebook"
+              title="Download Rulebook"
+              className="group shrink-0 inline-flex items-center justify-center h-10 px-3 hover:px-4 focus:px-4 rounded-full border border-white/20 bg-black/60 bg-gradient-to-br from-white/[0.06] via-black/70 to-evergreen/25 backdrop-blur-md text-white/90 hover:text-white hover:border-mint-leaf/60 focus:border-mint-leaf/60 focus:outline-none shadow-[0_0_20px_rgba(0,0,0,0.45)] hover:shadow-[0_0_24px_rgba(65,210,162,0.22)] focus:shadow-[0_0_24px_rgba(65,210,162,0.22)] transition-all duration-300 ease-out overflow-hidden cursor-pointer font-mono"
+            >
+              <svg
+                className="w-4 h-4 shrink-0 text-mint-leaf transition-transform duration-300 ease-out group-hover:scale-110 group-focus:scale-110"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.2}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"
+                />
+              </svg>
+              <span className="max-w-0 opacity-0 ml-0 translate-x-1.5 group-hover:max-w-[180px] group-hover:opacity-100 group-hover:ml-2 group-hover:translate-x-0 group-focus:max-w-[180px] group-focus:opacity-100 group-focus:ml-2 group-focus:translate-x-0 overflow-hidden whitespace-nowrap text-[10px] tracking-[0.16em] uppercase transition-all duration-300 ease-out">
+                Download Rulebook
+              </span>
+            </a>
           </div>
 
           {/* Introductory Note */}
-          <div className="px-4 sm:px-10 py-5 sm:py-6 border-b border-white/20 bg-evergreen/20 flex flex-wrap items-center justify-between gap-4">
+          <div className="px-4 sm:px-10 py-5 sm:py-6 border-b border-white/15 bg-evergreen/15 flex flex-wrap items-center justify-between gap-4">
             <p className="font-mono text-xs sm:text-sm text-white/85 max-w-3xl leading-relaxed">
-              All participating squads must adhere strictly to the extended Odyssey operational directives below. Violation of any protocol clause may result in penalty or disqualification.
+              All participating squads must adhere strictly to the Odyssey operational directives below. Violation of any protocol clause may result in penalty or disqualification.
             </p>
           </div>
 
-          {/* Rules Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/20">
-            {EXTENDED_RULES.map((block, idx) => (
-              <div
-                key={block.code}
-                className={`p-5 sm:p-10 flex flex-col justify-between gap-6 ${idx >= 2 ? 'md:border-t md:border-white/20' : ''
-                  }`}
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-white/15 pb-3">
-                    <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase">
+          {/* Rules Cards Grid */}
+          <div className="p-4 sm:p-8 lg:p-10 bg-evergreen/10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+              {RULES.map((block) => (
+                <div
+                  key={block.code}
+                  className={`${block.colSpanClass} group relative p-6 sm:p-8 border border-white/15 bg-black/55 bg-gradient-to-br from-white/[0.04] via-black/60 to-evergreen/15 backdrop-blur-md hover:border-mint-leaf/50 hover:bg-white/[0.06] transition-all duration-300 flex flex-col gap-5`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex items-center px-2.5 py-1 border border-mint-leaf/40 bg-mint-leaf/10 font-ethnocentric text-xs sm:text-sm tracking-[0.18em] text-mint-leaf">
                       {block.code}
                     </span>
+                    <span className="h-px flex-1 bg-white/15 group-hover:bg-mint-leaf/30 transition-colors" />
+                    <span className="w-1.5 h-1.5 bg-mint-leaf/60 group-hover:bg-mint-leaf transition-colors" />
                   </div>
 
-                  <h3 className="font-ethnocentric text-sm sm:text-lg text-white uppercase leading-snug break-words">
+                  <h3 className="font-ethnocentric text-sm sm:text-base text-white uppercase tracking-wide leading-snug break-words">
                     {block.category}
                   </h3>
 
-                  <ul className="space-y-3 pt-2">
-                    {block.items.map((item, itemIdx) => (
-                      <li
-                        key={itemIdx}
-                        className="flex items-start gap-3 font-mono text-xs leading-relaxed text-white/75"
-                      >
-                        <span className="w-1.5 h-1.5 bg-mint-leaf shrink-0 mt-1.5" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  {block.description && (
+                    <p className="font-mono text-xs sm:text-[13px] leading-relaxed text-white/80">
+                      {block.description}
+                    </p>
+                  )}
 
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">
-                  <span>SYNC'26 ODYSSEY RULEBOOK</span>
+                  {block.items && (
+                    <ul className="space-y-3.5">
+                      {block.items.map((item, itemIdx) => (
+                        <li
+                          key={itemIdx}
+                          className="flex items-start gap-3 font-mono text-xs sm:text-[13px] leading-relaxed text-white/80"
+                        >
+                          <span className="w-1.5 h-1.5 bg-mint-leaf shrink-0 mt-2" />
+                          <span>
+                            {item.label && (
+                              <span className="text-white font-medium">{item.label} </span>
+                            )}
+                            {item.text}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
