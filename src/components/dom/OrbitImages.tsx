@@ -90,6 +90,7 @@ export interface OrbitImagesProps {
   intro?: boolean;
   speedMultiplier?: number;
   frontArcOnly?: boolean;
+  tilt3d?: number;
   centerContent?: ReactNode;
 }
 
@@ -118,6 +119,7 @@ interface EngineConfig {
   intro: boolean;
   speedMultiplier: number;
   frontArcOnly: boolean;
+  tilt3d: number;
   sources: string[];
 }
 
@@ -542,6 +544,8 @@ const createEngine = (
       const sx = (x - cx) * st.scale + st.width / 2 - halfW;
       const sy = (y - cy) * st.scale + st.height / 2 - halfH;
       const rot = cfg.alignToPath ? heading(u) : 0;
+      const nxSigned = clamp((x - cx) / st.rawXMax, -1, 1);
+      const tiltY = cfg.tilt3d > 0 ? nxSigned * cfg.tilt3d * (d >= 0 ? 1 : 0.7) : 0;
       let z = depth > 0 ? (d <= 0 ? 10 + Math.round((d + 1) * 80) : 110 + Math.round(d * 80)) : 1;
       if (i === st.hoverIndex) z += 200;
       it.el.style.pointerEvents = opacity < 0.08 ? 'none' : '';
@@ -550,7 +554,9 @@ const createEngine = (
         it,
         't',
         'transform',
-        `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0px)${rot ? ` rotate(${rot.toFixed(2)}deg)` : ''} scale(${scale.toFixed(4)})`
+        `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0px)${
+          tiltY ? ` perspective(720px) rotateY(${tiltY.toFixed(2)}deg)` : ''
+        }${rot ? ` rotate(${rot.toFixed(2)}deg)` : ''} scale(${scale.toFixed(4)})`
       );
       write(it, 'o', 'opacity', opacity > 0.999 ? '' : opacity.toFixed(3));
       write(it, 'z', 'zIndex', String(z));
@@ -955,6 +961,7 @@ export default function OrbitImages({
   intro = true,
   speedMultiplier = 1,
   frontArcOnly = false,
+  tilt3d = 0,
   centerContent,
 }: OrbitImagesProps) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -1043,6 +1050,7 @@ export default function OrbitImages({
     intro,
     speedMultiplier,
     frontArcOnly,
+    tilt3d,
     sources: items.map((item) => item.src || item.title || ''),
   };
 

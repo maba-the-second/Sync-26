@@ -1,12 +1,9 @@
-import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useAppStore } from '../../store/useAppStore';
 import { clampedDelta, damp, isCoarseDevice, LAMBDA } from './frameUtils';
 
 export function CameraRig() {
-  const lookYRef = useRef(0);
-
   useFrame((state, frameDelta) => {
     const delta = clampedDelta(frameDelta);
     const { scrollProgress: scroll, activePage } = useAppStore.getState();
@@ -15,9 +12,15 @@ export function CameraRig() {
       state.camera instanceof THREE.PerspectiveCamera ? state.camera.aspect : 1;
     const isPortraitReg = activePage === 'registrations' && aspect < 0.85;
 
-    // Pull back on portrait viewports; pull back more on Registrations so the crystal shrinks cleanly inside the orbit
+    // Pull back on portrait viewports; pull back on Registrations so the crystal and 3D particle rings fit inside the mobile orbit
     const portraitPullback =
-      aspect < 0.85 ? (0.85 - aspect) * (isPortraitReg ? 7.8 : 3.8) : 0;
+      aspect < 0.85 ? (0.85 - aspect) * (isPortraitReg ? 9.4 : 3.8) : 0;
+
+    // Keep fog distance relative to camera pullback so the mobile crystal & 3D orbit rings stay as vivid as desktop
+    if (state.scene.fog instanceof THREE.Fog) {
+      state.scene.fog.near = damp(state.scene.fog.near, 5 + portraitPullback, LAMBDA.smooth, delta);
+      state.scene.fog.far = damp(state.scene.fog.far, 14 + portraitPullback, LAMBDA.smooth, delta);
+    }
 
     // Move camera forward on Z axis based on scroll, plus subtle mouse parallax
     state.camera.position.z = damp(
@@ -38,9 +41,7 @@ export function CameraRig() {
       LAMBDA.smooth,
       delta
     );
-    // Slightly lift the shrunk crystal into the upper-middle of the mobile orbit
-    lookYRef.current = damp(lookYRef.current, isPortraitReg ? -0.32 : 0, LAMBDA.smooth, delta);
-    state.camera.lookAt(0, lookYRef.current, 0);
+    state.camera.lookAt(0, 0, 0);
   });
 
   return null;

@@ -981,7 +981,7 @@ export function RegistrationsPage() {
   }
 
   return (
-    <div className="relative w-full h-screen h-[100dvh] flex flex-col items-center justify-center pt-12 pb-12 pl-11 pr-0 sm:pl-12 sm:pr-0 md:pt-14 md:pl-16 md:pr-6 lg:pt-12 lg:pb-0 lg:pl-[calc(3.5rem+4rem)] lg:pr-16 overflow-hidden pointer-events-none">
+    <div className="relative w-full h-screen h-[100dvh] flex flex-col items-center justify-center pt-12 pb-0 pl-11 pr-0 sm:pl-12 sm:pr-0 md:pt-14 md:pl-16 md:pr-6 lg:pt-12 lg:pb-0 lg:pl-[calc(3.5rem+4rem)] lg:pr-16 overflow-hidden pointer-events-none">
       {/* Mobile HUD Sector Header & Lower Telemetry Strip (underneath z-50 modals) */}
       <div
         aria-hidden="true"
@@ -1060,9 +1060,9 @@ export function RegistrationsPage() {
         />
       </a> */}
 
-      {/* 8 Competition Cards Orbiting the 3D Crystal (Compact Front-Arc on Mobile/Tablet, Full Ellipse on Desktop) */}
+      {/* 8 Competition Cards Orbiting the 3D Crystal (Full 3D Tilted Ring on Mobile/Tablet & Desktop) */}
       {isCompactOrbit ? (
-        <div className="w-full max-w-[380px] sm:max-w-[420px] px-2.5 sm:px-3 pointer-events-auto flex flex-col items-center mt-6 sm:mt-4">
+        <div className="relative w-full max-w-[460px] md:max-w-[540px] px-1 sm:px-2 pointer-events-auto flex flex-col items-center">
           <OrbitImages
             key="crystal-orbit-cards-mobile"
             className="orbit-compact"
@@ -1072,28 +1072,28 @@ export function RegistrationsPage() {
               eligibility: c.shortEligibility,
             }))}
             shape="ellipse"
-            baseWidth={420}
-            radiusX={124}
-            radiusY={98}
-            rotation={-5}
+            baseWidth={480}
+            radiusX={164}
+            radiusY={56}
+            rotation={-8}
             duration={34}
             paused={!!detailComp || isRegOpen}
             speedMultiplier={isHolding ? 4.2 : 1}
-            itemSize={112}
-            itemWidth={136}
-            itemHeight={84}
+            itemSize={100}
+            itemWidth={128}
+            itemHeight={78}
             itemRadius={8}
-            depth={0.52}
+            depth={0.82}
+            tilt3d={24}
             hoverScale={1.03}
-            frontArcOnly
             showPath
-            pathColor="rgba(65, 210, 162, 0.35)"
+            pathColor="rgba(65, 210, 162, 0.38)"
             pathWidth={1.5}
             clickToFront
             onItemClick={(idx, _src, rect) => openDetailsModal(idx, rect)}
             onRegister={(idx, rect) => openDetailsModal(idx, rect)}
           />
-          <div className="mt-2 px-3 py-1 rounded-full border border-white/15 bg-black/60 backdrop-blur-sm font-mono text-[9px] tracking-[0.2em] text-white/60 uppercase">
+          <div className="absolute top-full mt-3 px-3 py-1 rounded-full border border-white/15 bg-black/60 backdrop-blur-sm font-mono text-[9px] tracking-[0.2em] text-white/60 uppercase whitespace-nowrap">
             SWIPE TO ORBIT <span className="text-mint-leaf">//</span> TAP CARD TO INSPECT
           </div>
         </div>
