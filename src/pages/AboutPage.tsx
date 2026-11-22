@@ -1,79 +1,195 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useAppStore } from '../store/useAppStore';
-import { ImageTilt } from '../components/dom/ImageTilt';
-import { PerspectiveCardGallery } from '../components/dom/PerspectiveCardGallery';
+import { useAppStore, type PageId } from '../store/useAppStore';
+import { ShuffleText } from '../components/dom/ShuffleText';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TERMINAL_LINES = [
-  'INITIALIZING',
-  "SYNC'26 MANIFESTO",
-  '',
-  'CORE_ARCHIVE...[UNLOCKED]',
-  '',
-  'COLLECTIVE_ORIGINS',
-  'ARCHITECT_ROSTER',
-  'FOUNDATION_PROTOCOL',
+const SECTION_ANCHORS = ['#project', '#the-keep', '#factions'];
+
+interface SocietyPillar {
+  code: string;
+  title: string;
+  description: string;
+}
+
+const SOCIETY_PILLARS: SocietyPillar[] = [
+  {
+    code: '01 // VISION',
+    title: 'STUDENT-DRIVEN EXCELLENCE',
+    description:
+      'Cultivating analytical rigor, software craft, and creative technology leadership among school-level innovators across Sri Lanka.',
+  },
+  {
+    code: '02 // INITIATIVE',
+    title: 'THE SYNC PLATFORM',
+    description:
+      'Orchestrated annually by the Dharmaraja College ICT Society in Kandy to bridge classroom fundamentals with real-world digital engineering.',
+  },
+  {
+    code: '03 // HERITAGE',
+    title: 'OVER A DECADE OF IMPACT',
+    description:
+      'Anchored by more than 20 years of Odyssey inter-school quiz tradition and an expanding multi-discipline competition ecosystem.',
+  },
 ];
 
-const SECTION_ANCHORS = ['#project', '#the-keep', '#factions'];
+interface StatTile {
+  value: string;
+  label: string;
+  detail: string;
+}
+
+const SYNC_STATS: StatTile[] = [
+  {
+    value: '08',
+    label: 'COMPETITION TRACKS',
+    detail: '7 Core ICT Disciplines + ASPECT Gaming',
+  },
+  {
+    value: '06–13',
+    label: 'ELIGIBLE GRADES',
+    detail: 'Intra-School & National Inter-School Divisions',
+  },
+  {
+    value: '20+ YRS',
+    label: 'ODYSSEY HERITAGE',
+    detail: 'Flagship Quiz Legacy Refreshed for SYNC26',
+  },
+  {
+    value: 'NOV 28',
+    label: 'PHYSICAL FINALE',
+    detail: 'Hosted Live at Dharmaraja College, Kandy',
+  },
+];
+
+interface DisciplineCard {
+  code: string;
+  tag: string;
+  title: string;
+  description: string;
+  targetPage?: PageId;
+}
+
+const DISCIPLINES: DisciplineCard[] = [
+  {
+    code: '01',
+    tag: 'QUIZ // FLAGSHIP',
+    title: 'ODYSSEY',
+    description:
+      'Three-stage inter-school IT quiz spanning Networking, Programming & Database, AI & ML, IoT, and General ICT.',
+    targetPage: 'odyssey',
+  },
+  {
+    code: '02',
+    tag: 'ENGINEERING',
+    title: 'ALGORITHM',
+    description:
+      '4-hour HackerRank competitive programming arena testing data structures, logic, and optimal problem solving.',
+  },
+  {
+    code: '03',
+    tag: 'ENGINEERING',
+    title: 'WEB DESIGNING',
+    description:
+      'Architecting responsive School Command Center web platforms blending interactive UI craft with clean front-end code.',
+  },
+  {
+    code: '04',
+    tag: 'INTERACTIVE',
+    title: 'GAME DESIGNING',
+    description:
+      'End-to-end playable game builds uniting mechanics, world-building, and Cybernetic Odyssey visual direction.',
+  },
+  {
+    code: '05',
+    tag: 'CREATIVE',
+    title: 'LOGO DESIGNING',
+    description:
+      'Crafting futuristic visual identities and geometric brand systems built for high-impact digital environments.',
+  },
+  {
+    code: '06',
+    tag: 'CREATIVE',
+    title: 'POSTER DESIGNING',
+    description:
+      'High-concept editorial and promotional artwork capturing the kinetic pulse of the SYNC26 arena.',
+  },
+  {
+    code: '07',
+    tag: 'MULTIMEDIA',
+    title: 'VIDEO EDITING',
+    description:
+      'Cinematic 60–120s motion storytelling and timeline breakdowns showcasing rhythm, grading, and VFX.',
+  },
+  {
+    code: '08',
+    tag: 'ESPORTS // ARENA',
+    title: 'ASPECT',
+    description:
+      'Official tactical esports championship featuring Call of Duty 3 brackets and head-to-head finals.',
+    targetPage: 'aspect',
+  },
+];
+
+interface TimelinePhase {
+  phase: string;
+  window: string;
+  title: string;
+  detail: string;
+}
+
+const EVENT_TIMELINE: TimelinePhase[] = [
+  {
+    phase: 'STAGE 01',
+    window: 'NOV 10 — NOV 16',
+    title: 'CREATIVE SUBMISSIONS & ALGORITHM',
+    detail:
+      'Logo, Poster, and Video Editing submissions open alongside the 4-hour HackerRank Algorithm challenge.',
+  },
+  {
+    phase: 'STAGE 02',
+    window: 'NOV 18 — NOV 24',
+    title: 'WEB, GAME, ODYSSEY & ASPECT',
+    detail:
+      'Web & Game builds deploy, Odyssey online qualifiers narrow to finalists, and ASPECT esports brackets unfold.',
+  },
+  {
+    phase: 'STAGE 03',
+    window: 'NOV 28 // KANDY',
+    title: 'SYNC26 PHYSICAL GRAND FINALE',
+    detail:
+      'Live stage Odyssey finale, finalist showcases, and awards ceremony hosted at Dharmaraja College, Kandy.',
+  },
+];
 
 export function AboutPage() {
   const setActiveSection = useAppStore((state) => state.setActiveSection);
+  const setActivePage = useAppStore((state) => state.setActivePage);
+
   const rootRef = useRef<HTMLDivElement>(null);
+  const ambientScrollRef = useRef<HTMLDivElement>(null);
+  const logoFloatRef = useRef<HTMLDivElement>(null);
+  const logoImgRef = useRef<HTMLImageElement>(null);
+  const glassFrameRef = useRef<HTMLDivElement>(null);
+  const lightSweepRef = useRef<HTMLDivElement>(null);
+  const haloRef = useRef<HTMLDivElement>(null);
+  const ringOuterRef = useRef<HTMLDivElement>(null);
+  const ringInnerRef = useRef<HTMLDivElement>(null);
 
-  const heroCardStageRef = useRef<HTMLDivElement>(null);
-  const heroCardBodyRef = useRef<HTMLDivElement>(null);
-  const heroCardTiltRef = useRef<HTMLDivElement>(null);
-  const heroCardGlareRef = useRef<HTMLDivElement>(null);
-  const tiltRafRef = useRef<number | null>(null);
+  const navigateTo = (page: PageId) => {
+    setActivePage(page);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
 
-  const handleCardMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (
+  useLayoutEffect(() => {
+    const prefersReducedMotion =
       typeof window !== 'undefined' &&
-      window.matchMedia?.('(hover: none), (pointer: coarse)').matches
-    ) {
-      return;
-    }
-    const target = e.currentTarget;
-    const clientX = e.clientX;
-    const clientY = e.clientY;
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-    if (tiltRafRef.current !== null) {
-      window.cancelAnimationFrame(tiltRafRef.current);
-    }
-
-    tiltRafRef.current = window.requestAnimationFrame(() => {
-      if (!heroCardTiltRef.current) return;
-      const rect = target.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (clientX - cx) / (rect.width / 2);
-      const dy = (clientY - cy) / (rect.height / 2);
-      const rotateX = (-dy * 16).toFixed(2);
-      const rotateY = (dx * 16).toFixed(2);
-      heroCardTiltRef.current.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
-      tiltRafRef.current = null;
-    });
-  }, []);
-
-  const handleCardMouseLeave = useCallback(() => {
-    if (tiltRafRef.current !== null) {
-      window.cancelAnimationFrame(tiltRafRef.current);
-      tiltRafRef.current = null;
-    }
-    if (heroCardTiltRef.current) {
-      heroCardTiltRef.current.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    }
-  }, []);
-
-  useEffect(() => {
-    const mm = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      const aboutSection = rootRef.current?.querySelector('.about-section');
-
+      // Sync top HUD section indicator with scroll position
       SECTION_ANCHORS.forEach((selector, idx) => {
         ScrollTrigger.create({
           trigger: selector,
@@ -84,643 +200,632 @@ export function AboutPage() {
         });
       });
 
-      mm.add(
-        {
-          isDesktop: '(min-width: 769px)',
-          isMobile: '(max-width: 768px)',
-        },
-        (mc) => {
-          const isDesktop = Boolean(mc.conditions?.isDesktop);
-          if (heroCardBodyRef.current) {
-            const heroToCardTl = gsap.timeline({
-              scrollTrigger: {
-                trigger: '.hero-section',
-                start: 'top top',
-                endTrigger: aboutSection || '.about-section',
-                end: 'top top',
-                scrub: 0.65,
-              },
-            });
+      if (prefersReducedMotion) {
+        gsap.set(logoImgRef.current, { opacity: 0.16, scale: 0.94, clearProps: 'filter' });
+        gsap.set(glassFrameRef.current, { opacity: 0 });
+        gsap.set(haloRef.current, { opacity: 0.35, scale: 1 });
+        gsap.set([ringOuterRef.current, ringInnerRef.current], { opacity: 0.1 });
+        gsap.set('.about-hero-reveal', { opacity: 1, y: 0 });
+      } else {
+        // 1. Multi-stage Opening Logo Choreography (3D tilt + liquid-glass light sweep + ambient settle)
+        const introTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-            heroToCardTl.fromTo(
-              heroCardBodyRef.current,
-              {
-                width: '100vw',
-                height: '100vh',
-                x: '0vw',
-                y: '0vh',
-                rotateY: 0,
-                rotateX: 0,
-                rotateZ: 0,
-                z: 0,
-                borderRadius: '0px',
-              },
-              {
-                width: isDesktop ? '27vw' : '74vw',
-                height: isDesktop ? '66vh' : '38vh',
-                x: isDesktop ? '32.5vw' : '22px',
-                y: isDesktop ? '4vh' : '16vh',
-                rotateY: 360,
-                keyframes: {
-                  rotateX: [0, 22, -14, 0],
-                  rotateZ: [0, -9, 6, 0],
-                  z: [0, -180, 60, 0],
-                },
-                borderRadius: '14px',
-                ease: 'power2.inOut',
-              },
-              0
-            );
-
-            if (heroCardGlareRef.current) {
-              heroToCardTl.fromTo(
-                heroCardGlareRef.current,
-                { xPercent: -120, opacity: 0 },
-                {
-                  keyframes: {
-                    xPercent: [-120, 0, 120],
-                    opacity: [0, 0.65, 0],
-                  },
-                  ease: 'none',
-                },
-                0
-              );
-            }
-
-            gsap.to(heroCardBodyRef.current, {
-              scale: 0,
-              rotateY: 540,
-              rotateX: -28,
-              rotateZ: 12,
-              opacity: 0,
-              ease: 'power2.inOut',
-              scrollTrigger: {
-                trigger: '.section3',
-                start: 'top 75%',
-                end: 'top 15%',
-                scrub: 0.6,
-              },
-            });
-          }
-
-          gsap.fromTo(
-            '.s3image',
+        introTl
+          .fromTo(
+            haloRef.current,
+            { scale: 0.55, opacity: 0 },
+            { scale: 1.08, opacity: 0.85, duration: 1.15, ease: 'power2.out' },
+            0
+          )
+          .fromTo(
+            ringOuterRef.current,
+            { scale: 0.65, opacity: 0, rotate: -28 },
+            { scale: 1, opacity: 0.38, rotate: 0, duration: 1.2 },
+            0.08
+          )
+          .fromTo(
+            ringInnerRef.current,
+            { scale: 0.72, opacity: 0, rotate: 24 },
+            { scale: 1, opacity: 0.32, rotate: 0, duration: 1.2 },
+            0.12
+          )
+          .fromTo(
+            glassFrameRef.current,
+            { opacity: 0, scale: 0.88, rotateX: 16 },
+            { opacity: 1, scale: 1, rotateX: 0, duration: 0.95, ease: 'power3.out' },
+            0.12
+          )
+          .fromTo(
+            logoImgRef.current,
             {
-              scale: 0,
-              y: isDesktop ? 0 : -80,
-              transformOrigin: 'center',
+              opacity: 0,
+              scale: 1.24,
+              rotateX: 22,
+              rotateY: -16,
+              y: 18,
+              filter: 'blur(12px) brightness(1.5)',
             },
             {
-              scale: isDesktop ? 1.08 : 1.02,
+              opacity: 1,
+              scale: 1,
+              rotateX: 0,
+              rotateY: 0,
               y: 0,
-              ease: 'power3.inOut',
-              scrollTrigger: {
-                trigger: '.section3',
-                start: 'top 45%',
-                end: 'top -20%',
-                scrub: true,
-              },
-            }
+              filter: 'blur(0px) brightness(1)',
+              duration: 1.1,
+              ease: 'power3.out',
+            },
+            0.15
+          )
+          .fromTo(
+            lightSweepRef.current,
+            { xPercent: -140, opacity: 0 },
+            {
+              keyframes: [
+                { xPercent: -40, opacity: 0.9, duration: 0.35, ease: 'power2.in' },
+                { xPercent: 140, opacity: 0, duration: 0.55, ease: 'power2.out' },
+              ],
+            },
+            0.78
+          )
+          // Settle from hero spotlight into subtle persistent ambient anchor
+          .to(
+            glassFrameRef.current,
+            { opacity: 0, scale: 1.07, duration: 0.85, ease: 'power2.inOut' },
+            1.55
+          )
+          .to(
+            [ringOuterRef.current, ringInnerRef.current],
+            { opacity: 0.1, scale: 1.05, duration: 0.95, ease: 'power2.inOut' },
+            1.55
+          )
+          .to(
+            haloRef.current,
+            { opacity: 0.38, scale: 0.98, duration: 1.0, ease: 'power2.inOut' },
+            1.55
+          )
+          .to(
+            logoImgRef.current,
+            {
+              opacity: 0.2,
+              scale: 0.92,
+              duration: 1.05,
+              ease: 'power2.inOut',
+            },
+            1.55
+          )
+          // Reveal hero framing typography around the settled emblem
+          .fromTo(
+            '.about-hero-reveal',
+            { y: 26, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.85,
+              stagger: 0.1,
+              ease: 'power3.out',
+            },
+            1.3
           );
-        },
-        rootRef
-      );
 
-      gsap.to('.hero-section-content', {
-        opacity: 0,
-        y: -50,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: '.hero-section',
-          start: 'top top',
-          end: 'bottom center',
-          scrub: true,
-        },
-      });
+        // Subtle continuous ambient hover drift on the background logo
+        gsap.to(logoFloatRef.current, {
+          y: -10,
+          duration: 4.4,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        });
 
-      gsap.from('.about-section .section-title', {
-        y: 50,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.about-section',
-          start: 'top 65%',
-        },
-      });
+        // Slow, ultra-lightweight orbital rotation on the background reticle rings
+        gsap.to(ringOuterRef.current, {
+          rotation: 360,
+          duration: 72,
+          repeat: -1,
+          ease: 'none',
+        });
+        gsap.to(ringInnerRef.current, {
+          rotation: -360,
+          duration: 54,
+          repeat: -1,
+          ease: 'none',
+        });
 
-      gsap.to('.s3image', {
-        scale: 0,
-        ease: 'power3.inOut',
-        scrollTrigger: {
-          trigger: '.section4',
-          start: 'top 35%',
-          end: 'center center',
-          scrub: true,
-        },
-      });
-
-      gsap.fromTo(
-        '.s4-center-portrait',
-        { scale: 0.35, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.section4',
-            start: 'top 55%',
-            end: 'center center',
-            scrub: 1,
-          },
-        }
-      );
-
-      const blockTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.section5',
-          start: 'top 75%',
-          end: 'center 35%',
-          scrub: 1,
-        },
-      });
-
-      blockTl
-        .fromTo(
-          '.bg-block1',
-          { scale: 0, transformOrigin: 'center' },
-          { scale: 1.05, duration: 1, ease: 'power3.inOut' }
-        )
-        .fromTo(
-          '.bg-block2',
-          { scale: 0, transformOrigin: 'center' },
-          { scale: 1.15, duration: 1, ease: 'power3.inOut' },
-          '-=0.5'
-        )
-        .fromTo(
-          '.bg-block3',
-          { scale: 0, transformOrigin: 'center' },
-          { scale: 1.25, duration: 1, ease: 'power3.inOut' },
-          '-=0.4'
+        // 2. Scroll-coupled attenuation so scrolled sections stay crisp and high-contrast
+        gsap.fromTo(
+          ambientScrollRef.current,
+          { opacity: 1, scale: 1, y: 0 },
+          {
+            opacity: 0.44,
+            scale: 1.05,
+            y: -18,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '.about-hero',
+              start: 'top top',
+              end: 'bottom 35%',
+              scrub: 0.75,
+            },
+          }
         );
 
-      gsap.from('.s7-scale-up', {
-        scale: 0.25,
-        opacity: 0,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.section7',
-          start: 'top 65%',
-          end: 'top 10%',
-          scrub: true,
-        },
-      });
+        // Hero content fade-up on scroll departure
+        gsap.to('.about-hero-content', {
+          opacity: 0,
+          y: -36,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.about-hero',
+            start: '12% top',
+            end: 'bottom 35%',
+            scrub: true,
+          },
+        });
+      }
 
-      gsap.from('.s7-fade-up', {
-        opacity: 0.2,
-        y: 100,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.section7',
-          start: 'top 65%',
-          end: 'top 10%',
-          scrub: true,
-        },
+      // Section panel scroll reveals
+      gsap.utils.toArray<HTMLElement>('.about-reveal').forEach((el) => {
+        gsap.from(el, {
+          y: 36,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 84%',
+          },
+        });
       });
     }, rootRef);
 
     ScrollTrigger.refresh();
-    return () => {
-      mm.revert();
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, [setActiveSection]);
 
   return (
-    <div ref={rootRef} className="w-full text-white">
+    <div ref={rootRef} className="relative w-full text-white pointer-events-none">
       {/* =====================================================================
-          3D MORPHING HERO-TO-CARD STAGE (ABOUT)
+          PERSISTENT AMBIENT LOGO & OPENING REVEAL STAGE
+          Clipped inside .content-visible in App.tsx so it stays fixed behind
+          all About sections and cleanly reveals the footer at page bottom.
       ===================================================================== */}
       <div
-        ref={heroCardStageRef}
-        className="fixed inset-0 w-full h-full z-25 pointer-events-none flex items-center justify-center"
-        style={{ perspective: '1600px' }}
+        aria-hidden="true"
+        className="fixed inset-0 z-10 pointer-events-none flex items-center justify-center overflow-hidden pl-11 sm:pl-12 md:pl-14"
       >
         <div
-          ref={heroCardBodyRef}
-          onMouseMove={handleCardMouseMove}
-          onMouseLeave={handleCardMouseLeave}
-          className="pointer-events-auto relative w-screen h-screen will-change-transform"
-          style={{
-            transformStyle: 'preserve-3d',
-          }}
+          ref={ambientScrollRef}
+          className="relative w-full h-full flex items-center justify-center will-change-transform"
+          style={{ perspective: '1400px' }}
         >
+          {/* Ambient Emerald Depth Glow */}
           <div
-            ref={heroCardTiltRef}
-            className="relative w-full h-full transition-transform duration-300 ease-out"
-            style={{
-              transformStyle: 'preserve-3d',
-              transform: 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-            }}
+            ref={haloRef}
+            className="absolute w-[82vw] max-w-[680px] aspect-square rounded-full bg-[radial-gradient(circle,rgba(65,210,162,0.26)_0%,rgba(13,111,81,0.12)_42%,transparent_72%)] blur-2xl will-change-transform"
+          />
+
+          {/* Subtle Orbital Reticle Rings */}
+          <div
+            ref={ringOuterRef}
+            className="absolute w-[76vw] max-w-[540px] aspect-square rounded-full border border-mint-leaf/25 border-dashed will-change-transform"
+          />
+          <div
+            ref={ringInnerRef}
+            className="absolute w-[60vw] max-w-[400px] aspect-square rounded-full border border-white/15 will-change-transform"
+          />
+
+          {/* Floating Logo + Opening Liquid-Glass Prism Lens */}
+          <div
+            ref={logoFloatRef}
+            className="relative flex items-center justify-center w-[74vw] sm:w-[58vw] md:w-[46vw] max-w-[620px] px-4 will-change-transform"
           >
+            {/* Opening Liquid-Glass Housing (fades out as logo settles to ambient depth) */}
             <div
-              className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-mint-leaf via-sea-green to-evergreen border border-mint-leaf/60 shadow-[0_25px_70px_rgba(4,56,38,0.85)]"
-              style={{
-                transform: 'translateZ(-10px)',
-              }}
-            />
-
-            <div
-              className="absolute inset-0 rounded-[inherit] bg-evergreen border border-mint-leaf/40"
-              style={{
-                transform: 'translateZ(-5px)',
-              }}
-            />
-
-            <div
-              className="absolute inset-0 rounded-[inherit] overflow-hidden bg-evergreen border-2 border-mint-leaf/70 flex flex-col items-center justify-center p-6"
-              style={{
-                backfaceVisibility: 'hidden',
-                transform: 'rotateY(180deg) translateZ(1px)',
-              }}
+              ref={glassFrameRef}
+              className="pointer-events-none absolute -inset-4 sm:-inset-8 rounded-2xl border border-mint-leaf/35 bg-gradient-to-br from-white/[0.08] via-evergreen/20 to-black/50 backdrop-blur-[4px] shadow-[0_0_60px_rgba(65,210,162,0.18)] overflow-hidden will-change-transform"
             >
-              <img
-                src="./images/about-image.png"
-                alt="Card Back Face"
-                className="w-full h-full object-cover opacity-90 mix-blend-luminosity"
-                draggable={false}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC'26 - ABOUT</span>
-                <span>3D ROTATION ACTIVE</span>
-              </div>
-            </div>
+              {/* Corner HUD Brackets */}
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-mint-leaf/80" />
+              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-mint-leaf/80" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-mint-leaf/80" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-mint-leaf/80" />
 
-            <div
-              className="relative w-full h-full rounded-[inherit] overflow-hidden border border-white/20 bg-black shadow-[0_20px_60px_rgba(0,0,0,0.95)]"
-              style={{
-                backfaceVisibility: 'hidden',
-                transform: 'translateZ(2px)',
-              }}
-            >
-              <img
-                src="./images/hero-bg.png"
-                alt="Hero 3D Morphing Card"
-                className="w-full h-full object-cover opacity-100"
-                draggable={false}
-              />
-
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/35" />
-
-              <div className="pointer-events-none absolute inset-3 border border-mint-leaf/25 rounded-[inherit]">
-                <div className="absolute -top-px -left-px w-3 h-3 border-t-2 border-l-2 border-mint-leaf" />
-                <div className="absolute -top-px -right-px w-3 h-3 border-t-2 border-r-2 border-mint-leaf" />
-                <div className="absolute -bottom-px -left-px w-3 h-3 border-b-2 border-l-2 border-mint-leaf" />
-                <div className="absolute -bottom-px -right-px w-3 h-3 border-b-2 border-r-2 border-mint-leaf" />
-              </div>
-
+              {/* Specular Light Sweep */}
               <div
-                ref={heroCardGlareRef}
-                className="pointer-events-none absolute inset-y-0 -left-1/4 w-1/2 bg-gradient-to-r from-transparent via-frozen-water/45 to-transparent skew-x-[-20deg]"
+                ref={lightSweepRef}
+                className="absolute inset-y-0 -left-1/3 w-2/3 bg-gradient-to-r from-transparent via-frozen-water/50 to-transparent skew-x-[-22deg] will-change-transform"
               />
             </div>
+
+            <img
+              ref={logoImgRef}
+              src="./images/Sync logo 2.png"
+              alt="SYNC26 Official Logo"
+              className="relative z-10 w-full h-auto object-contain select-none drop-shadow-[0_0_28px_rgba(65,210,162,0.28)] will-change-transform"
+              draggable={false}
+            />
           </div>
         </div>
       </div>
 
       {/* =====================================================================
-          SECTION 1: HERO SECTION (#project) — ABOUT
+          SECTION 1: HERO (#project) — CINEMATIC OPENING & TITLE SEQUENCE
       ===================================================================== */}
       <section
         id="project"
-        className="hero-section relative min-h-screen min-h-[100dvh] w-full flex flex-col justify-between pl-16 sm:pl-20 md:pl-24 pr-4 sm:pr-10 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 z-30 pointer-events-none"
+        className="about-hero relative z-20 min-h-screen min-h-[100dvh] w-full flex flex-col justify-between pl-16 pr-4 sm:pl-20 sm:pr-10 md:pl-24 md:pr-14 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 pointer-events-none"
       >
-        <div className="hero-section-content flex flex-col justify-between flex-1">
-          <div className="max-w-[300px] sm:max-w-[340px]">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf block mb-2">
-              ABOUT
-            </span>
-            <p className="font-ethnocentric text-[11px] sm:text-[13px] md:text-sm leading-[1.45] text-white/90 font-normal tracking-normal">
-              Discover the collective behind SYNC'26. We unite builders, designers, and storytellers to engineer the next generation of interactive experiences.
-            </p>
+        <div className="about-hero-content flex flex-col justify-between flex-1">
+          {/* Top Manifesto Eyebrow */}
+          <div className="about-hero-reveal flex flex-wrap items-start justify-between gap-4">
+            <div className="max-w-sm">
+              <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.24em] text-mint-leaf uppercase block mb-2">
+                DHARMARAJA COLLEGE ICT SOCIETY // KANDY
+              </span>
+              <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
+                Uniting young technologists, designers, and problem-solvers across Sri Lanka for the 2026 inter-school ICT arena.
+              </p>
+            </div>
+
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 border border-white/15 bg-black/50 backdrop-blur-md font-mono text-[10px] tracking-[0.2em] text-white/75 uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-mint-leaf animate-pulse" />
+              <span>IN SYNC WITH THE FUTURE</span>
+            </div>
           </div>
 
-          <div className="w-full flex flex-col gap-1 sm:gap-0 my-auto pt-8 sm:pt-14">
-            <div className="ml-[4%] sm:ml-[24%] md:ml-[29%] flex flex-col items-start">
-              <div className="font-ethnocentric text-[clamp(1.35rem,7.2vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
-                ORIGIN<span className="text-mint-leaf">.</span>
-              </div>
-            </div>
-
-            <div className="ml-[6%] sm:ml-[30%] md:ml-[37%] flex flex-col items-start mt-1 sm:mt-2">
-              <div className="font-ethnocentric text-[clamp(1.15rem,6.3vw,6.8rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
-                COLLECTIVE<span className="text-mint-leaf">.</span>
-              </div>
-            </div>
-
-            <div className="ml-0 sm:ml-[2%] flex flex-col items-start mt-1 sm:mt-2">
-              <h1 className="font-ethnocentric text-[clamp(1.4rem,7.8vw,7.4rem)] leading-[0.88] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.28)]">
-                ABOUT<span className="text-mint-leaf">.</span>
+          {/* Bottom Monumental Title Block */}
+          <div className="about-hero-reveal flex flex-col md:flex-row md:items-end justify-between gap-6 pt-12">
+            <div>
+              <span className="font-mono text-[10px] tracking-[0.26em] text-mint-leaf uppercase block mb-2">
+                00 // IDENTITY &amp; ORIGIN
+              </span>
+              <h1 className="font-ethnocentric text-[clamp(2rem,7.2vw,6rem)] leading-[0.9] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.25)]">
+                ABOUT SYNC26<span className="text-mint-leaf">.</span>
               </h1>
+            </div>
+
+            <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.22em] text-white/60 uppercase">
+              <span>SCROLL TO EXPLORE</span>
+              <span className="text-mint-leaf text-sm animate-bounce">↓</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          SECTION 2: ABOUT SECTION (#about)
+          SECTION 2: ICT SOCIETY (#about) — DHARMARAJA COLLEGE ICT SOCIETY
       ===================================================================== */}
       <section
         id="about"
-        className="about-section min-h-screen min-h-[100dvh] w-full relative z-20 flex justify-center font-ethnocentric"
+        className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 md:pl-24 md:pr-12 pt-14 sm:pt-24 flex justify-center pointer-events-none"
       >
-        <div className="h-full w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] flex items-start z-20 relative max-md:flex-col border-t border-white/20 bg-black/55 backdrop-blur-[2px]">
-          <div className="relative flex flex-col max-md:w-full w-[62%] min-h-0 md:min-h-[86vh] justify-between">
-            <div className="px-4 py-6 sm:px-6 sm:py-8 text-white border-b border-white/20">
-              <div className="relative">
-                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black tracking-tight pl-0 sm:pl-12 md:pl-20 uppercase break-words">
-                  THE ARCHITECTS OF...
-                </h3>
-                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black tracking-tight mt-1 uppercase break-words">
-                  THE SYNC'26 PROTOCOL<span className="text-mint-leaf">.</span>
-                </h3>
-              </div>
+        <div className="about-reveal pointer-events-auto w-full max-w-[1400px] border border-white/20 bg-black/65 backdrop-blur-md">
+          {/* Header */}
+          <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+            <div className="relative min-w-0">
+              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
+                01 // THE ORGANIZERS
+              </span>
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
+                ICT SOCIETY<span className="text-mint-leaf">.</span>
+              </h2>
             </div>
 
-            <div className="p-4 sm:p-6 md:p-8 flex flex-col justify-between gap-6 flex-1">
-              <div className="w-full max-w-[220px] sm:w-56 md:w-64">
-                <ImageTilt
-                  src="./images/trailer-side-media.webp"
-                  alt="Trailer Side Media"
-                  className="border border-mint-leaf/30"
-                  tiltOptions={{ max: 20, scale: 1.03, perspective: 1200, speed: 400 }}
-                />
-                <div className="mt-2 flex items-center gap-2 font-mono text-[9px] text-mint-leaf uppercase tracking-widest">
-                  <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                  <span>MANIFESTO  ARCHIVE 06</span>
-                </div>
-              </div>
-
-              <h6 className="block max-w-xs font-mono text-[12px] leading-[18px] text-white/80 section-title">
-                Built on the pillars of evolution, inclusion, and imagination—empowering the next wave of creators.
-              </h6>
-            </div>
+            <span className="font-mono text-[10px] tracking-[0.22em] text-white/50 uppercase">
+              DHARMARAJA COLLEGE // KANDY
+            </span>
           </div>
 
-          <div className="w-[38%] min-h-[42vh] md:min-h-[86vh] border-l border-white/20 p-4 sm:p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
-            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span>DOCKING BAY - 06</span>
-              <span className="text-mint-leaf">3D OBJECT LOCK</span>
+          {/* 2-Column Editorial + Pillars */}
+          <div className="grid grid-cols-1 lg:grid-cols-12">
+            {/* Left Narrative Column */}
+            <div className="lg:col-span-7 p-5 sm:p-10 border-b lg:border-b-0 lg:border-r border-white/20 flex flex-col justify-center">
+              <div className="space-y-5 font-mono text-xs sm:text-sm leading-relaxed text-white/85">
+                <p className="text-white font-medium text-sm sm:text-base">
+                  The Information and Communication Technology Society of Dharmaraja College, Kandy stands at the forefront of student-led digital innovation, engineering craft, and competitive computing.
+                </p>
+                <p>
+                  Built across more than a decade of society initiatives and backed by over 20 years of inter-school ICT quiz heritage, the society brings together young programmers, designers, and strategists to build platforms that challenge students beyond conventional classroom boundaries.
+                </p>
+                <p>
+                  As the organizing force behind SYNC26, the Dharmaraja College ICT Society curates every technical brief, online qualifier, judging rubric, and live stage finale—creating an inclusive yet fiercely competitive arena for Grades 6–13 across the island.
+                </p>
+              </div>
             </div>
-            <div className="w-full flex-1 flex items-center justify-center my-2 sm:my-4 border border-dashed border-white/10 rounded-2xl" />
-            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span className="hidden md:inline">HOVER CARD TO TILT</span>
-              <span className="md:hidden">SCROLL TO EXPLORE</span>
-              <span>SYNC'26 ARCHIVE</span>
+
+            {/* Right Pillars Stack */}
+            <div className="lg:col-span-5 p-5 sm:p-10 bg-evergreen/15 flex flex-col justify-center gap-4">
+              {SOCIETY_PILLARS.map((pillar) => (
+                <div
+                  key={pillar.code}
+                  className="group p-4 sm:p-5 border border-white/15 bg-black/50 bg-gradient-to-br from-white/[0.04] via-black/60 to-evergreen/15 hover:border-mint-leaf/50 transition-all duration-300"
+                >
+                  <span className="font-mono text-[9px] tracking-[0.22em] text-mint-leaf uppercase block mb-1.5">
+                    {pillar.code}
+                  </span>
+                  <h3 className="font-ethnocentric text-xs sm:text-sm text-white uppercase mb-2 leading-snug">
+                    {pillar.title}
+                  </h3>
+                  <p className="font-mono text-[11px] sm:text-xs leading-relaxed text-white/75">
+                    {pillar.description}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          SECTION 3: 4-ROW ARCHITECTURAL GRID (#the-keep)
+          SECTION 3: ABOUT SYNC26 (#the-keep) — SPIRIT & FLAGSHIP DIMENSION
       ===================================================================== */}
       <section
         id="the-keep"
-        className="section3 min-h-screen w-full relative z-20 flex flex-col justify-center font-ethnocentric"
+        className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 md:pl-24 md:pr-12 pt-14 sm:pt-24 flex justify-center pointer-events-none"
       >
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10">
-          <img
-            src="./images/section3-image.png"
-            alt="Section 3 Backdrop"
-            className="s3image absolute object-cover w-[78vw] md:w-[92vw] max-w-[1250px] h-[54vh] md:h-[82vh] max-h-[900px] ml-10 md:ml-0 scale-0 rounded-xl opacity-45 border border-mint-leaf/30"
-          />
-        </div>
-
-        <div className="h-full mt-16 md:mt-[180px] w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] z-30 relative mx-auto">
-          <div className="relative min-h-0 md:min-h-[52vh] flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-4 sm:px-6 py-6 sm:py-8 w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0 max-md:border-b">
-              <div className="relative">
-                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black pl-0 sm:pl-12 md:pl-20 uppercase break-words">
-                  A LIVING NARRATIVE FORGED BY
-                </h3>
-                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black mt-1 uppercase break-words">
-                  VISIONARIES, ENGINEERS, AND
-                </h3>
-                <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black mt-1 uppercase break-words">
-                  KEEPERS<span className="text-mint-leaf">.</span>
-                </h3>
-              </div>
+        <div className="about-reveal pointer-events-auto w-full max-w-[1400px] border border-white/20 bg-black/65 backdrop-blur-md">
+          {/* Header */}
+          <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+            <div className="relative min-w-0">
+              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
+                02 // THE INTER-SCHOOL TECH ARENA
+              </span>
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
+                WHAT IS SYNC26<span className="text-mint-leaf">.</span>
+              </h2>
             </div>
 
-            <div className="p-4 sm:p-8 w-[30%] max-md:w-full font-mono text-[10px] leading-4 text-mint-leaf/80 space-y-0.5">
-              {TERMINAL_LINES.map((line, idx) => (
-                <p key={idx} className="min-h-[12px]">
-                  {line}
-                </p>
+            <span className="px-3 py-1 border border-mint-leaf/40 bg-mint-leaf/10 font-mono text-[10px] tracking-[0.2em] text-mint-leaf uppercase">
+              THINK • DESIGN • COMPETE
+            </span>
+          </div>
+
+          {/* Narrative + 2x2 Key Metrics */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 border-b border-white/20">
+            <div className="lg:col-span-6 p-5 sm:p-10 border-b lg:border-b-0 lg:border-r border-white/20 flex flex-col justify-center space-y-5 font-mono text-xs sm:text-sm leading-relaxed text-white/85">
+              <p className="text-white font-medium text-sm sm:text-base">
+                SYNC26 is Dharmaraja College&apos;s annual inter-school ICT competition and technology showcase—engineered under the vision &ldquo;In Sync With The Future.&rdquo;
+              </p>
+              <p>
+                Designed as a converging arena where creative intellect meets computational mastery, SYNC26 unites eight distinct competitive disciplines spanning algorithmic coding, web architecture, game creation, multimedia storytelling, esports, and live quiz mastery.
+              </p>
+              <p>
+                Whether competing individually in creative and coding brackets or representing your school on stage in Odyssey and ASPECT, every participant steps into an authentic testing ground built for collaboration, speed, and originality.
+              </p>
+            </div>
+
+            <div className="lg:col-span-6 p-5 sm:p-10 bg-evergreen/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {SYNC_STATS.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="p-5 sm:p-6 border border-white/15 bg-black/55 bg-gradient-to-br from-white/[0.04] via-black/60 to-evergreen/15 hover:border-mint-leaf/50 transition-colors flex flex-col justify-between gap-4"
+                >
+                  <span className="font-ethnocentric text-2xl sm:text-3xl text-mint-leaf leading-none">
+                    {stat.value}
+                  </span>
+                  <div>
+                    <h3 className="font-ethnocentric text-xs text-white uppercase tracking-wide mb-1.5">
+                      {stat.label}
+                    </h3>
+                    <p className="font-mono text-[11px] leading-relaxed text-white/70">
+                      {stat.detail}
+                    </p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
-          <div className="relative min-h-0 sm:min-h-[48vh] flex flex-col sm:flex-row w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="hidden sm:block px-6 py-8 sm:w-[70%] border-r border-white/20" />
-            <div className="p-4 sm:p-6 md:p-8 overflow-hidden w-full sm:w-[30%] flex flex-col justify-between gap-4">
-              <div className="w-full flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] text-mint-leaf">
-                <div>
-                  <p>N 35°27.37</p>
-                  <p>E 139°38.57</p>
-                </div>
-                <span className="px-2 py-0.5 border border-mint-leaf/40 text-[9px] flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-mint-leaf animate-ping" />
-                  ARCHIVE - LIVE
+          {/* Flagship Sub-Experience Links (Odyssey + Aspect) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/20">
+            <div className="p-5 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-evergreen/20 to-transparent">
+              <div className="space-y-1.5">
+                <span className="font-mono text-[9px] tracking-[0.22em] text-mint-leaf uppercase block">
+                  FLAGSHIP INTER-SCHOOL QUIZ
                 </span>
+                <h3 className="font-ethnocentric text-base sm:text-lg text-white uppercase">
+                  ODYSSEY // SYNC26
+                </h3>
+                <p className="font-mono text-xs text-white/75 max-w-md">
+                  Three-stage ICT quiz culminating in a live championship showdown on stage.
+                </p>
               </div>
+              <button
+                type="button"
+                onClick={() => navigateTo('odyssey')}
+                className="shrink-0 min-h-[42px] px-4 py-2 border border-mint-leaf/50 bg-mint-leaf/10 hover:bg-mint-leaf hover:text-black text-mint-leaf font-mono text-[10px] tracking-[0.2em] uppercase transition-colors cursor-pointer"
+              >
+                EXPLORE ODYSSEY →
+              </button>
+            </div>
 
-              <div className="relative border border-mint-leaf/30 rounded overflow-hidden bg-evergreen/40 h-40 flex items-center justify-center">
-                <img
-                  src="./images/protocol-bg.jpg"
-                  alt="Topographic Sector Map"
-                  className="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-luminosity"
-                  draggable={false}
-                />
-                <svg
-                  className="relative z-10 w-full h-full text-mint-leaf/70"
-                  viewBox="0 0 320 160"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <ellipse cx="160" cy="80" rx="130" ry="58" stroke="currentColor" strokeWidth="0.8" strokeDasharray="6 4" className="animate-pulse" />
-                  <ellipse cx="160" cy="80" rx="96" ry="42" stroke="currentColor" strokeWidth="1" />
-                  <ellipse cx="164" cy="78" rx="62" ry="26" stroke="currentColor" strokeWidth="1" strokeDasharray="4 3" />
-                  <ellipse cx="168" cy="76" rx="28" ry="12" stroke="#D6F8ED" strokeWidth="1.2" />
-                  <line x1="0" y1="80" x2="320" y2="80" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
-                  <line x1="160" y1="0" x2="160" y2="160" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
-                  <circle cx="168" cy="76" r="3" fill="#41D2A2" />
-                </svg>
+            <div className="p-5 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-evergreen/20 to-transparent">
+              <div className="space-y-1.5">
+                <span className="font-mono text-[9px] tracking-[0.22em] text-mint-leaf uppercase block">
+                  OFFICIAL ESPORTS CHAMPIONSHIP
+                </span>
+                <h3 className="font-ethnocentric text-base sm:text-lg text-white uppercase">
+                  ASPECT // ARENA
+                </h3>
+                <p className="font-mono text-xs text-white/75 max-w-md">
+                  Tactical Call of Duty 3 school tournament brackets and live finale combat.
+                </p>
               </div>
+              <button
+                type="button"
+                onClick={() => navigateTo('aspect')}
+                className="shrink-0 min-h-[42px] px-4 py-2 border border-mint-leaf/50 bg-mint-leaf/10 hover:bg-mint-leaf hover:text-black text-mint-leaf font-mono text-[10px] tracking-[0.2em] uppercase transition-colors cursor-pointer"
+              >
+                EXPLORE ASPECT →
+              </button>
             </div>
-          </div>
-
-          <div className="relative min-h-0 sm:min-h-[45vh] flex w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-6 py-8 w-[30%] border-r border-white/20 relative overflow-hidden max-sm:hidden">
-              <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_49.5%,rgba(65,210,162,0.35)_50%,transparent_50.5%)]" />
-            </div>
-
-            <div className="px-4 sm:px-6 py-6 sm:py-8 w-[70%] max-sm:w-full">
-              <div className="relative">
-                {[
-                  'OUR MISSION IS TO EMPOWER',
-                  'STORYTELLERS AND BUILDERS',
-                  'TO SHAPE AN UNCHARTED',
-                  'DIGITAL WORLD.',
-                ].map((item, idx) => (
-                  <h3
-                    key={idx}
-                    className={`section-title text-lg sm:text-4xl md:text-[42px] leading-tight font-black uppercase break-words ${
-                      idx === 0 ? 'pl-0 sm:pl-12 md:pl-20' : ''
-                    }`}
-                  >
-                    {item}
-                  </h3>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="relative h-[45vh] max-sm:hidden flex w-full text-white border-b border-white/20 bg-black/50">
-            <div className="p-8 h-full w-[30%] border-r border-white/20" />
-            <div className="p-8 h-full w-[35%] border-r border-white/20 flex flex-col justify-between">
-              <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
-                SYNC'26 <br /> ABOUT - ARCHIVE
-              </p>
-              <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
-            </div>
-            <div className="p-8 h-full w-[35%]" />
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          SECTION 4: 10K INITIAL COLLECTION (#factions)
+          SECTION 4: HIGHLIGHTS & TIMELINE (#factions) — 08 TRACKS & STAGES
       ===================================================================== */}
       <section
         id="factions"
-        className="section4 mt-16 md:mt-[120px] min-h-screen w-full relative z-20 flex justify-center font-ethnocentric overflow-hidden"
+        className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 md:pl-24 md:pr-12 pt-14 sm:pt-24 flex justify-center pointer-events-none"
       >
-        <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block1 absolute w-[88vw] md:w-[92vw] max-w-[1300px] h-[78vh] md:h-[88vh] bg-evergreen/90 border border-turf-green scale-0 rounded-xl" />
-        </div>
-        <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block2 absolute w-[90vw] md:w-[94vw] max-w-[1320px] h-[80vh] md:h-[90vh] bg-turf-green/80 border border-sea-green scale-0 rounded-xl" />
-        </div>
-        <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center pointer-events-none z-10">
-          <div className="bg-block3 absolute w-[92vw] md:w-[96vw] max-w-[1340px] h-[82vh] md:h-[92vh] bg-black/90 border border-mint-leaf/40 scale-0 rounded-xl" />
-        </div>
-
-        <div className="w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] flex items-center z-30 relative max-md:flex-col">
-          <div className="flex items-center justify-center w-[22vw] max-md:w-full py-4 sm:py-8">
-            <div className="-rotate-90 max-md:rotate-0 flex flex-col gap-2 items-center md:items-start">
-              <h2 className="font-ethnocentric text-[10vw] max-md:text-[18vw] leading-none tracking-tighter font-black text-white">
-                06M
+        <div className="about-reveal pointer-events-auto w-full max-w-[1400px] border border-white/20 bg-black/65 backdrop-blur-md">
+          {/* Header */}
+          <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
+            <div className="relative min-w-0">
+              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
+                03 // DISCIPLINES &amp; CHRONOLOGY
+              </span>
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
+                ARENA HIGHLIGHTS<span className="text-mint-leaf">.</span>
               </h2>
-              <span className="font-mono text-[11px] uppercase tracking-widest text-mint-leaf flex items-center gap-2">
-                <span>&gt;&gt;</span> Core Manifesto
+            </div>
+
+            <span className="font-mono text-[10px] tracking-[0.2em] text-white/55 uppercase">
+              08 COMPETITIONS // 03 EVENT STAGES
+            </span>
+          </div>
+
+          {/* 8 Disciplines Glass Grid */}
+          <div className="p-4 sm:p-8 lg:p-10 border-b border-white/20 bg-evergreen/10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {DISCIPLINES.map((item) => (
+                <div
+                  key={item.code}
+                  className="group p-5 border border-white/15 bg-black/55 bg-gradient-to-br from-white/[0.04] via-black/65 to-evergreen/15 backdrop-blur-md hover:border-mint-leaf/55 transition-all duration-300 flex flex-col justify-between gap-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+                      <span className="font-ethnocentric text-xs text-mint-leaf">
+                        {item.code}
+                      </span>
+                      <span className="font-mono text-[9px] tracking-[0.16em] text-white/55 uppercase">
+                        {item.tag}
+                      </span>
+                    </div>
+
+                    <h3 className="font-ethnocentric text-xs sm:text-sm text-white uppercase leading-snug">
+                      {item.title}
+                    </h3>
+
+                    <p className="font-mono text-[11px] sm:text-xs leading-relaxed text-white/75">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {item.targetPage && (
+                    <button
+                      type="button"
+                      onClick={() => navigateTo(item.targetPage!)}
+                      className="self-start font-mono text-[10px] tracking-[0.18em] text-mint-leaf hover:text-white uppercase transition-colors cursor-pointer"
+                    >
+                      VIEW ARENA →
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 3-Stage Event Chronology */}
+          <div className="p-4 sm:p-8 lg:p-10">
+            <div className="flex items-center justify-between mb-5">
+              <span className="font-mono text-[10px] tracking-[0.24em] text-mint-leaf uppercase">
+                EVENT TIMELINE // NOVEMBER 2026
+              </span>
+              <span className="font-mono text-[10px] tracking-[0.2em] text-white/45 uppercase hidden sm:inline">
+                ONLINE QUALIFIERS → LIVE FINALE
               </span>
             </div>
-          </div>
 
-          <div className="w-[48vw] max-md:w-full h-full flex items-center justify-center relative py-4 sm:py-8 border-x border-white/20 max-md:border-x-0">
-            <div className="s4-center-portrait w-full max-w-[260px] sm:max-w-md px-3 sm:px-6">
-              <ImageTilt
-                src="./images/section4-image.png"
-                alt="About Portrait"
-                className="!object-contain"
-                tiltOptions={{ max: 30, scale: 1.04, perspective: 1200, speed: 800 }}
-              />
-            </div>
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+              {EVENT_TIMELINE.map((step, idx) => {
+                const isFinale = idx === EVENT_TIMELINE.length - 1;
+                return (
+                  <div
+                    key={step.phase}
+                    className={`relative p-5 sm:p-6 border transition-all duration-300 ${
+                      isFinale
+                        ? 'border-mint-leaf/55 bg-gradient-to-br from-evergreen/55 via-black/80 to-black/95 shadow-[0_0_28px_rgba(65,210,162,0.14)]'
+                        : 'border-white/15 bg-white/[0.02] hover:border-mint-leaf/40'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="px-2 py-0.5 border border-mint-leaf/40 bg-mint-leaf/10 font-mono text-[9px] tracking-[0.2em] text-mint-leaf uppercase">
+                        {step.phase}
+                      </span>
+                      <span className="font-mono text-[10px] tracking-[0.16em] text-white/60 uppercase">
+                        {step.window}
+                      </span>
+                    </div>
 
-          <div className="w-[30vw] max-md:w-full h-full flex flex-col justify-center">
-            <div className="p-4 sm:p-6 border-b border-white/20 max-w-[280px] sm:max-w-none mx-auto w-full">
-              <ImageTilt
-                src="./images/face-traits.webp"
-                alt="Face Traits Upper"
-                tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
-              />
-            </div>
-            <div className="p-4 sm:p-6 max-w-[280px] sm:max-w-none mx-auto w-full">
-              <ImageTilt
-                src="./images/face-traits.webp"
-                alt="Face Traits Lower"
-                tiltOptions={{ max: 25, scale: 0.96, perspective: 1200, speed: 800 }}
-              />
+                    <h3 className="font-ethnocentric text-xs sm:text-sm text-white uppercase mb-2 leading-snug">
+                      {step.title}
+                    </h3>
+
+                    <p className="font-mono text-[11px] sm:text-xs leading-relaxed text-white/75">
+                      {step.detail}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          SECTION 5: COLLECTIBLES / PILLARS (#collectibles)
+          SECTION 5: FINAL CTA BANNER
       ===================================================================== */}
-      <section
-        id="collectibles"
-        className="section5 relative z-30 w-[97vw] max-md:w-full mx-auto min-h-screen pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] overflow-x-hidden font-ethnocentric flex flex-col justify-between gap-8 md:gap-12"
-      >
-        <div className="flex max-md:flex-col items-stretch w-full border-y border-white/20 bg-black/60 backdrop-blur-sm">
-          <div className="w-1/2 max-md:w-full p-4 sm:p-6 border-r border-white/20 max-md:border-r-0 max-md:border-b">
-            <div className="relative">
-              <h3 className="text-lg sm:text-4xl md:text-[42px] leading-tight md:leading-none font-black pl-0 sm:pl-12 md:pl-20 uppercase break-words">
-                FOUNDATIONAL PILLARS &amp;
-              </h3>
-              <h3 className="text-lg sm:text-4xl md:text-[42px] leading-tight md:leading-none font-black mt-1 uppercase break-words">
-                COLLECTIVE<span className="text-mint-leaf">.</span>
-              </h3>
-            </div>
-          </div>
+      <section className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 md:pl-24 md:pr-12 py-14 sm:py-28 flex justify-center pointer-events-none">
+        <div className="about-reveal pointer-events-auto relative w-full max-w-[1400px] border border-mint-leaf/40 bg-gradient-to-br from-evergreen/60 via-black/90 to-black backdrop-blur-md p-6 sm:p-14 md:p-20 overflow-hidden">
+          {/* Corner Brackets */}
+          <div className="pointer-events-none absolute -top-px -left-px w-5 h-5 border-t-2 border-l-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -top-px -right-px w-5 h-5 border-t-2 border-r-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -bottom-px -left-px w-5 h-5 border-b-2 border-l-2 border-mint-leaf" />
+          <div className="pointer-events-none absolute -bottom-px -right-px w-5 h-5 border-b-2 border-r-2 border-mint-leaf" />
 
-          <div className="w-1/2 max-md:w-full p-4 sm:p-6 flex items-center">
-            <div className="relative">
-              <span className="dot-mint pl-3 font-mono text-[9px] text-mint-leaf uppercase block mb-2">
-                Who We Are
+          {/* Subtle Radial Glow */}
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(65,210,162,0.16)_0%,transparent_65%)]" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            <div className="space-y-4 max-w-2xl">
+              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block">
+                JOIN THE ARENA // DHARMARAJA COLLEGE ICT SOCIETY
               </span>
-              <p className="font-mono text-[12px] leading-[18px] text-white/80 max-w-md">
-                SYNC'26 brings together interdisciplinary teams dedicated to pushing boundaries across code, design, and narrative architecture.
+              <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight font-black uppercase text-white break-words">
+                STEP INTO SYNC26<span className="text-mint-leaf">.</span>
+              </h2>
+              <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
+                Register your school squad or individual entries across 8 competitive ICT and gaming tracks before submission locks engage.
               </p>
             </div>
-          </div>
-        </div>
 
-        <PerspectiveCardGallery className="my-auto py-4 sm:py-8" />
-      </section>
-      {/* =====================================================================
-          SECTION 7: FOOTER CALLOUT
-      ===================================================================== */}
-      <section className="section7 min-h-screen w-full relative z-30 flex justify-center font-ethnocentric bg-black/85 border-t border-white/20">
-        <div className="h-full w-[97vw] max-md:w-full pt-16 md:pt-[70px] pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 flex flex-col justify-between z-30 relative overflow-hidden">
-          <div className="min-h-[22vh] sm:min-h-[34vh] md:min-h-[42vh] w-full border-b border-white/20 p-4 sm:p-8 flex items-end justify-center s7-fade-up">
-            <h2 className="font-ethnocentric text-[clamp(2rem,10.5vw,9.5rem)] leading-none font-black tracking-tight text-white uppercase">
-              SYNC'26<span className="text-mint-leaf">.</span>
-            </h2>
-          </div>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0 w-full lg:w-auto">
+              <button
+                type="button"
+                onClick={() => navigateTo('registrations')}
+                className="group relative min-h-[48px] bg-mint-leaf hover:bg-white text-black font-ethnocentric text-xs sm:text-sm tracking-[0.16em] uppercase px-7 sm:px-9 py-4 transition-all duration-300 cursor-pointer shadow-[0_0_35px_rgba(65,210,162,0.35)] hover:shadow-[0_0_45px_rgba(255,255,255,0.5)] flex items-center justify-center gap-3"
+                style={{
+                  clipPath:
+                    'polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)',
+                }}
+              >
+                <ShuffleText text="REGISTER NOW" />
+                <span className="font-mono text-base transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </button>
 
-          <div className="min-h-0 md:min-h-[42vh] w-full flex flex-col justify-between gap-4 py-6 sm:py-8 px-4 sm:px-8 md:px-12">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
-              ABOUT - SYNC'26 COLLECTIVE
-            </span>
-            <span className="font-mono font-normal text-[12px] max-w-xs leading-5 block text-white/80 s7-fade-up">
-              SYNC'26 is a brand that focuses on collective narrative and empowering storytellers.
-            </span>
-          </div>
-
-          <div className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-52 sm:w-72 md:w-96 max-md:static max-md:translate-x-0 max-md:translate-y-0 max-md:mx-auto max-md:pb-8">
-            <ImageTilt
-              src="./images/section4-image.png"
-              alt="About SYNC'26"
-              className="!object-contain s7-scale-up"
-              tiltOptions={{ max: 35, scale: 1.04, perspective: 1200, speed: 1200 }}
-            />
+              <button
+                type="button"
+                onClick={() => navigateTo('odyssey')}
+                className="min-h-[48px] px-6 py-4 border border-white/25 hover:border-mint-leaf text-white hover:text-mint-leaf bg-black/50 backdrop-blur-md font-mono text-xs tracking-[0.18em] uppercase transition-colors cursor-pointer text-center"
+              >
+                EXPLORE ODYSSEY
+              </button>
+            </div>
           </div>
         </div>
       </section>
