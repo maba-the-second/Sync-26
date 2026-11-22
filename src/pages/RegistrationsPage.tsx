@@ -507,15 +507,14 @@ function CustomSelect({
         onClick={toggleOpen}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className={`w-full min-h-[44px] sm:min-h-0 flex items-center justify-between gap-2 text-left transition-all cursor-pointer ${
-          compact ? 'px-3 py-2 rounded-lg' : 'px-3.5 py-2.5 rounded-xl'
-        } bg-black/85 border text-sm sm:text-xs focus:outline-none`}
+        className={`w-full min-h-[44px] sm:min-h-0 flex items-center justify-between gap-2 text-left transition-all cursor-pointer ${compact ? 'px-3 py-2 rounded-lg' : 'px-3.5 py-2.5 rounded-xl'
+          } bg-black/85 border text-sm sm:text-xs focus:outline-none`}
         style={{
           borderColor: isOpen
             ? accentColor
             : selectedOption
-            ? `rgba(${accentRgb}, 0.5)`
-            : 'rgba(255, 255, 255, 0.18)',
+              ? `rgba(${accentRgb}, 0.5)`
+              : 'rgba(255, 255, 255, 0.18)',
           boxShadow: isOpen
             ? `0 0 18px rgba(${accentRgb}, 0.35), inset 0 0 10px rgba(${accentRgb}, 0.12)`
             : 'none',
@@ -552,9 +551,8 @@ function CustomSelect({
         </span>
 
         <svg
-          className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${
-            isOpen ? 'rotate-180' : ''
-          }`}
+          className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''
+            }`}
           style={{ color: accentColor }}
           fill="none"
           viewBox="0 0 24 24"
@@ -568,9 +566,8 @@ function CustomSelect({
       {isOpen && (
         <div
           role="listbox"
-          className={`absolute left-0 right-0 z-50 ${
-            openUpward ? 'bottom-full mb-1.5' : 'top-full mt-1.5'
-          } rounded-xl bg-[#050a08]/98 backdrop-blur-xl border overflow-hidden`}
+          className={`absolute left-0 right-0 z-50 ${openUpward ? 'bottom-full mb-1.5' : 'top-full mt-1.5'
+            } rounded-xl bg-[#050a08]/98 backdrop-blur-xl border overflow-hidden`}
           style={{
             borderColor: accentColor,
             boxShadow: `0 16px 40px rgba(0, 0, 0, 0.92), 0 0 26px rgba(${accentRgb}, 0.32)`,
@@ -606,8 +603,8 @@ function CustomSelect({
                     backgroundColor: isSelected
                       ? `rgba(${itemRgb}, 0.22)`
                       : isHovered
-                      ? `rgba(${itemRgb}, 0.12)`
-                      : 'transparent',
+                        ? `rgba(${itemRgb}, 0.12)`
+                        : 'transparent',
                     borderLeft:
                       isSelected || isHovered
                         ? `3px solid ${itemColor}`
@@ -626,9 +623,8 @@ function CustomSelect({
                     />
                     <div className="truncate">
                       <span
-                        className={`text-xs ${
-                          isSelected ? 'font-bold text-white' : 'text-white/85'
-                        }`}
+                        className={`text-xs ${isSelected ? 'font-bold text-white' : 'text-white/85'
+                          }`}
                         style={isSelected ? { color: itemColor } : undefined}
                       >
                         {opt.label}
@@ -1047,7 +1043,7 @@ export function RegistrationsPage() {
         </a>
       </div>
 
-      {/* Floating WhatsApp Community Icon (Bottom-Right) */}
+      {/* Floating WhatsApp Community Icon (Bottom-Right)
       <a
         href={WHATSAPP_GROUP_LINK}
         target="_blank"
@@ -1062,7 +1058,7 @@ export function RegistrationsPage() {
           className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
           draggable={false}
         />
-      </a>
+      </a> */}
 
       {/* 8 Competition Cards Orbiting the 3D Crystal (Compact Front-Arc on Mobile/Tablet, Full Ellipse on Desktop) */}
       {isCompactOrbit ? (
@@ -1154,271 +1150,271 @@ export function RegistrationsPage() {
             }
           >
             <div className="sync-modal-inner max-h-[calc(88dvh-3px)]">
-            {/* Modal Header */}
-            <div
-              className="p-4 sm:p-6 border-b border-white/10 flex items-start justify-between gap-3 sm:gap-4"
-              style={{
-                background: `linear-gradient(135deg, rgba(${detailComp.accentRgb}, 0.22) 0%, rgba(6, 12, 10, 0.95) 70%)`,
-              }}
-            >
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2 mb-1.5 font-mono text-[10px] tracking-[0.18em] sm:tracking-[0.2em] uppercase">
-                  <span
-                    className="px-2.5 py-0.5 rounded-full border font-semibold"
-                    style={{
-                      color: detailComp.accentColor,
-                      borderColor: `rgba(${detailComp.accentRgb}, 0.45)`,
-                      backgroundColor: `rgba(${detailComp.accentRgb}, 0.12)`,
-                    }}
-                  >
-                    {detailComp.badge}
-                  </span>
-                  <span className="text-white/60">• {detailComp.eligibility}</span>
+              {/* Modal Header */}
+              <div
+                className="p-4 sm:p-6 border-b border-white/10 flex items-start justify-between gap-3 sm:gap-4"
+                style={{
+                  background: `linear-gradient(135deg, rgba(${detailComp.accentRgb}, 0.22) 0%, rgba(6, 12, 10, 0.95) 70%)`,
+                }}
+              >
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1.5 font-mono text-[10px] tracking-[0.18em] sm:tracking-[0.2em] uppercase">
+                    <span
+                      className="px-2.5 py-0.5 rounded-full border font-semibold"
+                      style={{
+                        color: detailComp.accentColor,
+                        borderColor: `rgba(${detailComp.accentRgb}, 0.45)`,
+                        backgroundColor: `rgba(${detailComp.accentRgb}, 0.12)`,
+                      }}
+                    >
+                      {detailComp.badge}
+                    </span>
+                    <span className="text-white/60">• {detailComp.eligibility}</span>
+                  </div>
+                  <h3 className="font-ethnocentric text-base sm:text-2xl text-white tracking-wider uppercase break-words">
+                    {detailComp.title}
+                  </h3>
                 </div>
-                <h3 className="font-ethnocentric text-base sm:text-2xl text-white tracking-wider uppercase break-words">
-                  {detailComp.title}
-                </h3>
+
+                <button
+                  type="button"
+                  onClick={() => closeDetailsModal()}
+                  className="min-w-[40px] min-h-[40px] flex items-center justify-center p-2 rounded-lg bg-white/5 border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors cursor-pointer shrink-0"
+                  aria-label="Close modal"
+                >
+                  ✕
+                </button>
               </div>
 
-              <button
-                type="button"
-                onClick={() => closeDetailsModal()}
-                className="min-w-[40px] min-h-[40px] flex items-center justify-center p-2 rounded-lg bg-white/5 border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors cursor-pointer shrink-0"
-                aria-label="Close modal"
-              >
-                ✕
-              </button>
-            </div>
+              {/* Modal Scrollable Body */}
+              <div data-lenis-prevent className="p-4 sm:p-6 overflow-y-auto overscroll-contain flex-1 min-h-0 space-y-5 font-mono text-xs text-white/85">
+                <p className="text-white/90 text-xs sm:text-sm leading-relaxed border-l-2 pl-3" style={{ borderColor: detailComp.accentColor }}>
+                  {detailComp.shortDesc}
+                </p>
 
-            {/* Modal Scrollable Body */}
-            <div data-lenis-prevent className="p-4 sm:p-6 overflow-y-auto overscroll-contain flex-1 min-h-0 space-y-5 font-mono text-xs text-white/85">
-              <p className="text-white/90 text-xs sm:text-sm leading-relaxed border-l-2 pl-3" style={{ borderColor: detailComp.accentColor }}>
-                {detailComp.shortDesc}
-              </p>
-
-              {detailComp.sections.statement && (
-                <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Challenge Statement
-                  </h4>
-                  {detailComp.sections.statement.map((s, i) => (
-                    <p key={i} className="leading-relaxed text-white/80">
-                      {s}
-                    </p>
-                  ))}
-                </div>
-              )}
-
-              {detailComp.sections.theme && (
-                <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Theme & Aesthetic Vision
-                  </h4>
-                  {detailComp.sections.theme.map((t, i) => (
-                    <p key={i} className="leading-relaxed text-white/80">
-                      {t}
-                    </p>
-                  ))}
-                </div>
-              )}
-
-              {detailComp.sections.overview && (
-                <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Overview
-                  </h4>
-                  {detailComp.sections.overview.map((o, i) => (
-                    <p key={i} className="leading-relaxed text-white/80">
-                      {o}
-                    </p>
-                  ))}
-                </div>
-              )}
-
-              {detailComp.sections.participation && (
-                <div>
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Participation & Eligibility
-                  </h4>
-                  <ul className="space-y-1.5">
-                    {detailComp.sections.participation.map((p, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-white/80">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                          style={{ backgroundColor: detailComp.accentColor }}
-                        />
-                        <span>{p}</span>
-                      </li>
+                {detailComp.sections.statement && (
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Challenge Statement
+                    </h4>
+                    {detailComp.sections.statement.map((s, i) => (
+                      <p key={i} className="leading-relaxed text-white/80">
+                        {s}
+                      </p>
                     ))}
-                  </ul>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {detailComp.sections.format && (
-                <div>
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Competition Format
-                  </h4>
-                  <ul className="space-y-1.5">
-                    {detailComp.sections.format.map((f, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-white/80">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                          style={{ backgroundColor: detailComp.accentColor }}
-                        />
-                        <span>{f}</span>
-                      </li>
+                {detailComp.sections.theme && (
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Theme & Aesthetic Vision
+                    </h4>
+                    {detailComp.sections.theme.map((t, i) => (
+                      <p key={i} className="leading-relaxed text-white/80">
+                        {t}
+                      </p>
                     ))}
-                  </ul>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {detailComp.sections.instructions && (
-                <div>
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Instructions & Technical Guidelines
-                  </h4>
-                  <ul className="space-y-1.5">
-                    {detailComp.sections.instructions.map((ins, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-white/80">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                          style={{ backgroundColor: detailComp.accentColor }}
-                        />
-                        <span>{ins}</span>
-                      </li>
+                {detailComp.sections.overview && (
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Overview
+                    </h4>
+                    {detailComp.sections.overview.map((o, i) => (
+                      <p key={i} className="leading-relaxed text-white/80">
+                        {o}
+                      </p>
                     ))}
-                  </ul>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {detailComp.sections.rules && (
-                <div>
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Official Rules
-                  </h4>
-                  <ul className="space-y-1.5">
-                    {detailComp.sections.rules.map((r, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-white/80">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                          style={{ backgroundColor: detailComp.accentColor }}
-                        />
-                        <span>{r}</span>
-                      </li>
+                {detailComp.sections.participation && (
+                  <div>
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Participation & Eligibility
+                    </h4>
+                    <ul className="space-y-1.5">
+                      {detailComp.sections.participation.map((p, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-white/80">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                            style={{ backgroundColor: detailComp.accentColor }}
+                          />
+                          <span>{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {detailComp.sections.format && (
+                  <div>
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Competition Format
+                    </h4>
+                    <ul className="space-y-1.5">
+                      {detailComp.sections.format.map((f, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-white/80">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                            style={{ backgroundColor: detailComp.accentColor }}
+                          />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {detailComp.sections.instructions && (
+                  <div>
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Instructions & Technical Guidelines
+                    </h4>
+                    <ul className="space-y-1.5">
+                      {detailComp.sections.instructions.map((ins, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-white/80">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                            style={{ backgroundColor: detailComp.accentColor }}
+                          />
+                          <span>{ins}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {detailComp.sections.rules && (
+                  <div>
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Official Rules
+                    </h4>
+                    <ul className="space-y-1.5">
+                      {detailComp.sections.rules.map((r, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-white/80">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                            style={{ backgroundColor: detailComp.accentColor }}
+                          />
+                          <span>{r}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {detailComp.sections.scoring && (
+                  <div>
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Evaluation & Scoring Criteria
+                    </h4>
+                    <ul className="space-y-1.5">
+                      {detailComp.sections.scoring.map((s, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-white/80">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                            style={{ backgroundColor: detailComp.accentColor }}
+                          />
+                          <span>{s}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {detailComp.sections.submission && (
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Submission Protocol
+                    </h4>
+                    <ul className="space-y-1.5 font-mono text-xs">
+                      {detailComp.sections.submission.map((sub, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-white/80">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                            style={{ backgroundColor: detailComp.accentColor }}
+                          />
+                          <span>{sub}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {detailComp.sections.announcement && (
+                  <div className="p-4 rounded-xl bg-white/[0.04] border border-white/15 space-y-1.5">
+                    <h4
+                      className="font-mono font-bold text-xs tracking-[0.2em] uppercase"
+                      style={{ color: detailComp.accentColor }}
+                    >
+                      Official Tournament Announcement
+                    </h4>
+                    {detailComp.sections.announcement.map((a, i) => (
+                      <p key={i} className="leading-relaxed text-white/80">
+                        {a}
+                      </p>
                     ))}
-                  </ul>
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
 
-              {detailComp.sections.scoring && (
-                <div>
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2.5"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Evaluation & Scoring Criteria
-                  </h4>
-                  <ul className="space-y-1.5">
-                    {detailComp.sections.scoring.map((s, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-white/80">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                          style={{ backgroundColor: detailComp.accentColor }}
-                        />
-                        <span>{s}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {/* Modal Footer CTAs */}
+              <div className="p-4 sm:p-5 border-t border-white/10 bg-black/80 flex flex-col-reverse sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 font-mono">
+                <a
+                  href={WHATSAPP_DIRECT_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white hover:border-mint-leaf hover:text-mint-leaf text-xs uppercase tracking-wider transition-all"
+                >
+                  <span>Ask via WhatsApp</span>
+                </a>
 
-              {detailComp.sections.submission && (
-                <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase mb-2"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Submission Protocol
-                  </h4>
-                  <ul className="space-y-1.5 font-mono text-xs">
-                    {detailComp.sections.submission.map((sub, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-white/80">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                          style={{ backgroundColor: detailComp.accentColor }}
-                        />
-                        <span>{sub}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {detailComp.sections.announcement && (
-                <div className="p-4 rounded-xl bg-white/[0.04] border border-white/15 space-y-1.5">
-                  <h4
-                    className="font-mono font-bold text-xs tracking-[0.2em] uppercase"
-                    style={{ color: detailComp.accentColor }}
-                  >
-                    Official Tournament Announcement
-                  </h4>
-                  {detailComp.sections.announcement.map((a, i) => (
-                    <p key={i} className="leading-relaxed text-white/80">
-                      {a}
-                    </p>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Modal Footer CTAs */}
-            <div className="p-4 sm:p-5 border-t border-white/10 bg-black/80 flex flex-col-reverse sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 font-mono">
-              <a
-                href={WHATSAPP_DIRECT_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white hover:border-mint-leaf hover:text-mint-leaf text-xs uppercase tracking-wider transition-all"
-              >
-                <span>Ask via WhatsApp</span>
-              </a>
-
-              <button
-                type="button"
-                onClick={() => {
-                  const id = detailComp.id;
-                  closeDetailsModal(() => openRegistrationModal(id));
-                }}
-                className="min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all cursor-pointer"
-                style={{
-                  backgroundColor: detailComp.accentColor,
-                  boxShadow: `0 0 20px rgba(${detailComp.accentRgb}, 0.45)`,
-                }}
-              >
-                <span>REGISTER FOR THIS COMPETITION &rarr;</span>
-              </button>
-            </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const id = detailComp.id;
+                    closeDetailsModal(() => openRegistrationModal(id));
+                  }}
+                  className="min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all cursor-pointer"
+                  style={{
+                    backgroundColor: detailComp.accentColor,
+                    boxShadow: `0 0 20px rgba(${detailComp.accentRgb}, 0.45)`,
+                  }}
+                >
+                  <span>REGISTER FOR THIS COMPETITION &rarr;</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1445,517 +1441,516 @@ export function RegistrationsPage() {
             }
           >
             <div className="sync-modal-inner max-h-[calc(90dvh-3px)]">
-            {/* Header */}
-            <div
-              className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between gap-3"
-              style={{
-                background: `linear-gradient(135deg, rgba(${activeComp.accentRgb}, 0.22) 0%, rgba(6, 12, 10, 0.95) 70%)`,
-              }}
-            >
-              <div className="min-w-0">
-                <span
-                  className="text-[10px] font-mono uppercase tracking-[0.2em] sm:tracking-[0.22em] block mb-1"
-                  style={{ color: activeComp.accentColor }}
-                >
-                  OFFICIAL APPLICATION // {activeComp.code}
-                </span>
-                <h3 className="font-ethnocentric text-sm sm:text-xl text-white uppercase tracking-wider break-words">
-                  REGISTER FOR {activeComp.title}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsRegOpen(false)}
-                className="min-w-[40px] min-h-[40px] flex items-center justify-center p-2 rounded-lg bg-white/5 border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors cursor-pointer shrink-0"
-                aria-label="Close registration modal"
+              {/* Header */}
+              <div
+                className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between gap-3"
+                style={{
+                  background: `linear-gradient(135deg, rgba(${activeComp.accentRgb}, 0.22) 0%, rgba(6, 12, 10, 0.95) 70%)`,
+                }}
               >
-                ✕
-              </button>
-            </div>
-
-            {/* Form State */}
-            {submitState === 'form' && (
-              <form
-                onSubmit={handleFormSubmit}
-                data-lenis-prevent
-                className="p-4 sm:p-6 overflow-y-auto overscroll-contain flex-1 min-h-0 space-y-4 font-mono text-xs"
-              >
-                {/* Competition Selector (Only the 8 Sync-26 Competitions) */}
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                    Selected Competition <span style={{ color: activeComp.accentColor }}>*</span>
-                  </label>
-                  <CustomSelect
-                    value={selectedCompId}
-                    onChange={(val) => {
-                      setSelectedCompId(val);
-                      setGrade('');
-                      setErrors({});
-                    }}
-                    options={COMPETITIONS.map((c) => ({
-                      value: c.id,
-                      label: c.title,
-                      sublabel: `${c.category} • ${c.eligibility}`,
-                      accentColor: c.accentColor,
-                      accentRgb: c.accentRgb,
-                    }))}
-                    accentColor={activeComp.accentColor}
-                    accentRgb={activeComp.accentRgb}
-                  />
+                <div className="min-w-0">
+                  <span
+                    className="text-[10px] font-mono uppercase tracking-[0.2em] sm:tracking-[0.22em] block mb-1"
+                    style={{ color: activeComp.accentColor }}
+                  >
+                    OFFICIAL APPLICATION // {activeComp.code}
+                  </span>
+                  <h3 className="font-ethnocentric text-sm sm:text-xl text-white uppercase tracking-wider break-words">
+                    REGISTER FOR {activeComp.title}
+                  </h3>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setIsRegOpen(false)}
+                  className="min-w-[40px] min-h-[40px] flex items-center justify-center p-2 rounded-lg bg-white/5 border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors cursor-pointer shrink-0"
+                  aria-label="Close registration modal"
+                >
+                  ✕
+                </button>
+              </div>
 
-                {/* Participation Type & School Name */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Form State */}
+              {submitState === 'form' && (
+                <form
+                  onSubmit={handleFormSubmit}
+                  data-lenis-prevent
+                  className="p-4 sm:p-6 overflow-y-auto overscroll-contain flex-1 min-h-0 space-y-4 font-mono text-xs"
+                >
+                  {/* Competition Selector (Only the 8 Sync-26 Competitions) */}
                   <div>
                     <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                      Participation Type <span style={{ color: activeComp.accentColor }}>*</span>
+                      Selected Competition <span style={{ color: activeComp.accentColor }}>*</span>
                     </label>
                     <CustomSelect
-                      value={partType}
-                      onChange={(val) =>
-                        handlePartTypeChange(val as 'intra' | 'inter')
-                      }
-                      options={[
-                        {
-                          value: 'intra',
-                          label: 'Intra-School',
-                          sublabel: 'Dharmaraja College',
-                        },
-                        {
-                          value: 'inter',
-                          label: 'Inter-School',
-                          sublabel: 'Other School',
-                        },
-                      ]}
+                      value={selectedCompId}
+                      onChange={(val) => {
+                        setSelectedCompId(val);
+                        setGrade('');
+                        setErrors({});
+                      }}
+                      options={COMPETITIONS.map((c) => ({
+                        value: c.id,
+                        label: c.title,
+                        sublabel: `${c.category} • ${c.eligibility}`,
+                        accentColor: c.accentColor,
+                        accentRgb: c.accentRgb,
+                      }))}
                       accentColor={activeComp.accentColor}
                       accentRgb={activeComp.accentRgb}
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                      School Name <span style={{ color: activeComp.accentColor }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={schoolName}
-                      readOnly={partType === 'intra'}
-                      onChange={(e) => setSchoolName(e.target.value)}
-                      placeholder="Enter your school name"
-                      className={`w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf ${
-                        partType === 'intra' ? 'opacity-75 cursor-not-allowed' : ''
-                      }`}
-                    />
-                    {errors.school && (
-                      <p className="text-[11px] text-red-400 mt-1">{errors.school}</p>
-                    )}
-                  </div>
-                </div>
+                  {/* Participation Type & School Name */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                        Participation Type <span style={{ color: activeComp.accentColor }}>*</span>
+                      </label>
+                      <CustomSelect
+                        value={partType}
+                        onChange={(val) =>
+                          handlePartTypeChange(val as 'intra' | 'inter')
+                        }
+                        options={[
+                          {
+                            value: 'intra',
+                            label: 'Intra-School',
+                            sublabel: 'Dharmaraja College',
+                          },
+                          {
+                            value: 'inter',
+                            label: 'Inter-School',
+                            sublabel: 'Other School',
+                          },
+                        ]}
+                        accentColor={activeComp.accentColor}
+                        accentRgb={activeComp.accentRgb}
+                      />
+                    </div>
 
-                {/* Individual vs Team Fields */}
-                {!activeComp.isTeam ? (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Full Name <span style={{ color: activeComp.accentColor }}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          placeholder="e.g. Mihin Rukshan"
-                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
-                        />
-                        {errors.fullName && (
-                          <p className="text-[11px] text-red-400 mt-1">{errors.fullName}</p>
-                        )}
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                        School Name <span style={{ color: activeComp.accentColor }}>*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={schoolName}
+                        readOnly={partType === 'intra'}
+                        onChange={(e) => setSchoolName(e.target.value)}
+                        placeholder="Enter your school name"
+                        className={`w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf ${partType === 'intra' ? 'opacity-75 cursor-not-allowed' : ''
+                          }`}
+                      />
+                      {errors.school && (
+                        <p className="text-[11px] text-red-400 mt-1">{errors.school}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Individual vs Team Fields */}
+                  {!activeComp.isTeam ? (
+                    <>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                            Full Name <span style={{ color: activeComp.accentColor }}>*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            placeholder="e.g. Mihin Rukshan"
+                            className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
+                          />
+                          {errors.fullName && (
+                            <p className="text-[11px] text-red-400 mt-1">{errors.fullName}</p>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                            Grade / Class{' '}
+                            <span style={{ color: activeComp.accentColor }}>
+                              * (Grades {activeComp.minGrade}–{activeComp.maxGrade})
+                            </span>
+                          </label>
+                          <CustomSelect
+                            value={grade}
+                            onChange={(val) => setGrade(val)}
+                            placeholder="Select Grade"
+                            options={gradeOptions.map((g) => ({
+                              value: String(g),
+                              label: `Grade ${g}`,
+                            }))}
+                            accentColor={activeComp.accentColor}
+                            accentRgb={activeComp.accentRgb}
+                          />
+                          {errors.grade && (
+                            <p className="text-[11px] text-red-400 mt-1">{errors.grade}</p>
+                          )}
+                        </div>
                       </div>
 
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Grade / Class{' '}
-                          <span style={{ color: activeComp.accentColor }}>
-                            * (Grades {activeComp.minGrade}–{activeComp.maxGrade})
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                            Email Address <span style={{ color: activeComp.accentColor }}>*</span>
+                          </label>
+                          <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="participant@example.com"
+                            className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
+                          />
+                          {errors.email && (
+                            <p className="text-[11px] text-red-400 mt-1">{errors.email}</p>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                            WhatsApp / Contact Number{' '}
+                            <span style={{ color: activeComp.accentColor }}>*</span>
+                          </label>
+                          <input
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            placeholder="0714906145 or +94 71 490 6145"
+                            className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
+                          />
+                          {errors.phone && (
+                            <p className="text-[11px] text-red-400 mt-1">{errors.phone}</p>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        className="p-3 rounded-xl border text-[11px] leading-relaxed"
+                        style={{
+                          borderColor: `rgba(${activeComp.accentRgb}, 0.4)`,
+                          backgroundColor: `rgba(${activeComp.accentRgb}, 0.1)`,
+                          color: activeComp.accentColor,
+                        }}
+                      >
+                        Team rule: Strictly Grades 10–13 only. All members from the same school. Max 5 members total (including Captain). Max 2 teams per school.
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                            Team <span style={{ color: activeComp.accentColor }}>*</span>
+                          </label>
+                          <CustomSelect
+                            value={teamName}
+                            onChange={(val) => setTeamName(val)}
+                            placeholder="Select Team (Team A / Team B)"
+                            options={[
+                              { value: 'Team A', label: 'Team A', sublabel: 'Squad Alpha' },
+                              { value: 'Team B', label: 'Team B', sublabel: 'Squad Bravo' },
+                            ]}
+                            accentColor={activeComp.accentColor}
+                            accentRgb={activeComp.accentRgb}
+                          />
+                          {errors.teamName && (
+                            <p className="text-[11px] text-red-400 mt-1">{errors.teamName}</p>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                            Team Captain's Full Name{' '}
+                            <span style={{ color: activeComp.accentColor }}>*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            placeholder="Captain's Full Name"
+                            className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
+                          />
+                          {errors.fullName && (
+                            <p className="text-[11px] text-red-400 mt-1">{errors.fullName}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                            Captain's Grade{' '}
+                            <span style={{ color: activeComp.accentColor }}>* (10–13)</span>
+                          </label>
+                          <CustomSelect
+                            value={grade}
+                            onChange={(val) => setGrade(val)}
+                            placeholder="Select Grade"
+                            options={[10, 11, 12, 13].map((g) => ({
+                              value: String(g),
+                              label: `Grade ${g}`,
+                            }))}
+                            accentColor={activeComp.accentColor}
+                            accentRgb={activeComp.accentRgb}
+                          />
+                          {errors.grade && (
+                            <p className="text-[11px] text-red-400 mt-1">{errors.grade}</p>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                            Captain's Email{' '}
+                            <span style={{ color: activeComp.accentColor }}>*</span>
+                          </label>
+                          <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="captain@school.lk"
+                            className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
+                          />
+                          {errors.email && (
+                            <p className="text-[11px] text-red-400 mt-1">{errors.email}</p>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
+                            Captain's Phone{' '}
+                            <span style={{ color: activeComp.accentColor }}>*</span>
+                          </label>
+                          <input
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            placeholder="0714906145"
+                            className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
+                          />
+                          {errors.phone && (
+                            <p className="text-[11px] text-red-400 mt-1">{errors.phone}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Additional Team Members */}
+                      <div className="pt-3 border-t border-white/10 space-y-3">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span
+                            className="text-[11px] font-bold uppercase tracking-wider"
+                            style={{ color: activeComp.accentColor }}
+                          >
+                            Additional Team Members (Up to 4 more)
                           </span>
-                        </label>
-                        <CustomSelect
-                          value={grade}
-                          onChange={(val) => setGrade(val)}
-                          placeholder="Select Grade"
-                          options={gradeOptions.map((g) => ({
-                            value: String(g),
-                            label: `Grade ${g}`,
-                          }))}
-                          accentColor={activeComp.accentColor}
-                          accentRgb={activeComp.accentRgb}
-                        />
-                        {errors.grade && (
-                          <p className="text-[11px] text-red-400 mt-1">{errors.grade}</p>
-                        )}
-                      </div>
-                    </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={handleAddMember}
+                              className="min-h-[36px] sm:min-h-0 px-3 py-1.5 sm:px-2.5 sm:py-1 rounded bg-white/5 border border-white/20 text-white hover:border-mint-leaf hover:text-mint-leaf text-[10px] cursor-pointer"
+                            >
+                              + Add Member
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleRemoveMember}
+                              className="min-h-[36px] sm:min-h-0 px-3 py-1.5 sm:px-2.5 sm:py-1 rounded bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white text-[10px] cursor-pointer"
+                            >
+                              - Remove
+                            </button>
+                          </div>
+                        </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Email Address <span style={{ color: activeComp.accentColor }}>*</span>
-                        </label>
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="participant@example.com"
-                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
-                        />
-                        {errors.email && (
-                          <p className="text-[11px] text-red-400 mt-1">{errors.email}</p>
-                        )}
+                        {teamMembers.map((member, idx) => (
+                          <div
+                            key={idx}
+                            className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/10"
+                          >
+                            <div className="sm:col-span-2">
+                              <label className="block text-[10px] text-white/60 mb-1">
+                                Member #{idx + 1} Full Name *
+                              </label>
+                              <input
+                                type="text"
+                                value={member.name}
+                                onChange={(e) =>
+                                  handleMemberChange(idx, 'name', e.target.value)
+                                }
+                                placeholder={`Member #${idx + 1} Name`}
+                                className="w-full min-h-[44px] sm:min-h-0 px-3 py-2 rounded-lg bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
+                              />
+                              {errors[`member_${idx}_name`] && (
+                                <p className="text-[10px] text-red-400 mt-0.5">
+                                  {errors[`member_${idx}_name`]}
+                                </p>
+                              )}
+                            </div>
+                            <div>
+                              <label className="block text-[10px] text-white/60 mb-1">
+                                Grade * (10–13)
+                              </label>
+                              <CustomSelect
+                                value={member.grade}
+                                onChange={(val) =>
+                                  handleMemberChange(idx, 'grade', val)
+                                }
+                                placeholder="Select Grade"
+                                options={[10, 11, 12, 13].map((g) => ({
+                                  value: String(g),
+                                  label: `Grade ${g}`,
+                                }))}
+                                accentColor={activeComp.accentColor}
+                                accentRgb={activeComp.accentRgb}
+                                compact
+                              />
+                              {errors[`member_${idx}_grade`] && (
+                                <p className="text-[10px] text-red-400 mt-0.5">
+                                  {errors[`member_${idx}_grade`]}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
+                    </>
+                  )}
 
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          WhatsApp / Contact Number{' '}
-                          <span style={{ color: activeComp.accentColor }}>*</span>
-                        </label>
-                        <input
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="0714906145 or +94 71 490 6145"
-                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
-                        />
-                        {errors.phone && (
-                          <p className="text-[11px] text-red-400 mt-1">{errors.phone}</p>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div
-                      className="p-3 rounded-xl border text-[11px] leading-relaxed"
-                      style={{
-                        borderColor: `rgba(${activeComp.accentRgb}, 0.4)`,
-                        backgroundColor: `rgba(${activeComp.accentRgb}, 0.1)`,
-                        color: activeComp.accentColor,
-                      }}
+                  {/* Form Actions */}
+                  <div className="pt-4 border-t border-white/10 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsRegOpen(false)}
+                      className="min-h-[44px] sm:min-h-0 px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white/75 hover:text-white text-xs uppercase cursor-pointer"
                     >
-                      Team rule: Strictly Grades 10–13 only. All members from the same school. Max 5 members total (including Captain). Max 2 teams per school.
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Team <span style={{ color: activeComp.accentColor }}>*</span>
-                        </label>
-                        <CustomSelect
-                          value={teamName}
-                          onChange={(val) => setTeamName(val)}
-                          placeholder="Select Team (Team A / Team B)"
-                          options={[
-                            { value: 'Team A', label: 'Team A', sublabel: 'Squad Alpha' },
-                            { value: 'Team B', label: 'Team B', sublabel: 'Squad Bravo' },
-                          ]}
-                          accentColor={activeComp.accentColor}
-                          accentRgb={activeComp.accentRgb}
-                        />
-                        {errors.teamName && (
-                          <p className="text-[11px] text-red-400 mt-1">{errors.teamName}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Team Captain's Full Name{' '}
-                          <span style={{ color: activeComp.accentColor }}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          placeholder="Captain's Full Name"
-                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
-                        />
-                        {errors.fullName && (
-                          <p className="text-[11px] text-red-400 mt-1">{errors.fullName}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Captain's Grade{' '}
-                          <span style={{ color: activeComp.accentColor }}>* (10–13)</span>
-                        </label>
-                        <CustomSelect
-                          value={grade}
-                          onChange={(val) => setGrade(val)}
-                          placeholder="Select Grade"
-                          options={[10, 11, 12, 13].map((g) => ({
-                            value: String(g),
-                            label: `Grade ${g}`,
-                          }))}
-                          accentColor={activeComp.accentColor}
-                          accentRgb={activeComp.accentRgb}
-                        />
-                        {errors.grade && (
-                          <p className="text-[11px] text-red-400 mt-1">{errors.grade}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Captain's Email{' '}
-                          <span style={{ color: activeComp.accentColor }}>*</span>
-                        </label>
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="captain@school.lk"
-                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
-                        />
-                        {errors.email && (
-                          <p className="text-[11px] text-red-400 mt-1">{errors.email}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-wider text-white/70 mb-1.5">
-                          Captain's Phone{' '}
-                          <span style={{ color: activeComp.accentColor }}>*</span>
-                        </label>
-                        <input
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="0714906145"
-                          className="w-full min-h-[44px] sm:min-h-0 px-3.5 py-2.5 rounded-xl bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
-                        />
-                        {errors.phone && (
-                          <p className="text-[11px] text-red-400 mt-1">{errors.phone}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Additional Team Members */}
-                    <div className="pt-3 border-t border-white/10 space-y-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span
-                          className="text-[11px] font-bold uppercase tracking-wider"
-                          style={{ color: activeComp.accentColor }}
-                        >
-                          Additional Team Members (Up to 4 more)
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={handleAddMember}
-                            className="min-h-[36px] sm:min-h-0 px-3 py-1.5 sm:px-2.5 sm:py-1 rounded bg-white/5 border border-white/20 text-white hover:border-mint-leaf hover:text-mint-leaf text-[10px] cursor-pointer"
-                          >
-                            + Add Member
-                          </button>
-                          <button
-                            type="button"
-                            onClick={handleRemoveMember}
-                            className="min-h-[36px] sm:min-h-0 px-3 py-1.5 sm:px-2.5 sm:py-1 rounded bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white text-[10px] cursor-pointer"
-                          >
-                            - Remove
-                          </button>
-                        </div>
-                      </div>
-
-                      {teamMembers.map((member, idx) => (
-                        <div
-                          key={idx}
-                          className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/10"
-                        >
-                          <div className="sm:col-span-2">
-                            <label className="block text-[10px] text-white/60 mb-1">
-                              Member #{idx + 1} Full Name *
-                            </label>
-                            <input
-                              type="text"
-                              value={member.name}
-                              onChange={(e) =>
-                                handleMemberChange(idx, 'name', e.target.value)
-                              }
-                              placeholder={`Member #${idx + 1} Name`}
-                              className="w-full min-h-[44px] sm:min-h-0 px-3 py-2 rounded-lg bg-black/80 border border-white/15 text-white text-base sm:text-xs focus:outline-none focus:border-mint-leaf"
-                            />
-                            {errors[`member_${idx}_name`] && (
-                              <p className="text-[10px] text-red-400 mt-0.5">
-                                {errors[`member_${idx}_name`]}
-                              </p>
-                            )}
-                          </div>
-                          <div>
-                            <label className="block text-[10px] text-white/60 mb-1">
-                              Grade * (10–13)
-                            </label>
-                            <CustomSelect
-                              value={member.grade}
-                              onChange={(val) =>
-                                handleMemberChange(idx, 'grade', val)
-                              }
-                              placeholder="Select Grade"
-                              options={[10, 11, 12, 13].map((g) => ({
-                                value: String(g),
-                                label: `Grade ${g}`,
-                              }))}
-                              accentColor={activeComp.accentColor}
-                              accentRgb={activeComp.accentRgb}
-                              compact
-                            />
-                            {errors[`member_${idx}_grade`] && (
-                              <p className="text-[10px] text-red-400 mt-0.5">
-                                {errors[`member_${idx}_grade`]}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-
-                {/* Form Actions */}
-                <div className="pt-4 border-t border-white/10 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setIsRegOpen(false)}
-                    className="min-h-[44px] sm:min-h-0 px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white/75 hover:text-white text-xs uppercase cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="min-h-[44px] sm:min-h-0 px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all cursor-pointer"
-                    style={{
-                      backgroundColor: activeComp.accentColor,
-                      boxShadow: `0 0 20px rgba(${activeComp.accentRgb}, 0.45)`,
-                    }}
-                  >
-                    SUBMIT REGISTRATION &rarr;
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* Loading State */}
-            {submitState === 'loading' && (
-              <div className="p-12 text-center space-y-4 font-mono">
-                <div
-                  className="w-12 h-12 mx-auto rounded-full border-2 border-t-transparent animate-spin"
-                  style={{ borderColor: activeComp.accentColor, borderTopColor: 'transparent' }}
-                />
-                <h4 className="font-ethnocentric text-sm sm:text-base text-white uppercase tracking-wider">
-                  COMMUNICATING WITH DISPATCH MATRIX
-                </h4>
-                <p className="text-xs text-white/60">
-                  Validating eligibility and recording registration...
-                </p>
-              </div>
-            )}
-
-            {/* Success State */}
-            {submitState === 'success' && (
-              <div className="p-6 sm:p-10 overflow-y-auto overscroll-contain flex-1 min-h-0 text-center space-y-5 font-mono">
-                <div
-                  className="w-14 h-14 mx-auto rounded-full border-2 flex items-center justify-center text-xl font-bold"
-                  style={{
-                    borderColor: activeComp.accentColor,
-                    color: activeComp.accentColor,
-                    boxShadow: `0 0 25px rgba(${activeComp.accentRgb}, 0.4)`,
-                  }}
-                >
-                  ✓
-                </div>
-                <div>
-                  <h3
-                    className="font-ethnocentric text-base sm:text-2xl uppercase tracking-wider mb-2"
-                    style={{ color: activeComp.accentColor }}
-                  >
-                    REGISTRATION SUCCESSFUL
-                  </h3>
-                  <p className="text-white text-sm">
-                    Thank you, <span className="font-bold">{submittedName}</span>!
-                  </p>
-                  <p className="text-white/65 text-xs mt-1">
-                    Your registration for{' '}
-                    <span className="text-white font-semibold">{activeComp.title}</span> has been received and verified.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-black/70 border border-white/15 inline-block max-w-full">
-                  <div className="text-[10px] text-white/50 uppercase tracking-widest mb-1">
-                    OFFICIAL CONFIRMATION ID
-                  </div>
-                  <div
-                    className="font-bold text-base sm:text-lg tracking-wider break-all"
-                    style={{ color: activeComp.accentColor }}
-                  >
-                    {confirmationId}
-                  </div>
-                </div>
-
-                <div className="space-y-3 pt-2">
-                  <p className="text-xs text-white/65 max-w-md mx-auto">
-                    Please join the official WhatsApp community to receive tournament updates, problem statements, and schedules:
-                  </p>
-                  <div className="flex flex-wrap items-center justify-center gap-3">
-                    <a
-                      href={WHATSAPP_GROUP_LINK}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="min-h-[44px] inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all"
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="min-h-[44px] sm:min-h-0 px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all cursor-pointer"
                       style={{
                         backgroundColor: activeComp.accentColor,
                         boxShadow: `0 0 20px rgba(${activeComp.accentRgb}, 0.45)`,
                       }}
                     >
-                      JOIN WHATSAPP GROUP
-                    </a>
-                    <button
-                      type="button"
-                      onClick={() => setIsRegOpen(false)}
-                      className="min-h-[44px] inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white hover:border-white/40 text-xs uppercase cursor-pointer"
-                    >
-                      CLOSE
+                      SUBMIT REGISTRATION &rarr;
                     </button>
                   </div>
-                </div>
-              </div>
-            )}
+                </form>
+              )}
 
-            {/* Error State */}
-            {submitState === 'error' && (
-              <div className="p-6 sm:p-10 overflow-y-auto overscroll-contain flex-1 min-h-0 text-center space-y-4 font-mono">
-                <h4 className="font-ethnocentric text-base sm:text-lg text-red-400 uppercase">
-                  TRANSMISSION ANOMALY
-                </h4>
-                <p className="text-xs text-white/75 max-w-md mx-auto">{errorMessage}</p>
-                <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setSubmitState('form')}
-                    className="min-h-[44px] inline-flex items-center justify-center px-4 py-2 rounded-xl bg-mint-leaf text-black font-bold text-xs uppercase cursor-pointer"
-                  >
-                    RETRY SUBMISSION
-                  </button>
-                  <a
-                    href={WHATSAPP_DIRECT_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="min-h-[44px] inline-flex items-center justify-center px-4 py-2 rounded-xl bg-white/5 border border-white/15 text-white text-xs uppercase"
-                  >
-                    CONTACT COORDINATOR
-                  </a>
+              {/* Loading State */}
+              {submitState === 'loading' && (
+                <div className="p-12 text-center space-y-4 font-mono">
+                  <div
+                    className="w-12 h-12 mx-auto rounded-full border-2 border-t-transparent animate-spin"
+                    style={{ borderColor: activeComp.accentColor, borderTopColor: 'transparent' }}
+                  />
+                  <h4 className="font-ethnocentric text-sm sm:text-base text-white uppercase tracking-wider">
+                    COMMUNICATING WITH DISPATCH MATRIX
+                  </h4>
+                  <p className="text-xs text-white/60">
+                    Validating eligibility and recording registration...
+                  </p>
                 </div>
-              </div>
-            )}
+              )}
+
+              {/* Success State */}
+              {submitState === 'success' && (
+                <div className="p-6 sm:p-10 overflow-y-auto overscroll-contain flex-1 min-h-0 text-center space-y-5 font-mono">
+                  <div
+                    className="w-14 h-14 mx-auto rounded-full border-2 flex items-center justify-center text-xl font-bold"
+                    style={{
+                      borderColor: activeComp.accentColor,
+                      color: activeComp.accentColor,
+                      boxShadow: `0 0 25px rgba(${activeComp.accentRgb}, 0.4)`,
+                    }}
+                  >
+                    ✓
+                  </div>
+                  <div>
+                    <h3
+                      className="font-ethnocentric text-base sm:text-2xl uppercase tracking-wider mb-2"
+                      style={{ color: activeComp.accentColor }}
+                    >
+                      REGISTRATION SUCCESSFUL
+                    </h3>
+                    <p className="text-white text-sm">
+                      Thank you, <span className="font-bold">{submittedName}</span>!
+                    </p>
+                    <p className="text-white/65 text-xs mt-1">
+                      Your registration for{' '}
+                      <span className="text-white font-semibold">{activeComp.title}</span> has been received and verified.
+                    </p>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-black/70 border border-white/15 inline-block max-w-full">
+                    <div className="text-[10px] text-white/50 uppercase tracking-widest mb-1">
+                      OFFICIAL CONFIRMATION ID
+                    </div>
+                    <div
+                      className="font-bold text-base sm:text-lg tracking-wider break-all"
+                      style={{ color: activeComp.accentColor }}
+                    >
+                      {confirmationId}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 pt-2">
+                    <p className="text-xs text-white/65 max-w-md mx-auto">
+                      Please join the official WhatsApp community to receive tournament updates, problem statements, and schedules:
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                      <a
+                        href={WHATSAPP_GROUP_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="min-h-[44px] inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black transition-all"
+                        style={{
+                          backgroundColor: activeComp.accentColor,
+                          boxShadow: `0 0 20px rgba(${activeComp.accentRgb}, 0.45)`,
+                        }}
+                      >
+                        JOIN WHATSAPP GROUP
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => setIsRegOpen(false)}
+                        className="min-h-[44px] inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white hover:border-white/40 text-xs uppercase cursor-pointer"
+                      >
+                        CLOSE
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Error State */}
+              {submitState === 'error' && (
+                <div className="p-6 sm:p-10 overflow-y-auto overscroll-contain flex-1 min-h-0 text-center space-y-4 font-mono">
+                  <h4 className="font-ethnocentric text-base sm:text-lg text-red-400 uppercase">
+                    TRANSMISSION ANOMALY
+                  </h4>
+                  <p className="text-xs text-white/75 max-w-md mx-auto">{errorMessage}</p>
+                  <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setSubmitState('form')}
+                      className="min-h-[44px] inline-flex items-center justify-center px-4 py-2 rounded-xl bg-mint-leaf text-black font-bold text-xs uppercase cursor-pointer"
+                    >
+                      RETRY SUBMISSION
+                    </button>
+                    <a
+                      href={WHATSAPP_DIRECT_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="min-h-[44px] inline-flex items-center justify-center px-4 py-2 rounded-xl bg-white/5 border border-white/15 text-white text-xs uppercase"
+                    >
+                      CONTACT COORDINATOR
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
