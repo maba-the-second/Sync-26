@@ -5,15 +5,37 @@ import { useAppStore } from '../store/useAppStore';
 const WHATSAPP_DIRECT_LINK = 'https://wa.link/05138r';
 const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/IaBJyTRhZcACMFKUOrYndg';
 
+interface RubricRow {
+  criteria: string;
+  weight: string;
+}
+
+interface CompetitionTrackOption {
+  label: string;
+  objective?: string;
+  format?: string;
+  rules?: string;
+  progression?: string;
+  deliverables?: string;
+  rubricLabel?: string;
+  rubric?: RubricRow[];
+}
+
 interface CompetitionSections {
   statement?: string[];
   theme?: string[];
   overview?: string[];
+  tracks?: CompetitionTrackOption[];
   participation?: string[];
   format?: string[];
   instructions?: string[];
   rules?: string[];
   scoring?: string[];
+  rubric?: {
+    unitLabel?: string;
+    subtitle?: string;
+    rows: RubricRow[];
+  };
   submission?: string[];
   announcement?: string[];
 }
@@ -41,98 +63,99 @@ const COMPETITIONS: CompetitionItem[] = [
   {
     id: 'logo',
     code: "SYNC'26",
-    title: 'Logo Designing',
-    badge: 'FUTURISTIC IDENTITY',
+    title: 'Logo Design',
+    badge: 'BRAND IDENTITY',
     category: 'Identity & Branding',
-    eligibility: 'Grades 6–13 • Individual Only',
+    eligibility: 'Grades 6–13 • Individual',
     shortEligibility: 'G6–13',
     minGrade: 6,
     maxGrade: 13,
     isTeam: false,
     prefix: 'LGD',
-    description: 'Craft iconic minimal emblems and scalable brand marks.',
+    description: 'Rebrand Spice Lane or craft a startup mark for Orbitly.',
     shortDesc:
-      'Create a memorable, futuristic identity that communicates innovation, digital transformation, and creative thinking.',
+      'Choose between Option A (Spice Lane Rebrand) or Option B (Orbitly Startup Logo) and deliver a scalable vector master with a complete presentation board.',
     accentColor: '#FF3B5C',
     accentRgb: '255, 59, 92',
     sections: {
-      overview: [
-        'Participants should design a futuristic, tech-inspired logo that embodies the spirit of innovation, digital transformation, and boundary-breaking creativity, suitable for a future-tech event.',
-      ],
-      participation: [
-        'Students from Grade 6–13 of Dharmaraja College and other schools are eligible.',
-        'Individual participation only; no team submissions. Each participant may submit only one entry.',
-      ],
-      instructions: [
-        'Logos must be created digitally using professional design tools such as Adobe Illustrator, Photoshop, Figma, or equivalent.',
-        'Submissions must include both a full-color version and a simplified monochrome version.',
-        'The design should be scalable, usable on small digital icons and large posters.',
-        'All work must be original; plagiarism and stock logo templates lead to disqualification.',
-        'A short design note must accompany the logo, explaining the inspiration and concept.',
-      ],
-      scoring: [
-        'Concept & Relevance: Aligning with future-tech vision.',
-        'Creativity: Freshness, innovative symbolism, and uniqueness.',
-        'Simplicity & Memorability: Clear and distinctive across contexts.',
-        'Versatility: Scalability, monochrome, and print adaptability.',
-        'Visual Impact: Professional balance and aesthetic poise.',
-      ],
-      submission: [
-        'Export logo in .png and .jpg formats (both color & monochrome versions).',
-        'Include short concept note text.',
-        'Naming format: Logo_SchoolName_YourName.rar (Example: Logo_RoyalCollege_MihinRukshan.rar).',
-        "Upload Google Drive public link via the SYNC '26 portal.",
+      tracks: [
+        {
+          label: 'Option A: Spice Lane Rebrand',
+          objective:
+            'Rebrand "Spice Lane," an established culinary brand expanding into modern global markets.',
+          deliverables:
+            'Vector master file (.AI or .SVG), Logo Presentation Board (.PDF) including primary mark, secondary mark, color palette, and usage guidelines.',
+          rubricLabel: 'Weight',
+          rubric: [
+            { criteria: 'Concept Originality & Relevance', weight: '30%' },
+            { criteria: 'Vector Quality & Scalability', weight: '30%' },
+            { criteria: 'Versatility Across Media', weight: '20%' },
+            { criteria: 'Presentation & Brand Guidelines', weight: '20%' },
+          ],
+        },
+        {
+          label: 'Option B: Orbitly Startup Logo',
+          objective:
+            'Create a brand mark for "Orbitly," a tech startup focusing on automated cloud workflow management.',
+          deliverables:
+            'Vector master file (.AI or .SVG) and a monochrome/color application presentation (.PDF).',
+          rubricLabel: 'Weight',
+          rubric: [
+            { criteria: 'Conceptual Clarity & Innovation', weight: '35%' },
+            { criteria: 'Scalability & Simplicity', weight: '25%' },
+            { criteria: 'Modern Visual Appeal', weight: '20%' },
+            { criteria: 'Presentation & Documentation', weight: '20%' },
+          ],
+        },
       ],
     },
   },
   {
     id: 'poster',
     code: "SYNC'26",
-    title: 'Poster Designing',
-    badge: 'HAPPENING NOW',
+    title: 'Graphic Design',
+    badge: 'POSTER & VISUAL ART',
     category: 'Graphic Design',
-    eligibility: 'Grades 6–13 • Individual Only',
+    eligibility: 'Grades 6–13 • Individual',
     shortEligibility: 'G6–13',
     minGrade: 6,
     maxGrade: 13,
     isTeam: false,
-    prefix: 'PST',
-    description: 'Design bold typographic layouts and visual key art.',
+    prefix: 'GRD',
+    description: 'Design a villain movie teaser or PulseBand social poster.',
     shortDesc:
-      'Create a futuristic promotional poster that feels like an event happening in real time.',
+      'Choose between Option A (Villain-Led Movie Teaser Poster) or Option B (PulseBand Social Media Poster) and execute print-ready or digital campaign artwork.',
     accentColor: '#FF7A2F',
     accentRgb: '255, 122, 47',
     sections: {
-      theme: [
-        "Theme: 'Happening Now: A Futuristic Call to SYNC '26'",
-        "Create a bold, futuristic graphic poster that captures the essence of the event in a 'happening now' style.",
-        "Posters should reflect the dynamic energy, digital aesthetic, and innovative spirit of SYNC '26.",
-        "The best submission may be featured as part of the official announcement of SYNC '26 on the main event day!",
-      ],
-      participation: [
-        'Students from Grade 6–13 of Dharmaraja College and other schools are eligible to participate.',
-        'Individual entries only; team participation is not permitted.',
-        'Schools may send any number of participants. Registration must be completed by deadline.',
-        'Each participant is limited to one poster submission.',
-      ],
-      instructions: [
-        'Participants may use Adobe Photoshop, Illustrator, or any professional graphic design software.',
-        "Designs must represent a 'Happening Now' SYNC '26 poster concept.",
-        'Submissions must be original; plagiarism or use of stock templates will lead to disqualification.',
-        'Standard poster dimensions recommended (A3 or A4 portrait), but creative layouts are valued.',
-      ],
-      scoring: [
-        'Concept & Relevance (Capturing futuristic digital theme).',
-        'Creativity (Originality and innovative approach).',
-        'Visual Appeal (Composition, color, and lighting effects).',
-        'Technical Skill (Use of design tools, layers, techniques).',
-        'Audience Impact (Communicative visual energy).',
-      ],
-      submission: [
-        'Poster file: Export final design in .png or .jpg format.',
-        'Editable source file: Submit the working file (.psd, .ai, or equivalent) with all layers intact.',
-        'File naming format: Poster_SchoolName_YourName.rar (Example: Poster_RoyalCollege_MihinRukshan.rar).',
-        "Upload Google Drive link with public access via the official SYNC '26 website before deadline.",
+      tracks: [
+        {
+          label: 'Option A: Villain-Led Movie Teaser Poster',
+          objective:
+            'Create a teaser poster focused on the primary antagonist of an upcoming fictional film.',
+          deliverables:
+            'High-resolution print-ready PDF (CMYK, 300 DPI) and digital viewable JPG/PNG (RGB).',
+          rubricLabel: 'Weight',
+          rubric: [
+            { criteria: 'Visual Composition & Layout', weight: '30%' },
+            { criteria: 'Typography & Hierarchy', weight: '25%' },
+            { criteria: 'Theme Alignment & Atmosphere', weight: '25%' },
+            { criteria: 'Technical Execution & Quality', weight: '20%' },
+          ],
+        },
+        {
+          label: 'Option B: PulseBand Social Media Poster',
+          objective:
+            'Design a promotional social media poster for "PulseBand," a next-gen fitness wearable.',
+          deliverables: '1080x1350 px (4:5 ratio) PNG/JPG digital export.',
+          rubricLabel: 'Weight',
+          rubric: [
+            { criteria: 'Brand Alignment & Visual Impact', weight: '30%' },
+            { criteria: 'Clarity of Information & Call to Action', weight: '25%' },
+            { criteria: 'Creative Concept & Asset Integration', weight: '25%' },
+            { criteria: 'Technical Precision', weight: '20%' },
+          ],
+        },
       ],
     },
   },
@@ -140,33 +163,36 @@ const COMPETITIONS: CompetitionItem[] = [
     id: 'aspect',
     code: "SYNC'26",
     title: 'Aspect',
-    badge: 'CALL OF DUTY 3',
+    badge: 'ESPORTS TOURNAMENT',
     category: 'Esports Arena',
-    eligibility: 'Grades 6–13 • Competitive Gaming',
-    shortEligibility: 'G6–13',
+    eligibility: 'Inter-School: Valorant • Intra-School: Call of Duty 4',
+    shortEligibility: 'ESPORTS',
     minGrade: 6,
     maxGrade: 13,
     isTeam: false,
     prefix: 'ASP',
-    description: 'Explore tactical esports warfare in Call of Duty 3.',
+    description: 'Compete in Valorant (Inter-School) or Call of Duty 4 (Intra-School).',
     shortDesc:
-      'The premier esports battleground featuring Call of Duty 3. Tactical combat, reflex coordination, and competitive cyber warfare.',
+      'The official SYNC esports tournament featuring 5v5 Valorant for Inter-School brackets and Call of Duty 4 LAN play for Intra-School competitors.',
     accentColor: '#FFD026',
     accentRgb: '255, 208, 38',
     sections: {
-      overview: [
-        'ASPECT is the official gaming championship of SYNC ’26, hosted by Dharmaraja College ICT Society.',
-        'Official tournament game title: Call of Duty 3.',
-        'Experience fast-paced tactical competition with professional tournament oversight.',
-      ],
-      announcement: [
-        "Tournament rules, bracket structure, match rotation, schedule, and prize distribution will be officially announced through the SYNC '26 event channels and WhatsApp community.",
-        'Stay connected via the official WhatsApp group for bracket releases and platform guidelines.',
-      ],
-      participation: [
-        'Open to school students Grade 6–13.',
-        'Players must register via the official form to reserve their bracket allocation.',
-        'Join the official WhatsApp group for scrim updates, lobby codes, and coordinator briefings.',
+      tracks: [
+        {
+          label: 'Inter-School Tournament: Valorant',
+          format:
+            '5v5 Competitive Tournament (Single/Double Elimination depending on bracket size).',
+          rules:
+            'Tournament rules follow standard competitive map pools and match settings. All players must use registered accounts.',
+          progression: 'Match wins determine bracket advancement.',
+        },
+        {
+          label: 'Intra-School Tournament: Call of Duty 4',
+          format: 'Search & Destroy / Free-For-All local network tournament.',
+          rules:
+            'Standard competitive mod rules apply. Hardware provided or configured per event setup.',
+          progression: 'Stage progression based on round wins and bracket standings.',
+        },
       ],
     },
   },
@@ -174,41 +200,30 @@ const COMPETITIONS: CompetitionItem[] = [
     id: 'odyssey',
     code: "SYNC'26",
     title: 'Odyssey',
-    badge: 'KNOWLEDGE ARENA',
+    badge: 'IT QUIZ COMPETITION',
     category: 'Team ICT Championship',
-    eligibility: 'Grades 10–13 • Teams Only (Max 5)',
-    shortEligibility: 'TEAM 10–13',
+    eligibility: 'Inter-School Teams Only • Max 4 Participants',
+    shortEligibility: 'TEAM MAX 4',
     minGrade: 10,
     maxGrade: 13,
     isTeam: true,
     prefix: 'ODY',
-    description: 'Navigate multi-stage ICT challenges across digital frontiers.',
+    description: 'Multi-round inter-school IT quiz culminating live at SYNC’26.',
     shortDesc:
-      'Premier team-based ICT championship spanning fundamentals, emerging technologies, logic, and digital ethics.',
+      'Inter-school IT quiz competition progressing through two online rounds to a live stage finale during ICT Day (sync’26).',
     accentColor: '#2EE66B',
     accentRgb: '46, 230, 107',
     sections: {
-      overview: [
-        'Tests students on a wide range of ICT topics: fundamentals, emerging tech, digital ethics, programming logic, and industry trends.',
-        "Conducted in two online rounds followed by a final physical round at SYNC '26.",
-      ],
       participation: [
-        'Students of Grades 10–13 from schools across Sri Lanka.',
-        'Teams only. No individual or mixed-school entries allowed.',
-        'A maximum of 5 members per team, all from the same school.',
-        'Strict limit of TWO teams per school.',
-        'Registration must be completed by the specified deadline.',
+        'Inter-school teams only. Maximum of 4 participants per team.',
       ],
       format: [
-        "Round 1 — Online Preliminary: Hosted via official SYNC '26 portal with Zoom breakout rooms. MCQs & short-answer challenges. Top 8 teams advance.",
-        'Round 2 — Online Semifinal: Advanced MCQs & scenario reasoning in breakout rooms. Top 2 teams advance to the Physical Final.',
-        "Final Round — Physical at SYNC '26 Main Event: Onsite championship stage covering A/L & O/L ICT syllabus, programming logic, and tech innovation with live interactive scoring.",
+        'Round 1 (Online): General IT knowledge screening quiz (Timed multiple-choice format).',
+        'Round 2 (Online): Advanced technical, computational, and history-of-computing online assessment.',
+        "Final Round (Live): Stage quiz hosted live during the ICT Day (sync'26) event.",
       ],
-      rules: [
-        'All team members must keep functioning cameras and microphones on throughout online rounds.',
-        'Team communication is permitted ONLY between registered members within assigned Zoom breakout rooms.',
-        'Any form of cheating or external assistance results in immediate disqualification.',
-        'Preset time limit per question; answers submitted after expiration are rejected.',
+      scoring: [
+        'Points awarded per correct response with penalty systems active during specific buzzer/rapid-fire stages in the finals.',
       ],
     },
   },
@@ -216,188 +231,197 @@ const COMPETITIONS: CompetitionItem[] = [
     id: 'gamedesign',
     code: "SYNC'26",
     title: 'Game Designing',
-    badge: 'INTERACTIVE WORLDS',
+    badge: 'ROGUELIKE / BOSS-RUSH',
     category: 'Game Development',
-    eligibility: 'Grades 6–13 • Individual Only',
-    shortEligibility: 'G6–13',
+    eligibility: 'Solo or Teams up to 4 Members',
+    shortEligibility: 'SOLO / MAX 4',
     minGrade: 6,
     maxGrade: 13,
     isTeam: false,
     prefix: 'GMD',
-    description: 'Build interactive mechanics, playable systems, and worlds.',
+    description: 'Build a Roguelike or Boss-Rush game in Tech & Fantasy.',
     shortDesc:
-      'Engineer an original playable game experience featuring engaging mechanics, futuristic world-building, and responsive controls.',
+      'Create a Roguelike or Boss-Rush game set in a Technology and Fantasy theme, hosted on itch.io as a Windows executable with a public GitHub repository.',
     accentColor: '#1AD6FF',
     accentRgb: '26, 214, 255',
     sections: {
+      participation: ['Solo participants or teams of up to 4 members.'],
       theme: [
-        "Theme: 'Beyond the Digital Frontier: Cybernetic Odyssey'",
-        'Create an original 2D or 3D playable game that explores futuristic mechanics, digital realms, or sci-fi problem solving.',
-      ],
-      participation: [
-        'Students from Grade 6–13 of Dharmaraja College and other schools are eligible to participate.',
-        'Individual participation only; team entries are not permitted.',
-        'All core game logic and level design must be the original work of the participant.',
+        'Create a Roguelike or Boss-Rush game set in a Technology and Fantasy theme.',
       ],
       instructions: [
-        'Participants may use Unity, Unreal Engine, Godot, Scratch, or HTML5/WebGL game frameworks.',
-        'The submission must include a playable build (Windows executable or WebGL build) along with source project files.',
-        'Include a brief README document explaining controls, game objectives, and engines/tools used.',
-      ],
-      scoring: [
-        'Gameplay & Mechanics: Responsiveness, fun factor, and level design.',
-        'Creativity & Theme Alignment: Originality and adherence to the futuristic theme.',
-        'Visuals & Audio Polish: Atmosphere, UI clarity, and sound design.',
-        'Technical Execution: Stability, performance, and clean implementation.',
+        'Game Engine: Participants may use any game engine (such as Godot, Unity, or GDevelop).',
+        'Asset Policy: Free third-party assets are allowed (with proper attribution); paid assets are strictly prohibited.',
       ],
       submission: [
-        'Package the playable build and project source files into a .rar or .zip archive.',
-        'Naming format: Game_SchoolName_YourName.rar.',
-        "Upload the Google Drive link with public access via the official SYNC '26 portal before the deadline.",
+        'Host the game on itch.io as a downloadable Windows executable (.zip) (do not use the web player option) and provide a public GitHub repository link.',
       ],
+      rubric: {
+        unitLabel: 'Points',
+        subtitle: 'Maximum 100 Points',
+        rows: [
+          { criteria: 'Gameplay & Genre Mechanics', weight: '35 points' },
+          { criteria: 'Theme Integration: Technology & Fantasy', weight: '20 points' },
+          { criteria: 'Technical Execution & Build Stability', weight: '20 points' },
+          { criteria: 'Visuals, Audio & User Experience', weight: '15 points' },
+          { criteria: 'Originality & Polish', weight: '10 points' },
+        ],
+      },
     },
   },
   {
     id: 'webdev',
     code: "SYNC'26",
-    title: 'Web Designing',
-    badge: 'COMMAND CENTER CHALLENGE',
-    category: 'Full-Stack & Web',
-    eligibility: 'Grades 6–13 • Individual Only',
+    title: 'Web Design',
+    badge: 'UI & WEB INTERFACE',
+    category: 'Web & UI Design',
+    eligibility: 'Grades 6–13 • Individual',
     shortEligibility: 'G6–13',
     minGrade: 6,
     maxGrade: 13,
     isTeam: false,
     prefix: 'WEB',
-    description: 'Engineer responsive interfaces and modern web experiences.',
+    description: 'Build a responsive web interface or interactive Figma prototype.',
     shortDesc:
-      'Design and develop an innovative digital platform that solves a practical problem through functionality, creativity, and excellent user experience.',
+      'Create a responsive, functional, and visually compelling web page or interface based on the prompt provided during the competition window.',
     accentColor: '#3B6EFF',
     accentRgb: '59, 110, 255',
     sections: {
-      statement: [
-        'With dozens of events happening across the year—debates, sports meets, exhibitions—the administration is struggling to keep everyone updated. Bob is tasked with building a digital command center for all school events: a place where students, teachers, and parents can stay informed and engaged.',
-        'Key capabilities: Announcements and event pages; Interactive calendars and countdowns; Online registrations and ticketing; Optional live event updates or highlights.',
-        'Challenge: Creating a scalable, interactive system that can handle multiple events smoothly with a clean user experience.',
-      ],
-      participation: [
-        'Students from Grade 6–13 of Dharmaraja College and other schools are eligible to participate.',
-        'Individual participation only—team entries are not accepted.',
-        'Registration for the competition must be completed by the specified deadline.',
-        'All submissions must represent original work. Copying existing solutions or plagiarizing content will result in disqualification.',
-      ],
-      instructions: [
-        'Participants are required to develop a fully functional web application.',
-        'Solutions may include interactive interfaces (web, desktop, or GUI), data processing, and visual outputs.',
-        'Participants are free to use any suitable programming environment (HTML/CSS/JS, React, Angular, Vue.js, etc.).',
-        'The final web application must be hosted online, using platforms such as GitHub Pages, Netlify, Vercel, or similar services.',
-        'A README.md file must accompany the project repository documenting project purpose, technologies used, and step-by-step instructions to run.',
-      ],
-      scoring: [
-        'Functionality: Does the application perform all required tasks correctly and efficiently?',
-        'Design & User Experience: How intuitive, engaging, and visually appealing is the interface?',
-        'Creativity & Innovation: Does the solution demonstrate original ideas, unique features, or creative approaches?',
-        'Code Structure & Quality: Is the code clean, organized, and maintainable?',
-        'Adding backend functionality, such as databases or APIs, will be considered a bonus and can improve scoring.',
-        'Multiple submissions are not allowed. Only the first submitted version will be evaluated.',
+      overview: [
+        'Objective: Create a responsive, functional, and visually compelling web page or interface based on the prompt provided during the competition window.',
       ],
       submission: [
-        "Submit a public GitHub repository link containing the project code through the official SYNC '26 website before the deadline.",
-        'Provide a hosted link to the live web application.',
-        'Ensure all links are accessible and fully functional before the deadline. Modifications after the deadline will not be considered.',
+        'Deliverables: Source files (HTML/CSS/JS) or Figma design prototype link with interactive components fully configured.',
       ],
+      rubric: {
+        unitLabel: 'Weight',
+        rows: [
+          { criteria: 'UI Aesthetics & Visual Polish', weight: '30%' },
+          { criteria: 'User Experience & Navigation Logic', weight: '30%' },
+          { criteria: 'Responsiveness & Layout Architecture', weight: '20%' },
+          { criteria: 'Code Structure / Prototype Functionality', weight: '20%' },
+        ],
+      },
     },
   },
   {
     id: 'algorithm',
     code: "SYNC'26",
     title: 'Algorithm',
-    badge: 'ALGORITHMIC THINKING',
+    badge: 'ALGORITHMIC CHALLENGES',
     category: 'Code & Logic',
-    eligibility: 'Grades 6–13 • Individual Only',
+    eligibility: 'Grades 6–13 • C++ / Python / Java',
     shortEligibility: 'G6–13',
     minGrade: 6,
     maxGrade: 13,
     isTeam: false,
     prefix: 'ALG',
-    description: 'Solve complex computational problems with optimal logic.',
+    description: 'Optimize algorithmic challenges for time and space complexity.',
     shortDesc:
-      'Challenge your programming logic, analytical thinking, and problem-solving ability through a competitive online algorithmic programming experience.',
+      'Solve a series of algorithmic challenges, optimizing for computational efficiency, time complexity, and memory management.',
     accentColor: '#7C4DFF',
     accentRgb: '124, 77, 255',
     sections: {
-      participation: [
-        'Open to students from Grade 6–13 of Dharmaraja College and other schools.',
-        'Individual participation only. Team entries are not permitted.',
-        'Registration for the competition must be completed before the announced deadline.',
-        "All solutions must be the participant's own work. Code plagiarism, sharing solutions, or copying another participant's work will result in immediate disqualification.",
-      ],
-      format: [
-        'Hosted online through the HackerRank platform.',
-        'Five algorithmic problems will be released simultaneously.',
-        'Each problem carries 100 points, for a total of 500 points.',
-        'Participants will have four hours to solve as many problems as possible.',
-        'Submissions are accepted in C++, Python, Java, or JavaScript.',
-        'Multiple attempts may be submitted for each problem.',
-        'This is a single-round competition.',
-        "Final date, time, HackerRank link, and other details will be communicated through the official SYNC '26 channels and WhatsApp group.",
-      ],
-      scoring: [
-        'Partial scoring will be available based on successfully passed test cases/subtasks.',
-        'For multiple attempts, only the highest-scoring submission for that problem will count.',
-        'There is no penalty for incorrect submissions.',
-        'The total score across all 5 problems will decide the rankings of each contestant.',
-        'In the event of a tie, the participant who achieved their final total score earliest will rank higher.',
-        'The decisions of the judging panel will be final.',
+      overview: [
+        'Objective: Solve a series of algorithmic challenges, optimizing for computational efficiency, time complexity, and memory management.',
       ],
       submission: [
-        'All solutions must be submitted directly through HackerRank before the competition closes.',
-        "No separate submission through the SYNC '26 website is required.",
+        'Deliverables: Code submissions via the designated online judging platform (Supported languages: C++, Python, Java).',
       ],
+      rubric: {
+        unitLabel: 'Weight',
+        rows: [
+          { criteria: 'Correctness & Test Case Coverage', weight: '50%' },
+          { criteria: 'Time Complexity Optimization', weight: '25%' },
+          { criteria: 'Space Complexity Optimization', weight: '15%' },
+          { criteria: 'Code Quality & Structure', weight: '10%' },
+        ],
+      },
     },
   },
   {
     id: 'videoedit',
     code: "SYNC'26",
     title: 'Video Editing',
-    badge: 'MOTION & CINEMA',
+    badge: 'MOTION & TRAILERS',
     category: 'Visual Storytelling',
-    eligibility: 'Grades 6–13 • Individual Only',
+    eligibility: 'Grades 6–13 • Individual',
     shortEligibility: 'G6–13',
     minGrade: 6,
     maxGrade: 13,
     isTeam: false,
     prefix: 'VID',
-    description: 'Cut, grade, and synchronize high-energy motion stories.',
+    description: 'Edit a BrightLoop product intro or PulseBand vertical teaser.',
     shortDesc:
-      'Craft a high-impact futuristic motion sequence combining precision rhythmic editing, sound design, visual effects, and color grading.',
+      'Choose between Option A (BrightLoop Product Intro Video) or Option B (PulseBand Teaser Video) and submit your final MP4 export with the project archive.',
     accentColor: '#E040FB',
     accentRgb: '224, 64, 251',
     sections: {
+      tracks: [
+        {
+          label: 'Option A: BrightLoop Product Intro Video',
+          objective:
+            'Edit a dynamic 30-to-60 second product introduction video for "BrightLoop," a smart lighting solution.',
+          deliverables: 'MP4 export (1080p, H.264), Project File archive link.',
+          rubricLabel: 'Weight',
+          rubric: [
+            { criteria: 'Pacing & Rhythmic Editing', weight: '30%' },
+            { criteria: 'Audio Design & Sound Effects', weight: '25%' },
+            { criteria: 'Visual Transitions & Color Grading', weight: '25%' },
+            { criteria: 'Overall Engagement & Narrative Flow', weight: '20%' },
+          ],
+        },
+        {
+          label: 'Option B: PulseBand Teaser Video',
+          objective:
+            'Cut a 15-to-30 second high-energy teaser trailer for the upcoming "PulseBand" launch.',
+          deliverables:
+            'MP4 export (9:16 vertical aspect ratio, 1080x1920), Project File archive.',
+          rubricLabel: 'Weight',
+          rubric: [
+            { criteria: 'Visual Impact & Energy', weight: '35%' },
+            { criteria: 'Audio-Visual Syncing', weight: '25%' },
+            { criteria: 'Creative Motion Effects', weight: '20%' },
+            { criteria: 'Brand Messaging Clarity', weight: '20%' },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: 'iot',
+    code: "SYNC'26",
+    title: 'IoT Innovation',
+    badge: 'OPEN-THEME IOT',
+    category: 'Internet of Things',
+    eligibility: 'Individual or Team • Strictly IoT-Based',
+    shortEligibility: 'IOT / OPEN',
+    minGrade: 6,
+    maxGrade: 13,
+    isTeam: false,
+    prefix: 'IOT',
+    description: 'Build an original open-theme Internet of Things innovation.',
+    shortDesc:
+      'An open-theme premier innovation competition focused strictly on Internet of Things (IoT) solutions with interconnected network capability and data exchange.',
+    accentColor: '#41D2A2',
+    accentRgb: '65, 210, 162',
+    sections: {
+      overview: [
+        'IoT Innovation is a premier innovation competition focused entirely on the Internet of Things (IoT). The competition operates on an open-theme basis, providing participants with the creative freedom to address any issue across any industry, provided the core solution is strictly IoT-based.',
+        'All participants must strictly adhere to the following guidelines regarding project scope, deliverables, originality, and intellectual property.',
+      ],
       theme: [
-        "Theme: 'The Pulse of SYNC '26: Future in Motion'",
-        'Produce a 60 to 120 second futuristic showreel, trailer, or cinematic edit that embodies digital velocity and cybernetic storytelling.',
-      ],
-      participation: [
-        'Students from Grade 6–13 of Dharmaraja College and other schools are eligible to participate.',
-        'Individual participation only; team entries are not permitted.',
-        'Each participant may submit only one final video entry.',
-      ],
-      instructions: [
-        'Participants may use Adobe Premiere Pro, After Effects, DaVinci Resolve, Final Cut Pro, or equivalent professional non-linear editors.',
-        'Output resolution must be at least 1080p (1920×1080) at 24/30/60 fps in .mp4 (H.264) format.',
-        'Include timeline screenshots demonstrating layer structure, cuts, and grading nodes/effects.',
-      ],
-      scoring: [
-        'Pacing & Rhythmic Sync: Precision of cuts, transitions, and audio synchronization.',
-        'Visual Effects & Color Grading: Atmosphere, motion graphics, and tonal consistency.',
-        'Storytelling & Impact: Emotional and visual engagement.',
-        'Technical Quality: Render clarity, sound mixing, and workflow organization.',
+        'Open Theme: Participants are free to identify and solve a problem in any sector (e.g., agriculture, healthcare, smart homes, industrial automation). There are no restrictions on the chosen field.',
+        'Mandatory IoT Requirement: The innovation must be fundamentally based on IoT technology. This can be hardware-focused, software-focused, or a hybrid of both, but interconnected network capability and data exchange are mandatory criteria for qualification.',
       ],
       submission: [
-        'Include the final .mp4 video and project timeline screenshots inside a .rar archive.',
-        'Naming format: Video_SchoolName_YourName.rar.',
-        "Upload the Google Drive link with public access via the official SYNC '26 portal before the deadline.",
+        'Each participating individual or team is required to submit exactly two main deliverables for the evaluation process:',
+        'Presentation Video (Maximum 10 Minutes): A formal video presentation where the primary innovator presents the product, covering (1) a brief introduction outlining the specific issue or problem at hand, (2) a comprehensive introduction of the proposed IoT solution, and (3) a practical demonstration or detailed explanation of how the innovation functions in real-world scenarios. Overtime submissions will be subject to point deductions.',
+        'Project Document (The "Product CV"): A comprehensive technical document detailing the life cycle and architecture of the innovation, including core mechanisms, technical architecture, and system flow; hardware components and software frameworks utilized; and any additional technical specifications, schematics, or relevant background data.',
+      ],
+      rules: [
+        'Originality & Authenticity: The submission must be a genuine, original innovation. Direct copies, replicas, or slightly modified versions of existing market products will result in immediate disqualification.',
+        'Patent & Intellectual Property Disclosures: Ensure proper attribution and legal clarity are included in the Project Document.',
       ],
     },
   },
@@ -855,7 +879,7 @@ export function RegistrationsPage() {
   };
 
   const handleAddMember = () => {
-    if (teamMembers.length < 4) {
+    if (teamMembers.length < 3) {
       setTeamMembers((prev) => [...prev, { name: '', grade: '' }]);
     }
   };
@@ -1045,44 +1069,48 @@ export function RegistrationsPage() {
 
       {/* 8 Competition Cards Orbiting the 3D Crystal (Full 3D Tilted Ring on Mobile/Tablet & Desktop) */}
       {isCompactOrbit ? (
-        <div className="relative w-full max-w-[460px] md:max-w-[540px] px-0.5 sm:px-2 pointer-events-auto flex flex-col items-center">
-          <OrbitImages
-            key="crystal-orbit-cards-mobile"
-            className="orbit-compact"
-            images={COMPETITIONS.map((c) => ({
-              ...c,
-              description: undefined,
-              eligibility: c.shortEligibility,
-            }))}
-            shape="ellipse"
-            baseWidth={560}
-            radiusX={216}
-            radiusY={76}
-            rotation={-8}
-            duration={34}
-            paused={!!detailComp || isRegOpen}
-            speedMultiplier={isHolding ? 4.2 : 1}
-            itemSize={92}
-            itemWidth={108}
-            itemHeight={80}
-            itemRadius={8}
-            depth={0.78}
-            tilt3d={26}
-            backOcclusion={{
-              fadeOutStart: 0.92,
-              fadeOutEnd: 0.72,
-              fadeInStart: 0.80,
-              fadeInEnd: 0.98,
-              backDepthRamp: 0.08,
-            }}
-            hoverScale={1.03}
-            showPath
-            pathColor="rgba(65, 210, 162, 0.38)"
-            pathWidth={1.5}
-            clickToFront
-            onItemClick={(idx, _src, rect) => openDetailsModal(idx, rect)}
-            onRegister={(idx, rect) => openDetailsModal(idx, rect)}
-          />
+        <div className="relative w-full flex flex-col items-center pointer-events-auto">
+          <div className="w-full flex justify-center overflow-x-clip">
+            <div className="w-[130%] max-w-[540px] md:w-full md:max-w-[600px] shrink-0">
+              <OrbitImages
+                key="crystal-orbit-cards-mobile"
+                className="orbit-compact"
+                images={COMPETITIONS.map((c) => ({
+                  ...c,
+                  description: undefined,
+                  eligibility: c.shortEligibility,
+                }))}
+                shape="ellipse"
+                baseWidth={640}
+                radiusX={276}
+                radiusY={92}
+                rotation={-8}
+                duration={34}
+                paused={!!detailComp || isRegOpen}
+                speedMultiplier={isHolding ? 4.2 : 1}
+                itemSize={86}
+                itemWidth={92}
+                itemHeight={104}
+                itemRadius={8}
+                depth={0.68}
+                tilt3d={26}
+                backOcclusion={{
+                  fadeOutStart: 0.86,
+                  fadeOutEnd: 0.64,
+                  fadeInStart: 0.74,
+                  fadeInEnd: 0.95,
+                  backDepthRamp: 0.08,
+                }}
+                hoverScale={1.03}
+                showPath
+                pathColor="rgba(65, 210, 162, 0.38)"
+                pathWidth={1.5}
+                clickToFront
+                onItemClick={(idx, _src, rect) => openDetailsModal(idx, rect)}
+                onRegister={(idx, rect) => openDetailsModal(idx, rect)}
+              />
+            </div>
+          </div>
           <div className="absolute top-full mt-3 px-3 py-1 rounded-full border border-white/15 bg-black/60 backdrop-blur-sm font-mono text-[9px] tracking-[0.2em] text-white/60 uppercase whitespace-nowrap">
             SWIPE TO ORBIT <span className="text-mint-leaf">//</span> TAP CARD TO INSPECT
           </div>
@@ -1230,6 +1258,112 @@ export function RegistrationsPage() {
                   </div>
                 )}
 
+                {detailComp.sections.tracks && (
+                  <div className="space-y-4">
+                    {detailComp.sections.tracks.map((track, tIdx) => (
+                      <div
+                        key={tIdx}
+                        className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3"
+                      >
+                        <h4
+                          className="font-mono font-bold text-xs sm:text-sm tracking-[0.14em] uppercase"
+                          style={{ color: detailComp.accentColor }}
+                        >
+                          {track.label}
+                        </h4>
+
+                        <ul className="space-y-2">
+                          {track.objective && (
+                            <li className="flex items-start gap-2.5 text-white/80">
+                              <span
+                                className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                                style={{ backgroundColor: detailComp.accentColor }}
+                              />
+                              <span>
+                                <strong className="text-white">Objective:</strong> {track.objective}
+                              </span>
+                            </li>
+                          )}
+                          {track.format && (
+                            <li className="flex items-start gap-2.5 text-white/80">
+                              <span
+                                className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                                style={{ backgroundColor: detailComp.accentColor }}
+                              />
+                              <span>
+                                <strong className="text-white">Format:</strong> {track.format}
+                              </span>
+                            </li>
+                          )}
+                          {track.rules && (
+                            <li className="flex items-start gap-2.5 text-white/80">
+                              <span
+                                className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                                style={{ backgroundColor: detailComp.accentColor }}
+                              />
+                              <span>
+                                <strong className="text-white">Rules:</strong> {track.rules}
+                              </span>
+                            </li>
+                          )}
+                          {track.progression && (
+                            <li className="flex items-start gap-2.5 text-white/80">
+                              <span
+                                className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                                style={{ backgroundColor: detailComp.accentColor }}
+                              />
+                              <span>
+                                <strong className="text-white">Scoring / Progression:</strong>{' '}
+                                {track.progression}
+                              </span>
+                            </li>
+                          )}
+                          {track.deliverables && (
+                            <li className="flex items-start gap-2.5 text-white/80">
+                              <span
+                                className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                                style={{ backgroundColor: detailComp.accentColor }}
+                              />
+                              <span>
+                                <strong className="text-white">Deliverables:</strong>{' '}
+                                {track.deliverables}
+                              </span>
+                            </li>
+                          )}
+                        </ul>
+
+                        {track.rubric && track.rubric.length > 0 && (
+                          <div className="pt-2">
+                            <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/60 mb-2">
+                              Scoring Rubric
+                            </div>
+                            <div className="rounded-lg border border-white/10 overflow-hidden">
+                              <div className="grid grid-cols-[1fr_auto] gap-3 px-3 py-2 bg-white/[0.04] border-b border-white/10 text-[10px] font-bold uppercase tracking-wider text-white/75">
+                                <span>Evaluation Criteria</span>
+                                <span className="text-right">{track.rubricLabel ?? 'Weight'}</span>
+                              </div>
+                              {track.rubric.map((row, rIdx) => (
+                                <div
+                                  key={rIdx}
+                                  className="grid grid-cols-[1fr_auto] gap-3 px-3 py-2 border-b last:border-b-0 border-white/[0.06] text-xs text-white/80"
+                                >
+                                  <span>{row.criteria}</span>
+                                  <span
+                                    className="font-bold text-right shrink-0"
+                                    style={{ color: detailComp.accentColor }}
+                                  >
+                                    {row.weight}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 {detailComp.sections.participation && (
                   <div>
                     <h4
@@ -1337,6 +1471,46 @@ export function RegistrationsPage() {
                         </li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {detailComp.sections.rubric && (
+                  <div>
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                      <h4
+                        className="font-mono font-bold text-xs tracking-[0.2em] uppercase"
+                        style={{ color: detailComp.accentColor }}
+                      >
+                        Scoring Rubric
+                      </h4>
+                      {detailComp.sections.rubric.subtitle && (
+                        <span className="text-[10px] uppercase tracking-wider text-white/60">
+                          {detailComp.sections.rubric.subtitle}
+                        </span>
+                      )}
+                    </div>
+                    <div className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">
+                      <div className="grid grid-cols-[1fr_auto] gap-3 px-3.5 py-2.5 bg-white/[0.04] border-b border-white/10 text-[10px] font-bold uppercase tracking-wider text-white/75">
+                        <span>Evaluation Criteria</span>
+                        <span className="text-right">
+                          {detailComp.sections.rubric.unitLabel ?? 'Weight'}
+                        </span>
+                      </div>
+                      {detailComp.sections.rubric.rows.map((row, rIdx) => (
+                        <div
+                          key={rIdx}
+                          className="grid grid-cols-[1fr_auto] gap-3 px-3.5 py-2.5 border-b last:border-b-0 border-white/[0.06] text-xs text-white/80"
+                        >
+                          <span>{row.criteria}</span>
+                          <span
+                            className="font-bold text-right shrink-0"
+                            style={{ color: detailComp.accentColor }}
+                          >
+                            {row.weight}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
@@ -1620,7 +1794,7 @@ export function RegistrationsPage() {
                           color: activeComp.accentColor,
                         }}
                       >
-                        Team rule: Strictly Grades 10–13 only. All members from the same school. Max 5 members total (including Captain). Max 2 teams per school.
+                        Team rule: Inter-school teams only. Strictly Grades 10–13. All members from the same school. Maximum 4 participants per team (including Captain).
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1726,7 +1900,7 @@ export function RegistrationsPage() {
                             className="text-[11px] font-bold uppercase tracking-wider"
                             style={{ color: activeComp.accentColor }}
                           >
-                            Additional Team Members (Up to 4 more)
+                            Additional Team Members (Up to 3 more)
                           </span>
                           <div className="flex items-center gap-2">
                             <button

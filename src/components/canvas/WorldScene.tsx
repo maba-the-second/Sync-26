@@ -130,11 +130,18 @@ export function WorldScene() {
     }
 
     // Rotate each particle orbit ring around its tilted axis (accelerates when holding mouse)
+    // Hide the outermost particle ring on mobile Registrations so it doesn't crowd the compact orbit cards
+    const hideOutermostRing =
+      activePage === 'registrations' && typeof window !== 'undefined' && window.innerWidth < 1024;
     const speedMultiplier = isHolding ? 2.4 : 1.0;
     ORBIT_CONFIGS.forEach((cfg, idx) => {
       const ring = orbitRefs.current[idx];
       if (ring) {
-        ring.rotation.y += delta * cfg.speed * speedMultiplier;
+        const isOutermost = idx === ORBIT_CONFIGS.length - 1;
+        ring.visible = !(isOutermost && hideOutermostRing);
+        if (ring.visible) {
+          ring.rotation.y += delta * cfg.speed * speedMultiplier;
+        }
       }
     });
 
