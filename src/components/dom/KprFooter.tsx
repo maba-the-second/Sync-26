@@ -1,12 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { useAppStore } from '../../store/useAppStore';
-
 const FOOTER_LINKS: {
   heading: string;
   items: { label: string; target?: string; href?: string }[];
 }[] = [
   {
-    heading: ' NAVIGATION',
+    heading: 'NAVIGATION',
     items: [
       { label: 'FRONTIER', target: '#project' },
       { label: 'ROADMAP', target: '#the-keep' },
@@ -15,7 +12,7 @@ const FOOTER_LINKS: {
     ],
   },
   {
-    heading: ' COMMUNITY & SOCIALS',
+    heading: 'COMMUNITY & SOCIALS',
     items: [
       { label: 'WHATSAPP COMMUNITY', href: 'https://chat.whatsapp.com/IaBJyTRhZcACMFKUOrYndg' },
       { label: 'DIRECT WHATSAPP', href: 'https://wa.link/05138r' },
@@ -24,27 +21,17 @@ const FOOTER_LINKS: {
     ],
   },
   {
-    heading: ' DIRECT DISPATCH',
+    heading: 'CONTACT',
     items: [
       { label: 'MUDITHA  +94 70 264 5851', href: 'tel:+94702645851' },
       { label: 'NETHUN  +94 71 490 6145', href: 'tel:+94714906145' },
       { label: 'DRCK.ICTSOCIETY@GMAIL.COM', href: 'mailto:drck.ictsociety@gmail.com' },
-      { label: 'MISSION DIRECTIVE', target: '#about' },
+      { label: 'ABOUT', target: '#about' },
     ],
   },
 ];
 
 export function KprFooter() {
-  const depthTextRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    return useAppStore.subscribe((state) => {
-      if (depthTextRef.current) {
-        depthTextRef.current.textContent = `DEPTH LOCK — ${(state.scrollProgress * 100).toFixed(1)}% — SECURE CONNECTION`;
-      }
-    });
-  }, []);
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -86,9 +73,6 @@ export function KprFooter() {
           <p className="font-mono text-[12px] sm:text-[15px] text-white/80 leading-relaxed tracking-normal normal-case max-w-sm">
             Official competition and registration platform of the Dharmaraja College Information &amp; Communication Technology Society.
           </p>
-          <div ref={depthTextRef} className="text-[10px] sm:text-[11px] text-white/40 tracking-[0.16em] sm:tracking-[0.2em]">
-            DEPTH LOCK // 0.0% — SECURE CONNECTION
-          </div>
         </div>
 
         {/* Center/Right Directory Columns */}

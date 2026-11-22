@@ -134,11 +134,6 @@ export function OrbitTimeline({
             );
           })}
         </div>
-
-        <div className="px-4 py-2.5 border-t border-white/20 flex items-center justify-between font-mono text-[9px] text-white/45 tracking-widest uppercase">
-          <span>SYNC'26 CHRONOLOGY</span>
-          <span className="text-mint-leaf">INTERACTIVE</span>
-        </div>
       </div>
     </div>
   );

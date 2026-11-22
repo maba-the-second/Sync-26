@@ -254,11 +254,11 @@
 
 /* Compact mobile/tablet orbit cards (smaller footprint, tighter typography) */
 .orbit-compact .orbit-item-inner {
-  padding: 1.5px;
+  padding: 1.2px;
 }
 
 .orbit-compact .orbit-card {
-  padding: 3.5px 5px;
+  padding: 3px 4px;
 }
 
 .orbit-compact .orbit-card-header {
@@ -266,31 +266,32 @@
 }
 
 .orbit-compact .orbit-card-code {
-  font-size: 5px;
+  font-size: clamp(4.2px, 1.2vw, 5.5px);
   line-height: 1;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
 }
 
 .orbit-compact .orbit-card-body {
-  margin: 1px 0;
+  margin: 0.5px 0;
   gap: 0;
 }
 
 .orbit-compact .orbit-card-title {
-  font-size: 6px;
+  font-size: clamp(4.8px, 1.4vw, 6.5px);
   line-height: 1.08;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
+  overflow-wrap: break-word;
 }
 
 .orbit-compact .orbit-card-actions {
-  padding-top: 2px;
+  padding-top: 1.5px;
 }
 
 .orbit-compact .orbit-card-btn {
-  font-size: 5.5px;
+  font-size: clamp(4.5px, 1.25vw, 6px);
   line-height: 1;
-  letter-spacing: 0.08em;
-  padding: 2px 5px;
+  letter-spacing: 0.06em;
+  padding: 2px 4px;
 }
 
 .orbit-center-content {

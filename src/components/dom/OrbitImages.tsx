@@ -49,6 +49,14 @@ export interface OrbitCardItem {
   accentRgb?: string;
 }
 
+export interface OrbitBackOcclusion {
+  fadeOutStart: number;
+  fadeOutEnd: number;
+  fadeInStart: number;
+  fadeInEnd: number;
+  backDepthRamp?: number;
+}
+
 export interface OrbitImagesProps {
   images?: Array<string | OrbitCardItem>;
   altPrefix?: string;
@@ -91,6 +99,7 @@ export interface OrbitImagesProps {
   speedMultiplier?: number;
   frontArcOnly?: boolean;
   tilt3d?: number;
+  backOcclusion?: OrbitBackOcclusion;
   centerContent?: ReactNode;
 }
 
@@ -120,6 +129,7 @@ interface EngineConfig {
   speedMultiplier: number;
   frontArcOnly: boolean;
   tilt3d: number;
+  backOcclusion?: OrbitBackOcclusion;
   sources: string[];
 }
 
@@ -520,9 +530,18 @@ const createEngine = (
 
       // Occlude images when passing behind the central 3D crystal on the back half of the orbit (d < 0)
       if (d < 0 && depth > 0) {
-        const backWeight = clamp(-d / 0.18, 0, 1);
+        const occ = cfg.backOcclusion;
+        const backWeight = clamp(-d / (occ?.backDepthRamp ?? 0.18), 0, 1);
         const nx = Math.abs(x - cx) / st.rawXMax;
-        const edgeT = clamp((nx - 0.30) / (0.50 - 0.30), 0, 1);
+        let edgeT: number;
+        if (occ) {
+          const isEnteringBack = cfg.direction === 'reverse' ? x < cx : x > cx;
+          const inner = isEnteringBack ? occ.fadeOutEnd : occ.fadeInStart;
+          const outer = isEnteringBack ? occ.fadeOutStart : occ.fadeInEnd;
+          edgeT = clamp((nx - inner) / Math.max(0.01, outer - inner), 0, 1);
+        } else {
+          edgeT = clamp((nx - 0.30) / (0.50 - 0.30), 0, 1);
+        }
         const centerVisibility = edgeT * edgeT * (3 - 2 * edgeT);
         const occlusionFactor = 1 - backWeight * (1 - centerVisibility);
         opacity *= occlusionFactor;
@@ -962,6 +981,7 @@ export default function OrbitImages({
   speedMultiplier = 1,
   frontArcOnly = false,
   tilt3d = 0,
+  backOcclusion,
   centerContent,
 }: OrbitImagesProps) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -1051,6 +1071,7 @@ export default function OrbitImages({
     speedMultiplier,
     frontArcOnly,
     tilt3d,
+    backOcclusion,
     sources: items.map((item) => item.src || item.title || ''),
   };
 

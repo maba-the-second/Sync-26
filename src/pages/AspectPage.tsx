@@ -7,17 +7,6 @@ import { PerspectiveCardGallery } from '../components/dom/PerspectiveCardGallery
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TERMINAL_LINES = [
-  'INITIALIZING',
-  "SYNC'26 ASPECT",
-  '',
-  'VISION_MATRIX...[SYNCED]',
-  '',
-  'AESTHETIC_PARAMETERS',
-  'DIMENSIONAL_SHADERS',
-  'PERSPECTIVE_LOCK',
-];
-
 const SECTION_ANCHORS = ['#project', '#the-keep', '#factions'];
 
 export function AspectPage() {
@@ -352,10 +341,6 @@ export function AspectPage() {
                 draggable={false}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC'26 - ASPECT</span>
-                <span>3D ROTATION ACTIVE</span>
-              </div>
             </div>
 
             <div
@@ -457,10 +442,6 @@ export function AspectPage() {
                   className="border border-mint-leaf/30"
                   tiltOptions={{ max: 20, scale: 1.03, perspective: 1200, speed: 400 }}
                 />
-                <div className="mt-2 flex items-center gap-2 font-mono text-[9px] text-mint-leaf uppercase tracking-widest">
-                  <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                  <span>ASPECT - ARCHIVE 05</span>
-                </div>
               </div>
 
               <h6 className="block max-w-xs font-mono text-[12px] leading-[18px] text-white/80 section-title">
@@ -470,16 +451,7 @@ export function AspectPage() {
           </div>
 
           <div className="w-[38%] min-h-[42vh] md:min-h-[86vh] border-l border-white/20 p-4 sm:p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
-            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span>DOCKING BAY - 05</span>
-              <span className="text-mint-leaf">3D OBJECT LOCK</span>
-            </div>
             <div className="w-full flex-1 flex items-center justify-center my-2 sm:my-4 border border-dashed border-white/10 rounded-2xl" />
-            <div className="w-full flex items-center justify-between font-mono text-[9px] text-white/40 uppercase tracking-widest">
-              <span className="hidden md:inline">HOVER CARD TO TILT</span>
-              <span className="md:hidden">SCROLL TO EXPLORE</span>
-              <span>SYNC'26 ARCHIVE</span>
-            </div>
           </div>
         </div>
       </section>
@@ -501,7 +473,7 @@ export function AspectPage() {
 
         <div className="h-full mt-16 md:mt-[180px] w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] z-30 relative mx-auto">
           <div className="relative min-h-0 md:min-h-[52vh] flex max-md:flex-col w-full text-white border-y border-white/20 bg-black/50 backdrop-blur-[2px]">
-            <div className="px-4 sm:px-6 py-6 sm:py-8 w-[70%] max-md:w-full border-r border-white/20 max-md:border-r-0 max-md:border-b">
+            <div className="px-4 sm:px-6 py-6 sm:py-8 w-full">
               <div className="relative">
                 <h3 className="section-title text-lg sm:text-4xl md:text-[44px] leading-tight md:leading-none font-black pl-0 sm:pl-12 md:pl-20 uppercase break-words">
                   CRAFT INTERFACES AND WORLDS
@@ -514,30 +486,11 @@ export function AspectPage() {
                 </h3>
               </div>
             </div>
-
-            <div className="p-4 sm:p-8 w-[30%] max-md:w-full font-mono text-[10px] leading-4 text-mint-leaf/80 space-y-0.5">
-              {TERMINAL_LINES.map((line, idx) => (
-                <p key={idx} className="min-h-[12px]">
-                  {line}
-                </p>
-              ))}
-            </div>
           </div>
 
           <div className="relative min-h-0 sm:min-h-[48vh] flex flex-col sm:flex-row w-full text-white border-b border-white/20 bg-black/50 backdrop-blur-[2px]">
             <div className="hidden sm:block px-6 py-8 sm:w-[70%] border-r border-white/20" />
-            <div className="p-4 sm:p-6 md:p-8 overflow-hidden w-full sm:w-[30%] flex flex-col justify-between gap-4">
-              <div className="w-full flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] text-mint-leaf">
-                <div>
-                  <p>N 35°27.37</p>
-                  <p>E 139°38.57</p>
-                </div>
-                <span className="px-2 py-0.5 border border-mint-leaf/40 text-[9px] flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-mint-leaf animate-ping" />
-                  ASPECT - LIVE
-                </span>
-              </div>
-
+            <div className="p-4 sm:p-6 md:p-8 overflow-hidden w-full sm:w-[30%] flex flex-col justify-center gap-4">
               <div className="relative border border-mint-leaf/30 rounded overflow-hidden bg-evergreen/40 h-40 flex items-center justify-center">
                 <img
                   src="./images/protocol-bg.jpg"
@@ -559,10 +512,6 @@ export function AspectPage() {
                   <line x1="160" y1="0" x2="160" y2="160" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
                   <circle cx="168" cy="76" r="3" fill="#41D2A2" />
                 </svg>
-                <div className="pointer-events-none absolute bottom-2 left-2.5 right-2.5 flex justify-between font-mono text-[8px] text-mint-leaf/80 tracking-widest">
-                  <span>ELEV - +412M</span>
-                  <span>SECTOR 05-A</span>
-                </div>
               </div>
             </div>
           </div>
@@ -595,10 +544,7 @@ export function AspectPage() {
 
           <div className="relative h-[45vh] max-sm:hidden flex w-full text-white border-b border-white/20 bg-black/50">
             <div className="p-8 h-full w-[30%] border-r border-white/20" />
-            <div className="p-8 h-full w-[35%] border-r border-white/20 flex flex-col justify-between">
-              <p className="text-[10px] leading-3 uppercase font-mono text-mint-leaf">
-                SYNC'26 <br /> ASPECT - ARCHIVE
-              </p>
+            <div className="p-8 h-full w-[35%] border-r border-white/20 flex items-center justify-center">
               <img src="./images/logo.png" alt="Symbol" className="w-16 opacity-70" />
             </div>
             <div className="p-8 h-full w-[35%]" />
@@ -626,12 +572,9 @@ export function AspectPage() {
         <div className="w-[97vw] max-md:w-full pl-16 pr-3 sm:pl-20 sm:pr-6 md:pl-[68px] md:pr-0 pt-16 md:pt-[70px] flex items-center z-30 relative max-md:flex-col">
           <div className="flex items-center justify-center w-[22vw] max-md:w-full py-4 sm:py-8">
             <div className="-rotate-90 max-md:rotate-0 flex flex-col gap-2 items-center md:items-start">
-              <h2 className="font-ethnocentric text-[10vw] max-md:text-[18vw] leading-none tracking-tighter font-black text-white">
-                05A
+              <h2 className="font-ethnocentric text-[6vw] max-md:text-[13vw] leading-none tracking-tighter font-black text-white">
+                ASPECT
               </h2>
-              <span className="font-mono text-[11px] uppercase tracking-widest text-mint-leaf flex items-center gap-2">
-                <span>&gt;&gt;</span> Aspect Showcase
-              </span>
             </div>
           </div>
 
@@ -710,10 +653,7 @@ export function AspectPage() {
             </h2>
           </div>
 
-          <div className="min-h-0 md:min-h-[42vh] w-full flex flex-col justify-between gap-4 py-6 sm:py-8 px-4 sm:px-8 md:px-12">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf s7-fade-up">
-              ASPECT - SYNC'26
-            </span>
+          <div className="min-h-0 md:min-h-[42vh] w-full flex flex-col justify-end gap-4 py-6 sm:py-8 px-4 sm:px-8 md:px-12">
             <span className="font-mono font-normal text-[12px] max-w-xs leading-5 block text-white/80 s7-fade-up">
               Experience the creative and visual dimension of SYNC'26 through Aspect.
             </span>

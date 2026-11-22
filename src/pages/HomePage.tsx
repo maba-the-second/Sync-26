@@ -409,10 +409,6 @@ export function HomePage() {
                 draggable={false}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-evergreen via-transparent to-evergreen/60" />
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf tracking-widest">
-                <span>SYNC'26 - CORE ARTIFACT</span>
-                <span>3D ROTATION ACTIVE</span>
-              </div>
 
               {/* Section 3 Revealed Scaling Image Layer (active on 360deg -> 540deg flip) */}
               <div
@@ -426,10 +422,6 @@ export function HomePage() {
                   draggable={false}
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/50" />
-                <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex justify-between items-center font-mono text-[10px] text-mint-leaf/80 tracking-widest">
-                  <span>SYNC'26 - THE KEEP</span>
-                  <span>SECTOR 04-K</span>
-                </div>
               </div>
             </div>
 
@@ -561,9 +553,6 @@ export function HomePage() {
 
           <div className="w-[38%] min-h-[42vh] md:min-h-[86vh] border-l border-white/20 p-4 sm:p-6 max-md:w-full max-md:border-l-0 max-md:border-t flex flex-col items-center justify-between">
             <div className="w-full flex-1 flex items-center justify-center my-2 sm:my-4 border border-dashed border-white/10 rounded-2xl" />
-            <div className="w-full flex items-center justify-end font-mono text-[11px] sm:text-[12px] text-white/40 uppercase tracking-widest">
-              <span>SYNC'26 ARCHIVE</span>
-            </div>
           </div>
         </div>
       </section>
@@ -661,8 +650,7 @@ export function HomePage() {
                     <line x1="160" y1="0" x2="160" y2="160" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.75" />
                     <circle cx="168" cy="76" r="3" fill="#41D2A2" />
                   </svg>
-                  <div className="pointer-events-none absolute bottom-2 left-2.5 right-2.5 flex justify-between font-mono text-[8px] text-mint-leaf/80 tracking-widest">
-                    <span>ELEV - +500M</span>
+                  <div className="pointer-events-none absolute bottom-2 left-2.5 right-2.5 flex justify-end font-mono text-[8px] text-mint-leaf/80 tracking-widest">
                     <span>DHARMARAJA COLLEGE</span>
                   </div>
                 </div>
@@ -698,8 +686,7 @@ export function HomePage() {
           </div>
 
           <div className="relative flex flex-col sm:flex-row w-full text-white border-b border-white/20 bg-black/50">
-            <div className="p-4 sm:p-8 w-full sm:w-[30%] border-b sm:border-b-0 sm:border-r border-white/20 flex flex-col justify-between gap-2 font-mono text-[10px] text-white/45 uppercase">
-              <span>DIVISION_SCOPE</span>
+            <div className="p-4 sm:p-8 w-full sm:w-[30%] border-b sm:border-b-0 sm:border-r border-white/20 flex flex-col justify-end gap-2 font-mono text-[10px] text-white/45 uppercase">
               <p className="text-mint-leaf/80 leading-relaxed">
                 INTRA-SCHOOL &amp; INTER-SCHOOL TRACKS  GRADES 06–13
               </p>
@@ -830,10 +817,10 @@ export function HomePage() {
           <div className="min-h-0 md:min-h-[42vh] w-full flex max-md:flex-col justify-between items-start md:items-end py-6 sm:py-8 px-4 sm:px-8 md:px-12 gap-6 sm:gap-8">
             <div className="flex flex-col justify-between space-y-4 s7-fade-up max-w-sm pointer-events-auto">
               <span className="font-mono text-[11px] sm:text-[12px] tracking-[0.2em] sm:tracking-[0.25em] text-mint-leaf">
-                YOUR NEXT BREAKTHROUGH STARTS HERE // SYNC'26
+                YOUR NEXT BREAKTHROUGH STARTS HERE
               </span>
               <span className="font-mono font-normal text-[13px] sm:text-[14px] leading-5 block text-white/80">
-                Step into the futuristic dimension. Submit your entry or contact the Dharmaraja College ICT Society organizing committee.
+                Submit your entry or contact the Dharmaraja College ICT Society organizing committee.
               </span>
               <div className="flex flex-wrap items-center gap-3 pt-1">
                 <button

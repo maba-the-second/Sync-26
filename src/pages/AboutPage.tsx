@@ -16,19 +16,19 @@ interface SocietyPillar {
 
 const SOCIETY_PILLARS: SocietyPillar[] = [
   {
-    code: '01 // VISION',
+    code: 'VISION',
     title: 'STUDENT-DRIVEN EXCELLENCE',
     description:
       'Cultivating analytical rigor, software craft, and creative technology leadership among school-level innovators across Sri Lanka.',
   },
   {
-    code: '02 // INITIATIVE',
+    code: 'INITIATIVE',
     title: 'THE SYNC PLATFORM',
     description:
       'Orchestrated annually by the Dharmaraja College ICT Society in Kandy to bridge classroom fundamentals with real-world digital engineering.',
   },
   {
-    code: '03 // HERITAGE',
+    code: 'HERITAGE',
     title: 'OVER A DECADE OF IMPACT',
     description:
       'Anchored by more than 20 years of Odyssey inter-school quiz tradition and an expanding multi-discipline competition ecosystem.',
@@ -75,7 +75,7 @@ interface DisciplineCard {
 const DISCIPLINES: DisciplineCard[] = [
   {
     code: '01',
-    tag: 'QUIZ // FLAGSHIP',
+    tag: 'QUIZ',
     title: 'ODYSSEY',
     description:
       'Three-stage inter-school IT quiz spanning Networking, Programming & Database, AI & ML, IoT, and General ICT.',
@@ -125,7 +125,7 @@ const DISCIPLINES: DisciplineCard[] = [
   },
   {
     code: '08',
-    tag: 'ESPORTS // ARENA',
+    tag: 'ESPORTS',
     title: 'ASPECT',
     description:
       'Official tactical esports championship featuring Call of Duty 3 brackets and head-to-head finals.',
@@ -157,7 +157,7 @@ const EVENT_TIMELINE: TimelinePhase[] = [
   },
   {
     phase: 'STAGE 03',
-    window: 'NOV 28 // KANDY',
+    window: 'NOV 28 · KANDY',
     title: 'SYNC26 PHYSICAL GRAND FINALE',
     detail:
       'Live stage Odyssey finale, finalist showcases, and awards ceremony hosted at Dharmaraja College, Kandy.',
@@ -460,7 +460,7 @@ export function AboutPage() {
           <div className="about-hero-reveal flex flex-wrap items-start justify-between gap-4">
             <div className="max-w-sm">
               <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.24em] text-mint-leaf uppercase block mb-2">
-                DHARMARAJA COLLEGE ICT SOCIETY // KANDY
+                DHARMARAJA COLLEGE ICT SOCIETY, KANDY
               </span>
               <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
                 Uniting young technologists, designers, and problem-solvers across Sri Lanka for the 2026 inter-school ICT arena.
@@ -476,17 +476,9 @@ export function AboutPage() {
           {/* Bottom Monumental Title Block */}
           <div className="about-hero-reveal flex flex-col md:flex-row md:items-end justify-between gap-6 pt-12">
             <div>
-              <span className="font-mono text-[10px] tracking-[0.26em] text-mint-leaf uppercase block mb-2">
-                00 // IDENTITY &amp; ORIGIN
-              </span>
               <h1 className="font-ethnocentric text-[clamp(2rem,7.2vw,6rem)] leading-[0.9] tracking-tight text-white uppercase drop-shadow-[0_0_35px_rgba(65,210,162,0.25)]">
                 ABOUT SYNC26<span className="text-mint-leaf">.</span>
               </h1>
-            </div>
-
-            <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.22em] text-white/60 uppercase">
-              <span>SCROLL TO EXPLORE</span>
-              <span className="text-mint-leaf text-sm animate-bounce">↓</span>
             </div>
           </div>
         </div>
@@ -503,17 +495,10 @@ export function AboutPage() {
           {/* Header */}
           <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative min-w-0">
-              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
-                01 // THE ORGANIZERS
-              </span>
               <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
                 ICT SOCIETY<span className="text-mint-leaf">.</span>
               </h2>
             </div>
-
-            <span className="font-mono text-[10px] tracking-[0.22em] text-white/50 uppercase">
-              DHARMARAJA COLLEGE // KANDY
-            </span>
           </div>
 
           {/* 2-Column Editorial + Pillars */}
@@ -567,9 +552,6 @@ export function AboutPage() {
           {/* Header */}
           <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative min-w-0">
-              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
-                02 // THE INTER-SCHOOL TECH ARENA
-              </span>
               <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
                 WHAT IS SYNC26<span className="text-mint-leaf">.</span>
               </h2>
@@ -624,7 +606,7 @@ export function AboutPage() {
                   FLAGSHIP INTER-SCHOOL QUIZ
                 </span>
                 <h3 className="font-ethnocentric text-base sm:text-lg text-white uppercase">
-                  ODYSSEY // SYNC26
+                  ODYSSEY
                 </h3>
                 <p className="font-mono text-xs text-white/75 max-w-md">
                   Three-stage ICT quiz culminating in a live championship showdown on stage.
@@ -645,7 +627,7 @@ export function AboutPage() {
                   OFFICIAL ESPORTS CHAMPIONSHIP
                 </span>
                 <h3 className="font-ethnocentric text-base sm:text-lg text-white uppercase">
-                  ASPECT // ARENA
+                  ASPECT
                 </h3>
                 <p className="font-mono text-xs text-white/75 max-w-md">
                   Tactical Call of Duty 3 school tournament brackets and live finale combat.
@@ -674,17 +656,10 @@ export function AboutPage() {
           {/* Header */}
           <div className="px-4 sm:px-10 py-6 sm:py-8 border-b border-white/20 flex flex-wrap items-end justify-between gap-4">
             <div className="relative min-w-0">
-              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block mb-2">
-                03 // DISCIPLINES &amp; CHRONOLOGY
-              </span>
               <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
                 ARENA HIGHLIGHTS<span className="text-mint-leaf">.</span>
               </h2>
             </div>
-
-            <span className="font-mono text-[10px] tracking-[0.2em] text-white/55 uppercase">
-              08 COMPETITIONS // 03 EVENT STAGES
-            </span>
           </div>
 
           {/* 8 Disciplines Glass Grid */}
@@ -732,10 +707,7 @@ export function AboutPage() {
           <div className="p-4 sm:p-8 lg:p-10">
             <div className="flex items-center justify-between mb-5">
               <span className="font-mono text-[10px] tracking-[0.24em] text-mint-leaf uppercase">
-                EVENT TIMELINE // NOVEMBER 2026
-              </span>
-              <span className="font-mono text-[10px] tracking-[0.2em] text-white/45 uppercase hidden sm:inline">
-                ONLINE QUALIFIERS → LIVE FINALE
+                EVENT TIMELINE — NOVEMBER 2026
               </span>
             </div>
 
@@ -791,14 +763,11 @@ export function AboutPage() {
 
           <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
             <div className="space-y-4 max-w-2xl">
-              <span className="font-mono text-[10px] tracking-[0.25em] text-mint-leaf uppercase block">
-                JOIN THE ARENA // DHARMARAJA COLLEGE ICT SOCIETY
-              </span>
               <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight font-black uppercase text-white break-words">
                 STEP INTO SYNC26<span className="text-mint-leaf">.</span>
               </h2>
               <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
-                Register your school squad or individual entries across 8 competitive ICT and gaming tracks before submission locks engage.
+                Register your school squad or individual entries across 8 competitive ICT and gaming tracks before registrations close.
               </p>
             </div>
 

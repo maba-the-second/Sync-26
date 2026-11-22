@@ -39,13 +39,12 @@ export function Preloader() {
       )}
     >
       <div className="flex justify-between gap-3 text-white/50">
-        <span>SYNC'26 ENGINE BOOT SEQUENCE</span>
-        <span className="shrink-0">REV 26.04</span>
+        <span>SYNC'26</span>
       </div>
 
       <div className="max-w-md w-full mx-auto space-y-3">
         <div className="flex justify-between gap-2 text-white">
-          <span className="truncate">INITIALIZING DUAL-LAYER WEBGL STENCIL...</span>
+          <span className="truncate">LOADING...</span>
           <span className="text-mint-leaf shrink-0">{progress}%</span>
         </div>
         <div className="h-1 w-full bg-white/10 overflow-hidden">
@@ -56,10 +55,7 @@ export function Preloader() {
         </div>
       </div>
 
-      <div className="text-white/40 flex justify-between">
-        <span>MEMORY: ALLOCATED</span>
-        <span>STATUS: READY</span>
-      </div>
+      <div />
     </div>
   );
 }

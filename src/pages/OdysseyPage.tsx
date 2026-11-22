@@ -20,19 +20,19 @@ interface AboutPillar {
 
 const ABOUT_PILLARS: AboutPillar[] = [
   {
-    code: 'PHASE // 01',
+    code: 'PHASE 01',
     title: 'ALGORITHMIC & LOGIC TRIALS',
     description:
       'Navigate high-pressure problem-solving checkpoints designed to test analytical speed, computational thinking, and precision.',
   },
   {
-    code: 'PHASE // 02',
+    code: 'PHASE 02',
     title: 'STRATEGIC ADAPTABILITY',
     description:
       'Each stage introduces evolving constraints and real-world engineering scenarios where squads must pivot and innovate.',
   },
   {
-    code: 'PHASE // 03',
+    code: 'PHASE 03',
     title: 'THE FINAL BEACON',
     description:
       'Top-performing teams converge in the ultimate showdown to claim the Odyssey title at SYNC\u201926.',
@@ -320,8 +320,7 @@ export function OdysseyPage() {
 
           {/* Footer Interaction Hint */}
           <div className="px-4 sm:px-10 py-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-2 sm:gap-4 font-mono text-[9px] sm:text-[10px] tracking-[0.16em] sm:tracking-[0.22em] text-white/50 uppercase">
-            <span>DRAG / SWIPE TO SCRUB // TAP TO FOCUS</span>
-            <span className="text-mint-leaf/80">SYNC&apos;26 ARCHIVES</span>
+            <span>DRAG OR SWIPE TO BROWSE · TAP TO FOCUS</span>
           </div>
         </div>
       </section>
@@ -375,7 +374,7 @@ export function OdysseyPage() {
           {/* Introductory Note */}
           <div className="px-4 sm:px-10 py-5 sm:py-6 border-b border-white/15 bg-evergreen/15 flex flex-wrap items-center justify-between gap-4">
             <p className="font-mono text-xs sm:text-sm text-white/85 max-w-3xl leading-relaxed">
-              All participating squads must adhere strictly to the Odyssey operational directives below. Violation of any protocol clause may result in penalty or disqualification.
+              All participating teams must follow the Odyssey rules below. Violating any rule may result in penalty or disqualification.
             </p>
           </div>
 
@@ -453,7 +452,7 @@ export function OdysseyPage() {
                 FORGE YOUR LEGACY BEYOND THE HORIZON<span className="text-mint-leaf">.</span>
               </h2>
               <p className="font-mono text-xs sm:text-sm leading-relaxed text-white/80">
-                Every great breakthrough begins with a single step into the unknown. Assemble your squad, calibrate your resolve, and claim your place among the pioneers of SYNC'26 Odyssey.
+                Assemble your team and claim your place in SYNC'26 Odyssey.
               </p>
             </div>
 

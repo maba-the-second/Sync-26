@@ -982,15 +982,11 @@ export function RegistrationsPage() {
 
   return (
     <div className="relative w-full h-screen h-[100dvh] flex flex-col items-center justify-center pt-12 pb-0 pl-11 pr-0 sm:pl-12 sm:pr-0 md:pt-14 md:pl-16 md:pr-6 lg:pt-12 lg:pb-0 lg:pl-[calc(3.5rem+4rem)] lg:pr-16 overflow-hidden pointer-events-none">
-      {/* Mobile HUD Sector Header & Lower Telemetry Strip (underneath z-50 modals) */}
+      {/* Mobile HUD Header (underneath z-50 modals) */}
       <div
         aria-hidden="true"
         className="md:hidden pointer-events-none absolute top-[58px] left-14 sm:left-16 right-[124px] z-10 flex flex-col gap-1 font-mono uppercase tracking-[0.2em]"
       >
-        <div className="flex items-center gap-1.5 text-[8px] tracking-[0.18em] text-mint-leaf">
-          <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-          <span>SECTOR 02 // ARENA</span>
-        </div>
         <div className="border-l-2 border-mint-leaf/60 pl-2">
           <div className="font-ethnocentric text-[10px] sm:text-[11px] leading-tight text-white/90 tracking-wider">
             COMPETITIONS
@@ -999,19 +995,6 @@ export function RegistrationsPage() {
             SELECT CARD TO REGISTER
           </div>
         </div>
-      </div>
-
-      <div
-        aria-hidden="true"
-        className="md:hidden hud-tall-only pointer-events-none absolute bottom-[64px] left-14 sm:left-16 right-3 z-10 items-center justify-between gap-2 px-2.5 py-1.5 border border-white/15 bg-black/45 backdrop-blur-[2px] font-mono uppercase text-[8px] tracking-[0.15em]"
-      >
-        <span className="text-white/65">
-          <span className="text-mint-leaf">GR 06–13</span> // INTER-SCHOOL
-        </span>
-        <span className="flex items-center gap-1.5 text-white/55 shrink-0">
-          <span>SYS: ONLINE</span>
-          <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-        </span>
       </div>
 
       {/* Top Action Bar inside Registrations Arena */}
@@ -1062,7 +1045,7 @@ export function RegistrationsPage() {
 
       {/* 8 Competition Cards Orbiting the 3D Crystal (Full 3D Tilted Ring on Mobile/Tablet & Desktop) */}
       {isCompactOrbit ? (
-        <div className="relative w-full max-w-[460px] md:max-w-[540px] px-1 sm:px-2 pointer-events-auto flex flex-col items-center">
+        <div className="relative w-full max-w-[460px] md:max-w-[540px] px-0.5 sm:px-2 pointer-events-auto flex flex-col items-center">
           <OrbitImages
             key="crystal-orbit-cards-mobile"
             className="orbit-compact"
@@ -1072,19 +1055,26 @@ export function RegistrationsPage() {
               eligibility: c.shortEligibility,
             }))}
             shape="ellipse"
-            baseWidth={480}
-            radiusX={164}
-            radiusY={56}
+            baseWidth={560}
+            radiusX={216}
+            radiusY={76}
             rotation={-8}
             duration={34}
             paused={!!detailComp || isRegOpen}
             speedMultiplier={isHolding ? 4.2 : 1}
-            itemSize={100}
-            itemWidth={128}
-            itemHeight={78}
+            itemSize={92}
+            itemWidth={108}
+            itemHeight={80}
             itemRadius={8}
-            depth={0.82}
-            tilt3d={24}
+            depth={0.78}
+            tilt3d={26}
+            backOcclusion={{
+              fadeOutStart: 0.92,
+              fadeOutEnd: 0.72,
+              fadeInStart: 0.80,
+              fadeInEnd: 0.98,
+              backDepthRamp: 0.08,
+            }}
             hoverScale={1.03}
             showPath
             pathColor="rgba(65, 210, 162, 0.38)"
@@ -1449,12 +1439,6 @@ export function RegistrationsPage() {
                 }}
               >
                 <div className="min-w-0">
-                  <span
-                    className="text-[10px] font-mono uppercase tracking-[0.2em] sm:tracking-[0.22em] block mb-1"
-                    style={{ color: activeComp.accentColor }}
-                  >
-                    OFFICIAL APPLICATION // {activeComp.code}
-                  </span>
                   <h3 className="font-ethnocentric text-sm sm:text-xl text-white uppercase tracking-wider break-words">
                     REGISTER FOR {activeComp.title}
                   </h3>
@@ -1649,8 +1633,8 @@ export function RegistrationsPage() {
                             onChange={(val) => setTeamName(val)}
                             placeholder="Select Team (Team A / Team B)"
                             options={[
-                              { value: 'Team A', label: 'Team A', sublabel: 'Squad Alpha' },
-                              { value: 'Team B', label: 'Team B', sublabel: 'Squad Bravo' },
+                              { value: 'Team A', label: 'Team A' },
+                              { value: 'Team B', label: 'Team B' },
                             ]}
                             accentColor={activeComp.accentColor}
                             accentRgb={activeComp.accentRgb}
@@ -1847,7 +1831,7 @@ export function RegistrationsPage() {
                     style={{ borderColor: activeComp.accentColor, borderTopColor: 'transparent' }}
                   />
                   <h4 className="font-ethnocentric text-sm sm:text-base text-white uppercase tracking-wider">
-                    COMMUNICATING WITH DISPATCH MATRIX
+                    SUBMITTING REGISTRATION
                   </h4>
                   <p className="text-xs text-white/60">
                     Validating eligibility and recording registration...
@@ -1929,7 +1913,7 @@ export function RegistrationsPage() {
               {submitState === 'error' && (
                 <div className="p-6 sm:p-10 overflow-y-auto overscroll-contain flex-1 min-h-0 text-center space-y-4 font-mono">
                   <h4 className="font-ethnocentric text-base sm:text-lg text-red-400 uppercase">
-                    TRANSMISSION ANOMALY
+                    SUBMISSION ERROR
                   </h4>
                   <p className="text-xs text-white/75 max-w-md mx-auto">{errorMessage}</p>
                   <div className="flex flex-wrap items-center justify-center gap-3 pt-2">

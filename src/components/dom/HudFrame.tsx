@@ -32,8 +32,6 @@ export function HudFrame() {
   const [isTouch, setIsTouch] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const progressTextRef = useRef<HTMLSpanElement>(null);
-  const mobileProgressTextRef = useRef<HTMLSpanElement>(null);
 
   // Detect touch-first devices (no hover, coarse pointer) to swap keyboard hints for touch controls
   useEffect(() => {
@@ -59,12 +57,6 @@ export function HudFrame() {
       const pct = `${(state.scrollProgress * 100).toFixed(1)}%`;
       if (progressBarRef.current) {
         progressBarRef.current.style.width = pct;
-      }
-      if (progressTextRef.current) {
-        progressTextRef.current.textContent = `SYS.LOC // ${pct}`;
-      }
-      if (mobileProgressTextRef.current) {
-        mobileProgressTextRef.current.textContent = `${state.activePage.toUpperCase()} // ${pct}`;
       }
     });
   }, []);
@@ -221,9 +213,8 @@ export function HudFrame() {
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-16 border-t border-white/20 p-4">
-                <span className="text-[9px] text-white/50">SYSTEM</span>
                 <span className="text-[10px] text-mint-leaf">
-                  DHARMARAJA ICT SOCIETY // SYNC'26
+                  DHARMARAJA COLLEGE ICT SOCIETY
                 </span>
               </div>
             </div>
@@ -240,7 +231,7 @@ export function HudFrame() {
               ✕
             </button>
             <img src="./images/logo.png" alt="Logo" className="w-8 opacity-80" />
-            <span className="text-[8px] text-mint-leaf">ONLINE</span>
+            <div />
           </div>
         </div>
 
@@ -266,9 +257,6 @@ export function HudFrame() {
           >
             <span className="w-2 h-px bg-white/25" />
             <span className="w-px flex-1 bg-gradient-to-b from-white/20 via-white/10 to-mint-leaf/35 my-2" />
-            <span className="-rotate-90 whitespace-nowrap text-[7px] tracking-[0.22em] text-white/45 my-4">
-              SYNC // 26
-            </span>
             <span className="w-px flex-1 bg-gradient-to-b from-mint-leaf/35 via-white/10 to-white/20 my-2" />
             <span className="w-2 h-px bg-white/25" />
           </div>
@@ -285,9 +273,6 @@ export function HudFrame() {
           >
             <span className="w-2 h-px bg-white/25" />
             <span className="w-px flex-1 bg-gradient-to-b from-white/20 via-white/10 to-white/20 my-2" />
-            <span className="-rotate-90 whitespace-nowrap text-[7px] tracking-[0.22em] text-mint-leaf/70 my-4">
-              {activePage === 'registrations' ? 'ARENA' : activePage.toUpperCase()}
-            </span>
             <span className="w-px flex-1 bg-gradient-to-b from-white/20 via-white/10 to-white/20 my-2" />
             <div className="flex flex-col items-center gap-1">
               <span className="w-1.5 h-px bg-white/25" />
@@ -372,21 +357,9 @@ export function HudFrame() {
               style={{ width: '0.0%' }}
             />
 
-            {/* Subtle Left Telemetry Counter (Hidden on Registrations Page) */}
-            {activePage !== 'registrations' && (
-              <div className="relative z-10 hidden lg:flex items-center gap-2 pl-5 text-[13px] text-white/60">
-                <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                <span ref={progressTextRef}>SYS.LOC // 0.0%</span>
-              </div>
-            )}
-
             {/* Center Top Navigation Links or Logo on Registrations */}
             {activePage === 'registrations' ? (
-              <div className="relative z-10 w-full h-full flex items-center justify-between md:justify-center px-2.5 md:px-0">
-                <div className="md:hidden min-w-[68px] flex items-center gap-1.5 text-[8px] tracking-[0.15em] text-white/60 shrink-0">
-                  <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                  <span>ARENA</span>
-                </div>
+              <div className="relative z-10 w-full h-full flex items-center justify-center px-2.5 md:px-0">
                 <div className="pointer-events-auto flex items-center justify-center">
                   <img
                     src="./images/Sync logo 2.png"
@@ -395,13 +368,10 @@ export function HudFrame() {
                     draggable={false}
                   />
                 </div>
-                <div className="md:hidden min-w-[68px] flex items-center justify-end text-[8px] tracking-[0.15em] text-mint-leaf/80 shrink-0">
-                  <span>08 TRACKS</span>
-                </div>
               </div>
             ) : (
               <>
-              {/* Compact brand mark & live telemetry on phones, where desktop section nav is hidden */}
+              {/* Compact brand mark on phones, where desktop section nav is hidden */}
               <div className="md:hidden relative z-10 pl-2.5 flex items-center shrink-0">
                 <img
                   src="./images/Sync logo 2.png"
@@ -409,12 +379,6 @@ export function HudFrame() {
                   className="h-6 sm:h-7 w-auto object-contain opacity-95"
                   draggable={false}
                 />
-              </div>
-              <div className="md:hidden relative z-10 flex-1 flex items-center justify-center gap-1.5 px-2 min-w-0 text-[8px] tracking-[0.14em] text-white/60">
-                <span className="w-1.5 h-1.5 bg-mint-leaf shrink-0 inline-block" />
-                <span ref={mobileProgressTextRef} className="truncate">
-                  {activePage.toUpperCase()} // 0.0%
-                </span>
               </div>
               <nav
                 className={`relative z-10 ${
@@ -474,14 +438,9 @@ export function HudFrame() {
 
           {/* Bottom Bar: Hold Status & "SCROLL ⌄" Indicator */}
           <footer className="w-full flex items-end justify-between gap-3 px-3 sm:px-8 pb-3 sm:pb-5">
-            {/* Spacebar-Hold Decrypt Telemetry (Mobile fallback status on Home) */}
+            {/* Spacebar-Hold Accelerate Control */}
             <div className="flex items-center gap-4 min-w-0">
-              {activePage === 'home' ? (
-                <div className="md:hidden flex items-center gap-1.5 text-[8px] tracking-[0.18em] text-white/55">
-                  <span className="w-1.5 h-1.5 bg-mint-leaf inline-block" />
-                  <span>SYS // SYNC&apos;26</span>
-                </div>
-              ) : isTouch ? (
+              {activePage === 'home' ? null : isTouch ? (
                 /* Touch devices have no space bar: press-and-hold this control instead */
                 <button
                   type="button"
@@ -508,15 +467,15 @@ export function HudFrame() {
                     }`}
                   />
                   <span className="relative">
-                    {isHolding ? 'BREACH ACTIVE' : 'HOLD TO ACCELERATE'}
+                    {isHolding ? 'ACCELERATING' : 'HOLD TO ACCELERATE'}
                   </span>
                 </button>
               ) : (
                 <span className="inline-block text-[9px] text-white/50">
                   {isHolding ? (
-                    <span className="text-mint-leaf">BREACH ACTIVE // REALITY PEELING</span>
+                    <span className="text-mint-leaf">ACCELERATING</span>
                   ) : (
-                    'PRESS AND HOLD SPACE BAR TO ACCELERATE'
+                    'HOLD SPACE TO ACCELERATE'
                   )}
                 </span>
               )}
