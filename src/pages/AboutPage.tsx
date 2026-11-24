@@ -172,11 +172,7 @@ export function AboutPage() {
   const ambientScrollRef = useRef<HTMLDivElement>(null);
   const logoFloatRef = useRef<HTMLDivElement>(null);
   const logoImgRef = useRef<HTMLImageElement>(null);
-  const glassFrameRef = useRef<HTMLDivElement>(null);
-  const lightSweepRef = useRef<HTMLDivElement>(null);
   const haloRef = useRef<HTMLDivElement>(null);
-  const ringOuterRef = useRef<HTMLDivElement>(null);
-  const ringInnerRef = useRef<HTMLDivElement>(null);
 
   const navigateTo = (page: PageId) => {
     setActivePage(page);
@@ -201,103 +197,41 @@ export function AboutPage() {
       });
 
       if (prefersReducedMotion) {
-        gsap.set(logoImgRef.current, { opacity: 0.16, scale: 0.94, clearProps: 'filter' });
-        gsap.set(glassFrameRef.current, { opacity: 0 });
-        gsap.set(haloRef.current, { opacity: 0.35, scale: 1 });
-        gsap.set([ringOuterRef.current, ringInnerRef.current], { opacity: 0.1 });
+        gsap.set(logoImgRef.current, { opacity: 1, scale: 1, clearProps: 'filter' });
+        gsap.set(haloRef.current, { opacity: 0.45, scale: 1 });
         gsap.set('.about-hero-reveal', { opacity: 1, y: 0 });
       } else {
-        // 1. Multi-stage Opening Logo Choreography (3D tilt + liquid-glass light sweep + ambient settle)
+        // 1. Opening Logo Reveal: starts small and expands smoothly into a prominent centerpiece
         const introTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
         introTl
           .fromTo(
             haloRef.current,
-            { scale: 0.55, opacity: 0 },
-            { scale: 1.08, opacity: 0.85, duration: 1.15, ease: 'power2.out' },
+            { scale: 0.4, opacity: 0 },
+            { scale: 1, opacity: 0.55, duration: 1.2, ease: 'power2.out' },
             0
-          )
-          .fromTo(
-            ringOuterRef.current,
-            { scale: 0.65, opacity: 0, rotate: -28 },
-            { scale: 1, opacity: 0.38, rotate: 0, duration: 1.2 },
-            0.08
-          )
-          .fromTo(
-            ringInnerRef.current,
-            { scale: 0.72, opacity: 0, rotate: 24 },
-            { scale: 1, opacity: 0.32, rotate: 0, duration: 1.2 },
-            0.12
-          )
-          .fromTo(
-            glassFrameRef.current,
-            { opacity: 0, scale: 0.88, rotateX: 16 },
-            { opacity: 1, scale: 1, rotateX: 0, duration: 0.95, ease: 'power3.out' },
-            0.12
           )
           .fromTo(
             logoImgRef.current,
             {
               opacity: 0,
-              scale: 1.24,
-              rotateX: 22,
-              rotateY: -16,
-              y: 18,
-              filter: 'blur(12px) brightness(1.5)',
+              scale: 0.28,
+              y: 12,
+              filter: 'blur(8px)',
             },
             {
               opacity: 1,
               scale: 1,
-              rotateX: 0,
-              rotateY: 0,
               y: 0,
-              filter: 'blur(0px) brightness(1)',
-              duration: 1.1,
+              filter: 'blur(0px)',
+              duration: 1.15,
               ease: 'power3.out',
             },
-            0.15
+            0.08
           )
-          .fromTo(
-            lightSweepRef.current,
-            { xPercent: -140, opacity: 0 },
-            {
-              keyframes: [
-                { xPercent: -40, opacity: 0.9, duration: 0.35, ease: 'power2.in' },
-                { xPercent: 140, opacity: 0, duration: 0.55, ease: 'power2.out' },
-              ],
-            },
-            0.78
-          )
-          // Settle from hero spotlight into subtle persistent ambient anchor
-          .to(
-            glassFrameRef.current,
-            { opacity: 0, scale: 1.07, duration: 0.85, ease: 'power2.inOut' },
-            1.55
-          )
-          .to(
-            [ringOuterRef.current, ringInnerRef.current],
-            { opacity: 0.1, scale: 1.05, duration: 0.95, ease: 'power2.inOut' },
-            1.55
-          )
-          .to(
-            haloRef.current,
-            { opacity: 0.38, scale: 0.98, duration: 1.0, ease: 'power2.inOut' },
-            1.55
-          )
-          .to(
-            logoImgRef.current,
-            {
-              opacity: 0.2,
-              scale: 0.92,
-              duration: 1.05,
-              ease: 'power2.inOut',
-            },
-            1.55
-          )
-          // Reveal hero framing typography around the settled emblem
           .fromTo(
             '.about-hero-reveal',
-            { y: 26, opacity: 0 },
+            { y: 24, opacity: 0 },
             {
               y: 0,
               opacity: 1,
@@ -305,49 +239,17 @@ export function AboutPage() {
               stagger: 0.1,
               ease: 'power3.out',
             },
-            1.3
+            0.55
           );
 
-        // Subtle continuous ambient hover drift on the background logo
+        // Subtle calm vertical breath on the logo container
         gsap.to(logoFloatRef.current, {
-          y: -10,
+          y: -8,
           duration: 4.4,
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
         });
-
-        // Slow, ultra-lightweight orbital rotation on the background reticle rings
-        gsap.to(ringOuterRef.current, {
-          rotation: 360,
-          duration: 72,
-          repeat: -1,
-          ease: 'none',
-        });
-        gsap.to(ringInnerRef.current, {
-          rotation: -360,
-          duration: 54,
-          repeat: -1,
-          ease: 'none',
-        });
-
-        // 2. Scroll-coupled attenuation so scrolled sections stay crisp and high-contrast
-        gsap.fromTo(
-          ambientScrollRef.current,
-          { opacity: 1, scale: 1, y: 0 },
-          {
-            opacity: 0.44,
-            scale: 1.05,
-            y: -18,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: '.about-hero',
-              start: 'top top',
-              end: 'bottom 35%',
-              scrub: 0.75,
-            },
-          }
-        );
 
         // Hero content fade-up on scroll departure
         gsap.to('.about-hero-content', {
@@ -362,6 +264,24 @@ export function AboutPage() {
           },
         });
       }
+
+      // 2. Scroll transition: smoothly scales down the centerpiece logo into a subtle background presence
+      gsap.fromTo(
+        ambientScrollRef.current,
+        { opacity: 1, scale: 1, y: 0 },
+        {
+          opacity: 0.14,
+          scale: 0.64,
+          y: -14,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.about-hero',
+            start: 'top top',
+            end: 'bottom 25%',
+            scrub: 0.65,
+          },
+        }
+      );
 
       // Section panel scroll reveals
       gsap.utils.toArray<HTMLElement>('.about-reveal').forEach((el) => {
@@ -385,7 +305,7 @@ export function AboutPage() {
   return (
     <div ref={rootRef} className="relative w-full text-white pointer-events-none">
       {/* =====================================================================
-          PERSISTENT AMBIENT LOGO & OPENING REVEAL STAGE
+          PERSISTENT AMBIENT LOGO & OPENING CENTERPIECE STAGE
           Clipped inside .content-visible in App.tsx so it stays fixed behind
           all About sections and cleanly reveals the footer at page bottom.
       ===================================================================== */}
@@ -396,52 +316,23 @@ export function AboutPage() {
         <div
           ref={ambientScrollRef}
           className="relative w-full h-full flex items-center justify-center will-change-transform"
-          style={{ perspective: '1400px' }}
         >
-          {/* Ambient Emerald Depth Glow */}
+          {/* Subtle Ambient Depth Glow */}
           <div
             ref={haloRef}
-            className="absolute w-[82vw] max-w-[680px] aspect-square rounded-full bg-[radial-gradient(circle,rgba(65,210,162,0.26)_0%,rgba(13,111,81,0.12)_42%,transparent_72%)] blur-2xl will-change-transform"
+            className="absolute w-[82vw] max-w-[660px] aspect-square rounded-full bg-[radial-gradient(circle,rgba(65,210,162,0.2)_0%,rgba(13,111,81,0.08)_44%,transparent_72%)] blur-2xl will-change-transform"
           />
 
-          {/* Subtle Orbital Reticle Rings */}
-          <div
-            ref={ringOuterRef}
-            className="absolute w-[76vw] max-w-[540px] aspect-square rounded-full border border-mint-leaf/25 border-dashed will-change-transform"
-          />
-          <div
-            ref={ringInnerRef}
-            className="absolute w-[60vw] max-w-[400px] aspect-square rounded-full border border-white/15 will-change-transform"
-          />
-
-          {/* Floating Logo + Opening Liquid-Glass Prism Lens */}
+          {/* Centered SYNC26 Logo */}
           <div
             ref={logoFloatRef}
-            className="relative flex items-center justify-center w-[74vw] sm:w-[58vw] md:w-[46vw] max-w-[620px] px-4 will-change-transform"
+            className="relative flex items-center justify-center w-[80vw] sm:w-[64vw] md:w-[50vw] max-w-[680px] px-4 will-change-transform"
           >
-            {/* Opening Liquid-Glass Housing (fades out as logo settles to ambient depth) */}
-            <div
-              ref={glassFrameRef}
-              className="pointer-events-none absolute -inset-4 sm:-inset-8 rounded-2xl border border-mint-leaf/35 bg-gradient-to-br from-white/[0.08] via-evergreen/20 to-black/50 backdrop-blur-[4px] shadow-[0_0_60px_rgba(65,210,162,0.18)] overflow-hidden will-change-transform"
-            >
-              {/* Corner HUD Brackets */}
-              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-mint-leaf/80" />
-              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-mint-leaf/80" />
-              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-mint-leaf/80" />
-              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-mint-leaf/80" />
-
-              {/* Specular Light Sweep */}
-              <div
-                ref={lightSweepRef}
-                className="absolute inset-y-0 -left-1/3 w-2/3 bg-gradient-to-r from-transparent via-frozen-water/50 to-transparent skew-x-[-22deg] will-change-transform"
-              />
-            </div>
-
             <img
               ref={logoImgRef}
               src="./images/Sync logo 2.png"
               alt="SYNC26 Official Logo"
-              className="relative z-10 w-full h-auto object-contain select-none drop-shadow-[0_0_28px_rgba(65,210,162,0.28)] will-change-transform"
+              className="relative z-10 w-full h-auto object-contain select-none drop-shadow-[0_0_32px_rgba(65,210,162,0.28)] will-change-transform"
               draggable={false}
             />
           </div>

@@ -146,7 +146,7 @@ export default function App() {
           {/* Sticky 3D WebGL Background inside the upper content curtain */}
           <div
             className={`sticky top-0 left-0 w-full h-screen h-[100dvh] z-0 ${
-              activePage === 'odyssey' && odysseyStage2
+              (activePage === 'odyssey' && odysseyStage2) || activePage === 'about'
                 ? 'pointer-events-none'
                 : 'pointer-events-auto'
             } ${
@@ -155,7 +155,11 @@ export default function App() {
                 : ''
             }`}
           >
-            {activePage === 'odyssey' ? <OdysseyCanvas /> : <SceneCanvas />}
+            {activePage === 'odyssey' ? (
+              <OdysseyCanvas />
+            ) : activePage === 'about' ? null : (
+              <SceneCanvas />
+            )}
           </div>
 
           {/* Active Directory Standalone View */}
