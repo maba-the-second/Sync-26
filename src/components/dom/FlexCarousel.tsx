@@ -1090,7 +1090,9 @@ const FlexCarousel = ({
         const inner = Math.max(4, s.reach * (spanW + spanH) * 0.5);
         lensUniforms.uInner.value = inner;
         lensUniforms.uOuter.value = inner * 1.6;
-        lensUniforms.uFlow.value = s.bend * (spanW + spanH) * 0.45;
+        // Cap vertical warp travel to the canvas headroom so tilted side previews never clip top/bottom.
+        const maxSafeFlow = Math.max(0, (height - cardH) * 0.4);
+        lensUniforms.uFlow.value = Math.min(s.bend * (spanW + spanH) * 0.45, maxSafeFlow);
         lensUniforms.uCurl.value = s.curl === 'rise' ? 1 : s.curl === 'fall' ? -1 : 0;
         lensUniforms.uDispersion.value = s.dispersion * 0.12 * (1 + Math.abs(deform) * liquidAmount * 1.2);
         lensUniforms.uStrength.value = effects.strength * (1 - focusEase);

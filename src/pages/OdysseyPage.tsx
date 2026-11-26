@@ -284,20 +284,11 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section
         id="factions"
-        className="relative z-20 w-full pt-14 sm:pt-24 overflow-x-clip pointer-events-none"
+        className="relative z-20 w-full pt-2 sm:pt-4 overflow-x-clip overflow-y-visible pointer-events-none"
       >
-        {/* Unboxed Section Heading */}
-        <div className="odyssey-reveal w-full pl-16 pr-3 sm:pl-20 sm:pr-8 mb-6 sm:mb-8 flex justify-center">
-          <div className="w-full max-w-[1400px]">
-            <h2 className="font-ethnocentric text-xl sm:text-4xl md:text-5xl leading-tight sm:leading-none font-black uppercase tracking-tight break-words">
-              LEGACY IN MOTION<span className="text-mint-leaf">.</span>
-            </h2>
-          </div>
-        </div>
-
         {/* Full-Bleed Edge-to-Edge Showreel Stage */}
         <div
-          className={`odyssey-reveal relative w-full h-[320px] sm:h-[480px] md:h-[580px] overflow-hidden ${
+          className={`odyssey-reveal relative w-full h-[340px] sm:h-[460px] md:h-[520px] overflow-x-clip overflow-y-visible ${
             odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
           }`}
         >
@@ -305,7 +296,7 @@ export function OdysseyPage() {
             items={SHOWREEL_ITEMS}
             preset="liquid"
             intro="rise"
-            cardHeight={0.48}
+            cardHeight={0.5}
             gap={16}
             radius={12}
             captions={false}
@@ -315,13 +306,6 @@ export function OdysseyPage() {
             className="odyssey-showreel w-full h-full text-white font-mono"
           />
         </div>
-
-        {/* Subtle Unboxed Interaction Hint */}
-        <div className="w-full pl-16 pr-3 sm:pl-20 sm:pr-8 mt-4 flex justify-center">
-          <div className="w-full max-w-[1400px] font-mono text-[9px] sm:text-[10px] tracking-[0.16em] sm:tracking-[0.22em] text-white/50 uppercase">
-            <span>DRAG OR SWIPE TO BROWSE · TAP TO FOCUS</span>
-          </div>
-        </div>
       </section>
 
       {/* =====================================================================
@@ -329,7 +313,7 @@ export function OdysseyPage() {
       ===================================================================== */}
       <section
         id="the-world"
-        className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 pt-14 sm:pt-24 flex justify-center pointer-events-none"
+        className="relative z-20 w-full pl-16 pr-3 sm:pl-20 sm:pr-8 pt-3 sm:pt-6 flex justify-center pointer-events-none"
       >
         <div
           className={`odyssey-reveal odyssey-panel w-full max-w-[1400px] border border-white/20 bg-black/70 backdrop-blur-md ${odysseyStage2 ? 'pointer-events-auto' : 'pointer-events-none'
