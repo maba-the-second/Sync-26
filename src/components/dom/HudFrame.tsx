@@ -10,7 +10,7 @@ const NAV_ITEMS = [
 
 const SIDEBAR_ITEMS: { label: string; page: PageId }[] = [
   { label: 'HOME', page: 'home' },
-  { label: 'REGISTRATIONS AND SUBMISSIONS', page: 'registrations' },
+  { label: 'REGISTER', page: 'registrations' },
   { label: 'ODYSSEY', page: 'odyssey' },
   { label: 'ASPECT', page: 'aspect' },
   { label: 'ABOUT', page: 'about' },

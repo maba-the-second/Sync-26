@@ -193,14 +193,17 @@ function buildTargetsFromImage(
       const waveProgress = clamp01((wx + halfW) / worldWidth);
       staggerDelays[i] = waveProgress * 1.35 + seeded(i + 91) * 0.25;
     } else {
-      // Ambient #41D2A2 / deep sea-green stardust with slight blue accent
-      const angle = seeded(i * 5 + 1) * Math.PI * 2;
-      const radius = 38 + seeded(i * 5 + 2) * 44;
-      const zDepth = -36 + seeded(i * 5 + 3) * 44;
-      const ySpread = (seeded(i * 5 + 4) - 0.5) * 46;
+      // Wide full-screen ambient #41D2A2 / deep sea-green stardust with slight blue accent
+      let wx = (seeded(i * 5 + 1) - 0.5) * 260;
+      const wy = (seeded(i * 5 + 2) - 0.5) * 175;
+      const zDepth = -72 + seeded(i * 5 + 3) * 92;
 
-      logoPositions[idx] = Math.cos(angle) * radius;
-      logoPositions[idx + 1] = ySpread;
+      if (zDepth > -18 && Math.abs(wx) < 40 && Math.abs(wy) < 20) {
+        wx = (wx >= 0 ? 1 : -1) * (40 + seeded(i * 5 + 4) * 85);
+      }
+
+      logoPositions[idx] = wx;
+      logoPositions[idx + 1] = wy;
       logoPositions[idx + 2] = zDepth;
 
       const tintMix = seeded(i + 19);
@@ -249,6 +252,14 @@ function ParticleSwarm({
   const plane = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const mouse3D = useMemo(() => new THREE.Vector3(), []);
   const dirVec = useMemo(() => new THREE.Vector3(), []);
+
+  const ambientPhases = useMemo(() => {
+    const phases = new Float32Array(count);
+    for (let i = 0; i < count; i++) {
+      phases[i] = seeded(i + 409) * Math.PI * 2;
+    }
+    return phases;
+  }, [count]);
 
   const currentPositions = useMemo(() => new Float32Array(count * 3), [count]);
   const logoTargetsRef = useRef<LogoTargetBuffers>(createInitialTargets(count, stride));
@@ -476,13 +487,26 @@ function ParticleSwarm({
         if (localMorph > 0) {
           const easedMorph = easeInOutCubic(localMorph);
           const arcLift = Math.sin(easedMorph * Math.PI) * 6.5 * (i % 2 === 0 ? 1 : -1);
-          const idleFloat =
-            localMorph >= 1 ? Math.sin(elapsed * 1.6 + i * 0.02) * 0.12 : 0;
+          const isAmbient = i >= glyphCount;
+
+          let floatX = 0;
+          let floatY = 0;
+          let floatZ = 0;
+          if (localMorph >= 1) {
+            if (isAmbient) {
+              const phase = ambientPhases[i];
+              floatX = Math.cos(elapsed * 0.45 + phase * 1.3) * 2.4;
+              floatY = Math.sin(elapsed * 0.55 + phase) * 2.0;
+              floatZ = Math.sin(elapsed * 0.38 + phase * 0.7) * 1.6;
+            } else {
+              floatY = Math.sin(elapsed * 1.6 + i * 0.02) * 0.12;
+            }
+          }
 
           logoVec.set(
-            logoPositions[idx],
-            logoPositions[idx + 1] + idleFloat,
-            logoPositions[idx + 2] + arcLift
+            logoPositions[idx] + floatX,
+            logoPositions[idx + 1] + floatY,
+            logoPositions[idx + 2] + arcLift + floatZ
           );
           targetVec.lerp(logoVec, easedMorph);
 
